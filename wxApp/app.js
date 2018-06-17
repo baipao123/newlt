@@ -1,6 +1,3 @@
-//app.js
-const request = require("./utils/request.js");
-
 App({
     onLaunch: function () {
 
@@ -15,12 +12,55 @@ App({
     },
     globalData: {
         user: null,
-        apiDomain: "http://demo.wx-dk.cn:8443",
+        apiDomain: "http://demo.wx-dk.cn:8443/",
         qiNiuDomain: 'http://img.newlt.justyoujob.com/',
         systemInfo: null
     },
     commonOnShow: function () {
 
+    },
+    post: function (url, params, success, fail, complete) {
+        this.request("POST", url, params, success, fail, complete);
+    },
+    get: function (url, params, success, fail, complete) {
+        this.request("GET", url, params, success, fail, complete);
+    },
+    request: function (method, url, params, success, fail, complete, loginFail = false) {
+        let that = this
+        if (url.substr(0, 5) != "https")
+            url = that.globalData.apiDomain + url;
+        wx.request({
+            url: url,
+            data: params,
+            method: method,
+            dataType: "json",
+            header: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                cookie: wx.getStorageSync('cookie')
+            },
+            success: function (res) {
+                if (res.data != undefined && res.data.code != undefined) {
+                    if (res.header['Set-Cookie'])
+                        wx.setStorageSync('cookie', res.header['Set-Cookie']);
+                    if (res.data.hasOwnProperty("msg") && res.data.msg != '')
+                        that.toast(res.data.msg, res.data.code == 0 ? "success" : "none")
+                    if (res.data.code == 0) {
+                        if (typeof success == 'function')
+                            success(res.data.data, res.data);
+                    } else if (res.data.code == -1) {
+                        if (!loginFail) {
+                            that.login(() => {
+                                that.request(method, url, params, success, fail, complete, true)
+                            });
+                        }
+                    } else if (typeof fail == 'function')
+                        fail(res.data)
+                } else
+                    that.toast("500,服务器解析异常")
+            },
+            fail: fail,
+            compete: complete
+        });
     },
     getUserInfo: function (success, refresh) {
         let that = this,
@@ -32,7 +72,7 @@ App({
     },
     getUserInfoByRequest: function (success) {
         let that = this
-        request.post("user/user-info", {}, function (data) {
+        that.post("user/user-info", {}, function (data) {
             that.globalData.user = data.user
             if (success)
                 success()
@@ -52,9 +92,9 @@ App({
         wx.login({
             success: function (res) {
                 if (res.code) {
-                    request.post("user/app-login", {code: res.code}, data => {
+                    that.post("user/app-login", {code: res.code}, data => {
                         that.globalData.user = data.user;
-                        if(success)
+                        if (success)
                             success();
                     })
                 } else {
@@ -83,7 +123,7 @@ App({
             callBack(that.globalData.systemInfo);
         }
     },
-    toast: function (text, icon, callback) {
+    toast: (text, icon, callback) => {
         icon = icon == undefined ? "none" : icon
         wx.showToast({
             title: text,
@@ -91,7 +131,7 @@ App({
             complete: callback
         })
     },
-    confirm: function (content, success, fail, title, confirmText, cancelText) {
+    confirm: (content, success, fail, title, confirmText, cancelText) => {
         wx.showModal({
             title: title == undefined ? "提示" : title,
             content: content,
@@ -177,7 +217,7 @@ App({
                                 default:
                                     break
                             }
-                            that.toast("请允许小程序的 "+txt+" 权限","none")
+                            that.toast("请允许小程序的 " + txt + " 权限", "none")
                         }
                     })
                 }
@@ -189,13 +229,9 @@ App({
             title: title
         })
     },
-    turnPage: function (url,success) {
+    turnPage: (url, success) => {
         if (!url)
             return false
-        if(!success)
-            success = function () {
-                
-            }
         if (url == "index/home" || url == "user/user") {
             wx.switchTab({
                 url: "/pages/" + url,

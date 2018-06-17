@@ -1,29 +1,13 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/index/home",
-    "pages/user/user",
-    "pages/user/info",
-    "pages/chose/user",
-    "pages/chose/company",
-    "pages/districtSelect/districtSelect",
-    "pages/job/add",
-    "pages/job/info",
-    "pages/job/userList",
-    "pages/job/getInfo",
-    "pages/job/scan",
-    "pages/company/verify",
-    "pages/company/jobs",
-    "pages/company/users",
-    "pages/common/webView",
-    "pages/common/note",
-    "pages/common/question",
-    "pages/common/concat"
+    "pages/home/home",
+    "pages/user/user"
   ],
   "tabBar": {
     "list": [
       {
-        "pagePath": "pages/index/home",
+        "pagePath": "pages/home/home",
         "text": "首页",
         "selectedColor": "#09bb07",
         "position": "top"
@@ -39,7 +23,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#f0ad4e",
-    "navigationBarTitleText": "有准兼职",
+    "navigationBarTitleText": "领图司机",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#eee"
   }
