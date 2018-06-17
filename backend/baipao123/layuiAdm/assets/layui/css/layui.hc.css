@@ -1,0 +1,20 @@
+@import "icon.hc.css";
+@import "icon.seraph.css";
+.layui-layout-right.layui-nav .layui-nav-child{right:0;left:auto;}
+
+.layui-icon{ font-size:16px !important;}
+.mag0{ margin:0 !important; }
+::selection { background: #ff5722; color: #fff; }
+.layui-red{ color:#f00 !important; font-weight:bold;}
+.layui-blue{ color:#01AAED !important;}
+
+
+.align-l{text-align: left;}
+.align-r{text-align: right;}
+.align-c{text-align: center;}
+
+a.clear{
+    color: -webkit-link !important;
+    cursor: pointer;
+    text-decoration: underline !important;
+}

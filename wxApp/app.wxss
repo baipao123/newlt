@@ -1,0 +1,193 @@
+/**app.wxss**/
+@import "wxss/weui.wxss";
+@import "wxss/icon.wxss";
+
+page {
+    background-color: #eee;
+}
+
+.page {
+    padding: 0;
+}
+
+button.clear {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    display: initial;
+}
+
+button.clear::after {
+    border: none;
+}
+
+.weui-flex__item-2 {
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    flex: 2;
+}
+
+.weui-flex__item-3 {
+    -webkit-box-flex: 3;
+    -webkit-flex: 3;
+    flex: 3;
+}
+
+.text {
+    font-size: 40rpx;
+}
+
+.text-m {
+    font-size: 30rpx;
+}
+
+.text-s {
+    font-size: 25rpx;
+}
+
+.text-l {
+    font-size: 50rpx;
+}
+
+.text-xl {
+    font-size: 60rpx;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.text-grey {
+    color: #999;
+    font-weight: lighter;
+}
+.text-grey-normal {
+    color: #999;
+}
+
+.text-green {
+    color: #1aad19;
+}
+
+.text-orange {
+    color: #f0ad4e;
+}
+
+.text-blue {
+    color: #4395FF;
+}
+
+
+.text-red {
+    color: #e64340;
+}
+
+.text-purple {
+    color: purple;
+}
+
+.text-line {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.f-l{
+    float: left;
+}
+
+.f-r{
+    float: right;
+}
+
+.a-l {
+    text-align: left;
+}
+
+.a-r {
+    text-align: right;
+}
+
+.a-c {
+    text-align: center;
+}
+
+.bg-white {
+    background-color: #fff;
+}
+
+.bg-grey {
+    background-color: #eee;
+}
+
+.bg-green {
+    background-color: #09bb07;
+}
+
+.bg-orange {
+    background-color: #f0ad4e;
+}
+
+.bg-blue{
+    background-color: #4395FF;
+}
+
+.bg-transparent {
+    background-color: transparent;
+}
+
+button.low{
+    line-height:2;
+}
+
+.block-auto {
+    margin: 0 auto;
+    display: block;
+}
+
+.block-auto-20 {
+    margin: 20rpx auto;
+    display: block;
+}
+
+.block-auto-40 {
+    margin: 40rpx auto;
+    display: block;
+}
+
+.width-1 {
+    width: 100%;
+}
+
+.width-2 {
+    width: 50%;
+}
+
+.width-3-1 {
+    width: 33.333333%;
+}
+
+.width-3-2 {
+    width: 66.666667%;
+}
+
+.padding-0-x {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.padding-0-y {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.border-none {
+    border: none;
+}
+
+.weui-loading.big{
+    width: 200rpx;
+    height: 200rpx;
+    display: block;
+    margin: 100rpx auto;
+}
