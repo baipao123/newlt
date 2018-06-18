@@ -12,7 +12,7 @@ App({
     },
     globalData: {
         user: null,
-        apiDomain: "http://demo.wx-dk.cn:8443/",
+        apiDomain: "https://demo.wx-dk.cn/",
         qiNiuDomain: 'http://img.newlt.justyoujob.com/',
         systemInfo: null
     },

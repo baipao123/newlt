@@ -13,6 +13,8 @@ use Yii;
 class Img
 {
     public static function format($path, $width = 0, $height = 0, $isHost = false) {
+        if (empty($path))
+            return "";
         if (strpos($path, "http") === 0)
             return $path;
         $src = $isHost ? Yii::$app->params['qiniu']['domain'] . "/" . ltrim($path, "/") : ltrim($path, "/");
