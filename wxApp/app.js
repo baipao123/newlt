@@ -42,7 +42,7 @@ App({
                 if (res.data != undefined && res.data.code != undefined) {
                     if (res.header['Set-Cookie'])
                         wx.setStorageSync('cookie', res.header['Set-Cookie']);
-                    if (res.data.hasOwnProperty("msg") && res.data.msg != '')
+                    if (res.data.hasOwnProperty("msg") && res.data.msg != '' && (res.data.hasOwnProperty("code") && res.data.code != -1))
                         that.toast(res.data.msg, res.data.code == 0 ? "success" : "none")
                     if (res.data.code == 0) {
                         if (typeof success == 'function')
