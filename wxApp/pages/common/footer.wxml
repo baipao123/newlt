@@ -1,0 +1,6 @@
+<view class="weui-footer">
+    <view class="weui-footer__text">
+        <view>领图全真模考系统版权所有 | 苏ICP备201707030号</view>
+        <view>服务热线: 0519-85850880</view>
+    </view>
+</view>

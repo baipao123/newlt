@@ -12,4 +12,6 @@
     <view class="weui-loadmore" wx:else>
         <view class="weui-loadmore__tips weui-loadmore__tips_in-line bg-transparent">暂无岗位</view>
     </view>
+
+    <include src="/pages/common/footer.wxml"/>
 </view>

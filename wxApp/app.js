@@ -123,6 +123,12 @@ App({
             callBack(that.globalData.systemInfo);
         }
     },
+    phoneCall: function (phone, success) {
+        wx.makePhoneCall({
+            phoneNumber: phone,
+            success: success
+        })
+    },
     toast: (text, icon, callback) => {
         icon = icon == undefined ? "none" : icon
         wx.showToast({
