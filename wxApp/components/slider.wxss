@@ -1,0 +1,10 @@
+.slider-title{
+    height: 60rpx;
+    line-height: 60rpx;
+    background-color: rgba(0, 0, 0, .6);
+    color: #fff;
+    position:absolute;
+    left:0;
+    top:0;
+    padding:0 15px;
+}

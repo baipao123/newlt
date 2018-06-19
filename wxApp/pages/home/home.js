@@ -2,10 +2,11 @@ const app = getApp()
 
 Page({
     data: {
-        user: {}
+        user: {},
+        sliders: [],
     },
     onLoad: function () {
-
+        this.getSlider()
     },
     onShow: function () {
         let that = this
@@ -15,5 +16,13 @@ Page({
             })
             app.commonOnShow()
         })
-    }
+    },
+    getSlider: function () {
+        let that = this
+        app.get("slider/index", {}, function (res) {
+            that.setData({
+                sliders: res.list
+            })
+        })
+    },
 })

@@ -1,0 +1,8 @@
+<swiper class="slider" indicator-dots="true" autoplay="true" wx:if="{{sliders.length>0}}" style="height:{{windowWidth/2}}px;">
+    <block wx:for="{{sliders}}" wx:key="key-slider">
+        <swiper-item bindtap="sliderTap" data-index="{{index}}">
+            <image src="{{domain+item.cover}}" class="slider-image" style="width:{{windowWidth}}px;height:{{windowWidth/2}}px" mode="aspectFill" lazy-load="true"/>
+            <view class="slider-title text-line text-m" wx:if="{{item.title}}" style="width: {{windowWidth-30}}px">{{item.title}}</view>
+        </swiper-item>
+    </block>
+</swiper>

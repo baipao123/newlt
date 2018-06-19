@@ -1,3 +1,4 @@
 <view class="page">
-
+    <slider id="slider" sliders="{{sliders}}" style="margin:0;">
+    </slider>
 </view>
