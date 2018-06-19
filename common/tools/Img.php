@@ -44,4 +44,13 @@ class Img
             return $src;
         }
     }
+
+    public static function icon($path, $isHost = false) {
+        if (empty($path))
+            return "";
+        if (strpos($path, "http") === 0)
+            return $path;
+        $src = $isHost ? Yii::$app->params['qiniu']['domain'] . "/" . ltrim($path, "/") : ltrim($path, "/");
+        return $src . "-icon";
+    }
 }

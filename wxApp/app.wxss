@@ -159,16 +159,20 @@ button.low{
     width: 100%;
 }
 
+.width-5-4 {
+    width: 80%;
+}
+
+.width-3-2 {
+    width: 66.666667%;
+}
+
 .width-2 {
     width: 50%;
 }
 
 .width-3-1 {
     width: 33.333333%;
-}
-
-.width-3-2 {
-    width: 66.666667%;
 }
 
 .padding-0-x {
