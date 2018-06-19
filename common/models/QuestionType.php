@@ -16,7 +16,9 @@ class QuestionType extends \common\models\base\QuestionType
 {
 
     /**
-     * @return  self[]
+     * @param int $tid
+     * @param int $status
+     * @return QuestionType[]
      */
     public static function getList($tid = 0, $status = Status::PASS) {
         $query = self::find()->where(["parentId" => $tid])->orderBy("sort desc");

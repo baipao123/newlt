@@ -9,22 +9,32 @@
 namespace backend\controllers;
 
 
+use common\models\QuestionPrice;
+use common\models\QuestionType;
+
 class QuestionController extends BaseController
 {
-    public function actionTypes($tid = 0) {
+    public $basicActions = ["type-info", "price-info"];
 
+    public function actionTypes($tid = 0, $status = 0) {
+        return $this->render("types", [
+            "types" => QuestionType::getList($tid, $status)
+        ]);
     }
 
     public function actionTypeInfo($id) {
+        $type = QuestionType::findOne($id);
 
     }
 
-    public function actionPrices($tid = 0) {
-
+    public function actionPrices($tid = 0, $status = 0) {
+        return $this->render("prices", [
+            "prices" => QuestionPrice::prices($tid, $status)
+        ]);
     }
 
     public function actionPriceInfo($id = 0) {
-
+        $price = QuestionPrice::findOne($id);
     }
 
 }

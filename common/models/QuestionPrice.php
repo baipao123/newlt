@@ -24,7 +24,7 @@ class QuestionPrice extends \common\models\base\QuestionPrice
     /**
      * @return  self[]
      */
-    public function prices($tid = 0, $status = Status::PASS) {
+    public static function prices($tid = 0, $status = Status::PASS) {
         $query = self::find();
         if ($status > 0)
             $query->andWhere(["status" => $status]);
