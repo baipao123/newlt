@@ -4,6 +4,10 @@ Page({
     data: {
         user: {},
         sliders: [],
+        empty: false,
+        loading: false,
+        refresh: false,
+        page: 1
     },
     onLoad: function () {
         this.getSlider()
@@ -24,5 +28,21 @@ Page({
                 sliders: res.list
             })
         })
+    },
+    getList: function (page, refresh) {
+
+    },
+    onReachBottom: function () {
+        if (this.data.empty || this.data.loading)
+            return true;
+        let that = this
+        that.getList(that.data.page, false)
+    },
+    onPullDownRefresh: function () {
+        let that = this
+        if (that.data.refresh)
+            return true
+        that.getList(1, true)
+        that.getSlider()
     },
 })

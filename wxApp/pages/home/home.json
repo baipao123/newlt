@@ -1,6 +1,8 @@
 {
     "window": {
-        "navigationBarTitleText": "领图司机"
+        "navigationBarTitleText": "领图司机",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 100
     },
     "usingComponents": {
         "slider": "/components/slider"

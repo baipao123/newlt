@@ -1,4 +1,15 @@
 <view class="page">
     <slider id="slider" sliders="{{sliders}}" style="margin:0;">
     </slider>
+
+    <view class="weui-loadmore" wx:if="{{!empty && !loading}}">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line bg-transparent">上拉加载更多</view>
+    </view>
+    <view class="weui-loadmore" wx:elif="{{loading}}">
+        <view class="weui-loading"> </view>
+        <view class="weui-loadmore__tips">加载中</view>
+    </view>
+    <view class="weui-loadmore" wx:else>
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line bg-transparent">暂无岗位</view>
+    </view>
 </view>
