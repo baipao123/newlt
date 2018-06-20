@@ -61,4 +61,18 @@ class StringHelper extends \yii\helpers\StringHelper{
     public static function isMobile($mobile) {
         return (bool)preg_match('/1[1-9]([0-9]){9}/', $mobile);
     }
+
+    // 支付需要过滤一下商品标题    长度、特殊字符要求
+    public static function formatTitleForPay($title, $length = 40, $maxLength = 128) {
+        //        $title = trim($title, "-  　");
+        $char = ["=", "&"];
+        // 过滤特殊字符
+        // 支持的：# @ \ ^ & _ - + 。. ...
+        // 不支持的： 支付宝：= &
+        $title = preg_replace('/(' . implode("|", $char) . ')/', '', $title);
+        if (strlen($title) > $maxLength) {
+            $title = self::truncate($title, $length);
+        }
+        return $title;
+    }
 }
