@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\OrderNotify;
 use common\tool\WxPay;
 use common\tools\Status;
 use yii\helpers\ArrayHelper;
