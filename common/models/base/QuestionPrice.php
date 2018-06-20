@@ -19,6 +19,7 @@ use Yii;
  * @property int $status
  * @property string $note
  * @property int $created_at
+ * @property int $updated_at
  */
 class QuestionPrice extends \yii\db\ActiveRecord
 {
@@ -36,7 +37,7 @@ class QuestionPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'price', 'oldPrice', 'hour', 'start_at', 'end_at', 'status', 'created_at'], 'integer'],
+            [['tid', 'price', 'oldPrice', 'hour', 'start_at', 'end_at', 'status', 'created_at', 'updated_at'], 'integer'],
             [['note'], 'string'],
             [['title', 'cover'], 'string', 'max' => 255],
         ];
@@ -60,6 +61,7 @@ class QuestionPrice extends \yii\db\ActiveRecord
             'status' => 'Status',
             'note' => 'Note',
             'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 }

@@ -38,7 +38,7 @@ class WxPay extends WxPayBase
      * @param array $params
      * @param bool $useCert
      * @param int $timeOut
-     * @return object 微信正常返回的部分
+     * @return array|bool 微信正常返回的部分
      * 微信正常返回的部分
      * report  如果请求不正确，那么会存在这个字段
      * out_trade_no
@@ -77,13 +77,11 @@ class WxPay extends WxPayBase
      * @param $data array  商品的信息  包括body、detail、out_trade_no、total_fee。。。
      * @param int $time_expire 支付时间，默认30分钟
      * @param int $timeOut 接口访问超时时间，默认6秒
-     * @return array
+     * @return array|bool
      * @throws yii\base\ExitException
      */
     public function UnifiedOrder($data, $time_expire = 900, $timeOut = 6) {
-        $sapi_url = Yii::$app->params['sapi_url'];
-        $sapi_url = rtrim($sapi_url, "/");
-        $notify_url = $sapi_url . $this->notify_end;
+        $notify_url = rtrim(Yii::$app->params['api_url'], "/") . $this->notify_end;
         //跨时区大作战，不然就是X小时15分钟的支付时间
         $timeZone = date_default_timezone_get();
         date_default_timezone_set("PRC");
@@ -127,7 +125,7 @@ class WxPay extends WxPayBase
      * @param int $refund_fee
      * @param int $refund_type 0 :未结算资金退款，1：可用余额退款
      * @param int $timeOut
-     * @return bool|mixed|void
+     * @return bool|mixed
      */
     public function Refund($trade_no = '', $out_trade_no = '', $refund_no = '', $total_fee = 0, $refund_fee = 0, $refund_type = 0, $timeOut = 6) {
         if (empty($refund_no))
@@ -155,7 +153,7 @@ class WxPay extends WxPayBase
      * 查询订单
      * @param string $transaction_id
      * @param string $out_trade_no
-     * @return mixed|void
+     * @return mixed
      */
     public function OrderQuery($out_trade_no = '', $transaction_id = '') {
         $params = [
@@ -177,7 +175,7 @@ class WxPay extends WxPayBase
      * 关闭订单
      * @param string $out_trade_no
      * @param int $timeOut
-     * @return mixed|void
+     * @return mixed
      */
     public function CloseOrder($out_trade_no, $timeOut = 6) {
         $params = [

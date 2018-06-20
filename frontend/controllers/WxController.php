@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Order;
 use common\models\OrderNotify;
 use common\tool\WxPay;
 use common\tools\Status;
@@ -41,13 +42,13 @@ class WxController extends Controller
             return false;
         }
         $order = Order::findOne(["out_trade_no" => $out_trade_no]);
-        if(!$order){
+        if (!$order) {
             $record->status = OrderNotify::StatusOrderNotFound;
             $record->save();
             return false;
         }
 
-        if($order->price != ArrayHelper::getValue($params, "total_fee")){
+        if ($order->price != ArrayHelper::getValue($params, "total_fee")) {
             $record->status = OrderNotify::StatusOrderPriceError;
             $record->save();
             return false;
@@ -55,6 +56,15 @@ class WxController extends Controller
 
         $record->status = OrderNotify::StatusVerifyPass;
         $record->save();
+
+        if ($order->status == Status::IS_PAY) {
+            echo $wxPay->ToXml([
+                "return_code" => "SUCCESS",
+                "return_msg"  => "OK"
+            ]);
+            return 0;
+        }
+
 
         $order->status = Status::IS_PAY;
         $order->trade_no = ArrayHelper::getValue($params, "trade_no");
