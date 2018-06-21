@@ -5,6 +5,7 @@ namespace common\models;
 use common\tools\Img;
 use common\tools\Tool;
 use common\tools\WxApp;
+use console\worker\SendTpl;
 use Yii;
 
 class User extends \common\models\base\User
@@ -80,5 +81,17 @@ class User extends \common\models\base\User
         }
         $accessToken = WxApp::getAccessToken();
         WxApp::sendTpl($accessToken, $this->openId, $type, $tplData, $page, $formId, $keyword);
+    }
+
+    public function sendTplByQueue($type, $data, $formId, $page = "", $color = [], $keyword = "") {
+        Yii::$app->queue->push(new SendTpl([
+            "openId"  => $this->openId,
+            "type"    => $type,
+            "data"    => $data,
+            "formId"  => $formId,
+            "page"    => $page,
+            "color"   => $color,
+            "keyword" => $keyword
+        ]));
     }
 }
