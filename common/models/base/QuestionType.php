@@ -15,6 +15,7 @@ use Yii;
  * @property int $setting
  * @property int $created_at
  * @property int $sort
+ * @property int $updated_at
  */
 class QuestionType extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,7 @@ class QuestionType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parentId', 'setting', 'created_at', 'status', 'sort'], 'integer'],
+            [['parentId', 'setting', 'created_at', 'status', 'sort', 'updated_at'], 'integer'],
             [['name', 'icon'], 'string', 'max' => 255],
         ];
     }
@@ -51,6 +52,7 @@ class QuestionType extends \yii\db\ActiveRecord
             'setting' => 'Setting',
             'created_at' => 'Created At',
             'sort' => 'Sort',
+            'updated_at' => 'Updated At',
         ];
     }
 }

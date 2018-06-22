@@ -42,9 +42,11 @@ layui.define(["element","jquery"],function(exports){
         //layui-tab-i 用于标记本i是图标
         if (icon === undefined || icon === "")
             return "";
+        if (icon.indexOf("my-icon-") !== -1)
+            return '<i class="layui-tab-i my-icon ' + icon + ' font-20" data-icon="' + icon + '"></i>';
         if (icon.indexOf("icon-") !== -1)
-            return '<i class="layui-tab-i seraph ' + icon + '" data-icon="' + icon + '"></i>';
-        return '<i class="layui-tab-i layui-icon" data-icon="' + icon + '">' + icon + '</i>';
+            return '<i class="layui-tab-i seraph ' + icon + ' font-20" data-icon="' + icon + '"></i>';
+        return '<i class="layui-tab-i layui-icon font-20" data-icon="' + icon + '">' + icon + '</i>';
 	}
 
 	Tab.prototype.generateAHeadHtml = function(href,target){

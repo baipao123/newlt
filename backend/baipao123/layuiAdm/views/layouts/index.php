@@ -203,8 +203,11 @@ use yii\helpers\Html;
                 if ($(this).siblings().length === 0) {
                     addBodyTab($(this));
                     $('body').removeClass('site-mobile');  //移动端点击菜单关闭菜单层
+                } else {
+                    let lis = $(this).parent("li").siblings(".layui-nav-itemed");
+                    if (lis.length > 2)
+                        lis.removeClass("layui-nav-itemed");
                 }
-                $(this).parent("li").siblings().removeClass("layui-nav-itemed");
             });
             //清除缓存
             $(".clearCache").click(function(){

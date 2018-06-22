@@ -25,40 +25,60 @@ class MenuAction extends ApiAction
             ],
             [
                 "title"    => "轮播管理",
-                "icon"     => "icon-icon10",
+                "icon"     => "my-icon-slider",
                 "href"     => "",
                 "spread"   => false,
                 "children" => [
                     [
                         "title"  => "轮播列表",
-                        "icon"   => "&#xe612;",
+                        "icon"   => "my-icon-long-arrow-right",
                         "href"   => "/slider/list",
                         "spread" => false
                     ]
                 ]
             ],
             [
-                "title"    => "企业管理",
-                "icon"     => "icon-icon10",
+                "title"    => "题库管理",
+                "icon"     => "my-icon-questions",
                 "href"     => "",
-                "spread"   => false,
+                "spread"   => true,
                 "children" => [
                     [
-                        "title"  => "企业列表",
-                        "icon"   => "&#xe612;",
-                        "href"   => "/company/list",
+                        "title"  => "分类列表",
+                        "icon"   => "my-icon-list-light",
+                        "href"   => "/question/types",
                         "spread" => false
                     ],
                     [
-                        "title"  => "待审核列表",
-                        "icon"   => "&#xe612;",
-                        "href"   => "/company/verify-list",
+                        "title"  => "价格管理",
+                        "icon"   => "my-icon-price",
+                        "href"   => "/question/prices",
                         "spread" => false
                     ],
                     [
-                        "title"  => "岗位列表",
-                        "icon"   => "&#xe612;",
-                        "href"   => "/job/list",
+                        "title"  => "题目列表",
+                        "icon"   => "my-icon-question-list",
+                        "href"   => "/question/list",
+                        "spread" => false
+                    ],
+                ]
+            ],
+            [
+                "title"    => "订单管理",
+                "icon"     => "my-icon-orders",
+                "href"     => "",
+                "spread"   => true,
+                "children" => [
+                    [
+                        "title"  => "订单列表",
+                        "icon"   => "my-icon-long-arrow-right",
+                        "href"   => "/order/list",
+                        "spread" => false
+                    ],
+                    [
+                        "title"  => "收入统计",
+                        "icon"   => "my-icon-chart-2",
+                        "href"   => "/order/count",
                         "spread" => false
                     ],
                 ]
@@ -76,21 +96,9 @@ class MenuAction extends ApiAction
                         "spread" => false
                     ],
                     [
-                        "title"  => "岗位记录",
-                        "icon"   => "&#xe612;",
+                        "title"  => "模考记录",
+                        "icon"   => "my-icon-exam",
                         "href"   => "/user/job-list",
-                        "spread" => false
-                    ],
-                    [
-                        "title"  => "工时记录",
-                        "icon"   => "&#xe612;",
-                        "href"   => "/user/daily-list",
-                        "spread" => false
-                    ],
-                    [
-                        "title"  => "打卡记录",
-                        "icon"   => "&#xe612;",
-                        "href"   => "/clock/list",
                         "spread" => false
                     ]
                 ]
@@ -103,7 +111,7 @@ class MenuAction extends ApiAction
                 "children" => [
                     [
                         "title"  => "账户列表",
-                        "icon"   => "&#xe612;",
+                        "icon"   => "my-icon-long-arrow-right",
                         "href"   => "/admin/list",
                         "spread" => false
                     ]

@@ -1,5 +1,10 @@
-@import "icon.hc.css";
+@import "../font/my-icon/iconfont.css";
 @import "icon.seraph.css";
+
+.my-icon{
+    font-size:inherit;
+}
+
 .layui-layout-right.layui-nav .layui-nav-child{right:0;left:auto;}
 
 .layui-icon{ font-size:16px !important;}
@@ -17,4 +22,8 @@ a.clear{
     color: -webkit-link !important;
     cursor: pointer;
     text-decoration: underline !important;
+}
+
+.font-20{
+    font-size:20px !important;
 }

@@ -32,4 +32,9 @@ class BaseController extends Controller {
         Init::Layout($action);
         return parent::beforeAction($action);
     }
+
+
+    public function alert(){
+        return $this->render("/layouts/none");
+    }
 }
