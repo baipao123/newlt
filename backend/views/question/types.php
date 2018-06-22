@@ -10,14 +10,18 @@ use common\tools\Status;
 use layuiAdm\tools\Url;
 
 ?>
-
+<button class="layui-btn layui-btn-danger"
+        onclick="layerOpenIFrame('<?= Url::createLink('/question/type-info', ["pid" => $tid]) ?>','添加分类')"><i class="layui-icon">&#xe654;</i>添加<?= $tid>0 ? '题库':''?>分类
+</button>
 
 <table class="layui-table">
     <thead>
     <tr>
         <th>分类ID</th>
         <th>名称</th>
+        <?php if ($tid <= 0): ?>
         <th>图标</th>
+        <?php endif; ?>
         <th>排序值</th>
         <th>状态</th>
         <th>最后修改时间</th>
@@ -30,7 +34,9 @@ use layuiAdm\tools\Url;
         <tr>
             <td><?= $type->id ?></td>
             <td><?= $type->name ?></td>
+            <?php if ($tid <= 0): ?>
             <td class="icon-<?= $type->id ?>"><img class="img" src="<?= $type->icon(true) ?>"/>
+            <?php endif; ?>
             </td>
             <td><?= $type->sort ?></td>
             <td>
@@ -43,9 +49,12 @@ use layuiAdm\tools\Url;
             <td><?= date("Y-m-d H:i:s", $type->updated_at) ?> </td>
             <td>
                 <span class="layui-btn layui-btn-sm layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink("question/type-info",["tid"=>$type->id])?>','编辑分类')"><i class="layui-icon">&#xe642;</i>编辑</span>
+                <?php if ($tid <= 0): ?>
+                <span class="layui-btn layui-btn-sm layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink("question/types",["tid"=>$type->id])?>','题库分类','100%')"><i class="my-icon my-icon-list-light"></i>题库分类</span>
+                <?php endif; ?>
                 <?php if($type->status == Status::FORBID): ?>
                     <span class="layui-btn layui-btn-sm" onclick="layerConfirmUrl('<?= Url::createLink("question/type-toggle",["tid"=>$type->id,"status"=>Status::PASS])?>')">通过</span>
-                    <span class="layui-btn layui-btn-sm layui-btn-primary" onclick="layerConfirmUrl('<?= Url::createLink("question/type-toggle",["tid"=>$type->id,"status"=>Status::DELETE])?>','确定删除？删除后无法恢复')">删除</span>
+                    <span class="layui-btn layui-btn-sm layui-btn-primary" onclick="layerConfirmUrl('<?= Url::createLink("question/type-toggle",["tid"=>$type->id,"status"=>Status::DELETE])?>','确定删除？删除后无法恢复，且题库也会删除')">删除</span>
 
                 <?php elseif($type->status == Status::PASS):?>
                     <span class="layui-btn layui-btn-sm layui-btn-warm" onclick="layerConfirmUrl('<?= Url::createLink("question/type-toggle",["tid"=>$type->id,"status"=>Status::FORBID])?>')">不通过</span>
@@ -55,3 +64,12 @@ use layuiAdm\tools\Url;
     <?php endforeach; ?>
     </tbody>
 </table>
+
+<script>
+    $(".img").click(function (e) {
+        let classTxt = $(this).parent().eq(0).attr("class");
+        globalLayer.photos({
+            photos: "." + classTxt
+        })
+    })
+</script>

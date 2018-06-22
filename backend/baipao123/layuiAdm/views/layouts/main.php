@@ -27,7 +27,7 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
     </div>
 </div>
 <script>
-    var globalLayer;
+    var globalLayer,layerIFrameName = '';
     $(document).ready(function(){
         //有无parent  是不是在iFrame中
         if (window.frames.length === parent.frames.length) {
@@ -48,19 +48,20 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
         });
     });
 
-    function layerConfirmUrl(url, text, _target) {
+    function layerConfirmUrl(url, text, _target, iFrameName) {
         if (text === undefined || text === '')
-            return layerOpenIFrame(url);
+            return layerOpenIFrame(url, text, "", iFrameName);
         globalLayer.confirm(text, function () {
             if (_target === undefined || !_target)
-                layerOpenIFrame(url);
+                layerOpenIFrame(url, "", "", iFrameName);
             else
                 window.location.href = url;
         });
     }
 
-    function layerOpenIFrame(url, title, width) {
-        width = width === undefined || width === "" ? ((title === "" || title === undefined) ? '235px' : '380px' ) : width;
+    function layerOpenIFrame(url, title, width, iFrameName) {
+        layerIFrameName = iFrameName == undefined || iFrameName == '' ? '' : iFrameName;
+        width = width === undefined || width === "" ? ((title === "" || title === undefined) ? '235px' : '600px' ) : width;
         globalLayer.open({
             type: 2,
             title: title,

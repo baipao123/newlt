@@ -26,6 +26,8 @@ class QiNiuUploaderWidget extends Widget
 
     public $region = "";
 
+    public $hint = "";
+
     public function init() {
         $this->assetFiles = [
             "/qiniu/qiniu.min.js",
@@ -53,6 +55,7 @@ class QiNiuUploaderWidget extends Widget
             'useCdn'   => $this->useCdn ? "true" : "false",
             'tokenUrl' => $this->tokenUrl,
             'region'   => $this->region,
+            "hint"     => $this->hint,
         ]);
     }
 }

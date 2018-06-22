@@ -139,7 +139,7 @@ use yii\helpers\Html;
         });
     }
     function layerOpenIFrame(url, title, width) {
-        width = width === undefined || width === "" ? ((title === "" || title === undefined) ? '235px' : '380px' ) : width;
+        width = width === undefined || width === "" ? ((title === "" || title === undefined) ? '235px' : '600px' ) : width;
         globalLayer.open({
             type: 2,
             title: title,

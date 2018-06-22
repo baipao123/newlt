@@ -29,6 +29,19 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
         </div>
         <script>
             var layerIndex = parent.globalLayer.getFrameIndex(window.name); //获取窗口索引
+
+            function layerConfirmUrl(url, text, _target) {
+                parent.layerConfirmUrl(url, text, _target, window.name);
+            }
+
+            function layerOpenIFrame(url, title, width) {
+                parent.layerOpenIFrame(url, title, width, window.name)
+            }
+
+            function globalOpenIFrame(url, title, icon) {
+                parent.globalOpenIFrame(url, title, icon)
+            }
+
             function layerMsg(text){
                 if (text != undefined && text != "")
                     parent.globalLayer.msg(text);
@@ -71,8 +84,10 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
                         console.log(icon);
                         //success 的需要刷新主页面
                         if (icon == 1) {
-                            console.log(parent);
-                            parent.location.reload();
+                            if (parent.layerIFrameName == '')
+                                parent.location.reload();
+                            else
+                                parent.frames[parent.layerIFrameName].location.reload()
                         }
                         if(close)
                             parent.globalLayer.close(layerIndex);
@@ -84,9 +99,6 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
                 parent.globalLayer.close(layerIndex);
             }
             $(document).ready(function (e) {
-                console.log(parent.globalLayer);
-                //高度自适应
-                parent.globalLayer.iframeAuto(layerIndex);
                 //danger、success会关闭本页面
                 // warning 需要点击确认来关闭弹窗,不关闭本页面
                 // info 使用msg，然后过几秒自动关闭
@@ -106,6 +118,16 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
                 <?php endif; ?>
                 <?php endforeach;?>
 //                var bodyHH =document.documentElement.clientHeight;t=t>bodyHH?bodyHH*0.9:t;
+
+                layui.use(['element', 'form', 'layer'], function () {
+                    let form = layui.form,
+                        element = layui.element;
+                    element.init();
+                    form.render();
+                });
+
+                //高度自适应
+                parent.globalLayer.iframeAuto(layerIndex);
             });
         </script>
 

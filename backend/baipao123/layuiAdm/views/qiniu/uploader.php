@@ -1,6 +1,9 @@
         <div class="layui-btn bp-qiniu-uploader bp-qiniu-uploader-<?= $id ?>">
             <i class="layui-icon">&#xe67c;</i>上传图片
         </div>
+        <?php if(!empty($hint)):?>
+        <div class="layui-word-aux" style="display: inline-block;"><?=$hint?></div>
+        <?php endif;?>
         <script>
             $(document).ready(function () {
                 layui.use('upload', function () {

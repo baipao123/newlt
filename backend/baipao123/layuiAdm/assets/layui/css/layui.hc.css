@@ -13,15 +13,18 @@
 .layui-red{ color:#f00 !important; font-weight:bold;}
 .layui-blue{ color:#01AAED !important;}
 
-
-.align-l{text-align: left;}
-.align-r{text-align: right;}
-.align-c{text-align: center;}
+.a-l{text-align: left;}
+.a-r{text-align: right;}
+.a-c{text-align: center;}
 
 a.clear{
     color: -webkit-link !important;
     cursor: pointer;
     text-decoration: underline !important;
+}
+
+.hide {
+    display: none;
 }
 
 .font-20{
