@@ -13,11 +13,13 @@ use Yii;
  * @property string $cover
  * @property int $price
  * @property int $oldPrice
+ * @property int $type
  * @property int $hour
  * @property int $start_at
  * @property int $end_at
  * @property int $status
  * @property string $note
+ * @property int $sort
  * @property int $created_at
  * @property int $updated_at
  */
@@ -37,7 +39,7 @@ class QuestionPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'price', 'oldPrice', 'hour', 'start_at', 'end_at', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['tid', 'price', 'oldPrice', 'type', 'hour', 'start_at', 'end_at', 'status', 'sort', 'created_at', 'updated_at'], 'integer'],
             [['note'], 'string'],
             [['title', 'cover'], 'string', 'max' => 255],
         ];
@@ -55,11 +57,13 @@ class QuestionPrice extends \yii\db\ActiveRecord
             'cover' => 'Cover',
             'price' => 'Price',
             'oldPrice' => 'Old Price',
+            'type' => 'Type',
             'hour' => 'Hour',
             'start_at' => 'Start At',
             'end_at' => 'End At',
             'status' => 'Status',
             'note' => 'Note',
+            'sort' => 'Sort',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

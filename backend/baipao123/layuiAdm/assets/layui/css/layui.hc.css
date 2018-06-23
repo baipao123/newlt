@@ -7,9 +7,9 @@
 
 .layui-layout-right.layui-nav .layui-nav-child{right:0;left:auto;}
 
-.layui-icon{ font-size:16px !important;}
+.layui-icon{ font-size:inherit;}
 .mag0{ margin:0 !important; }
-::selection { background: #ff5722; color: #fff; }
+::selection { background: #ff5722; color: #fff; }/*选中效果*/
 .layui-red{ color:#f00 !important; font-weight:bold;}
 .layui-blue{ color:#01AAED !important;}
 
@@ -29,4 +29,9 @@ a.clear{
 
 .font-20{
     font-size:20px !important;
+}
+
+.layui-table.simple td, .layui-table.simple th{
+    padding: 9px 0;
+    text-align: center;
 }
