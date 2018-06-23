@@ -58,7 +58,7 @@ class QuestionPrice extends \common\models\base\QuestionPrice
     public function cover($full = true) {
         if ($this->isNewRecord)
             return "";
-        if (!empty($cover))
+        if (!empty($this->cover))
             return Img::icon($this->cover, $full);
         $type = $this->questionType;
         return $type ? Img::icon($type->icon, $full) : "";

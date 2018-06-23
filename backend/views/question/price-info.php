@@ -33,7 +33,7 @@ use layuiAdm\tools\Url;
             <select name="tid" title="" lay-verify="required" lay-filter="tid">
                 <option value="0">请选择分类</option>
                 <?php foreach ($types as $type): ?>
-                    <option value="<?= $type->id ?>" <?= $type->id == $price->tid ? "selected" : ""?>><?= $type->name ?></option>
+                    <option value="<?= $type->id ?>" <?= $type->id == $price->tid ? "selected" : ""?> data-icon="<?= $type->icon ?>"><?= $type->name ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -50,10 +50,10 @@ use layuiAdm\tools\Url;
     <div class="layui-form-item">
         <label class="layui-form-label">图标</label>
         <div class="layui-input-block">
-            <input type="hidden" name="cover" lay-filter="cover" lay-verify="cover" class="type-icon" value="<?= $price->cover ?>">
+            <input type="hidden" name="cover" lay-filter="cover" lay-verify="cover" class="price-cover" value="<?= $price->cover ?>">
             <?php echo \layuiAdm\widgets\QiNiuUploaderWidget::widget(["isMulti" => false,"hint"=>"推荐尺寸:200*200"]) ?>
             <div class="imgList">
-                <img src="<?= $price->cover(true) ?>" class="type-icon <?= $price->cover == "" ? "hide" : ""?>">
+                <img src="<?= $price->cover(true) ?>" class="price-cover">
             </div>
         </div>
     </div>
@@ -139,15 +139,27 @@ use layuiAdm\tools\Url;
             ,type: 'datetime'
             ,range: true
         });
+
+        form.on('select(tid)', function (data) {
+            console.log(data);
+            let e = data.elem,
+                tid = data.value,
+                option = $(e).find("option[value=" + tid + "]"),
+                coverInput = $("input.price-cover")
+            console.log(option)
+            console.log(coverInput.val())
+            if (coverInput.val() == "")
+                uploadFile({key: option.attr("data-icon")}, true)
+        });
         form.verify()
     });
 
-    function uploadFile(info) {
-        console.log(info)
-        let coverImg = $("img.type-icon"),
-            coverInput = $("input.type-icon")
+    function uploadFile(info,inputNull) {
+        let coverImg = $("img.price-cover"),
+            coverInput = $("input.price-cover")
         coverImg.attr("src", "<?=Yii::$app->params['qiniu']['domain']?>" + "/" + info.key + "-icon")
-        coverInput.val(info.key)
+        if (!inputNull)
+            coverInput.val(info.key)
         coverImg.removeClass("hide")
     }
 
