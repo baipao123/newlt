@@ -32,6 +32,6 @@ a.clear{
 }
 
 .layui-table.simple td, .layui-table.simple th{
-    padding: 9px 0;
+    padding: 9px 2px;
     text-align: center;
 }

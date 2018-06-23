@@ -18,7 +18,7 @@ use yii\data\Pagination;
 
 class QuestionController extends BaseController
 {
-    public $basicActions = ["type-children", "type-info", "type-toggle", "price-info"];
+    public $basicActions = ["type-children", "type-info", "type-toggle", "price-info", "price-toggle"];
 
     public function actionTypes($tid = 0, $status = 0) {
         if ($tid > 0)
