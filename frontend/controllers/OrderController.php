@@ -8,6 +8,9 @@
 
 namespace frontend\controllers;
 
+use Yii;
+use common\models\Order;
+
 /**
  * @property Order $order;
  */

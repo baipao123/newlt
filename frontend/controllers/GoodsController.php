@@ -8,15 +8,59 @@
 
 namespace frontend\controllers;
 
+use Yii;
+use common\models\Order;
+use common\models\QuestionPrice;
+use common\models\QuestionType;
+use common\tools\Status;
+use common\tools\Tool;
 
 class GoodsController extends BaseController
 {
-    public function actionPrices($tid = 0) {
+    public function actionTypes() {
+        $types = QuestionType::getList();
+        $data = [];
+        foreach ($types as $type)
+            $data[] = $type->info();
+        return Tool::reJson([
+            "types" => $data
+        ]);
+    }
 
+
+    public function actionPrices($tid) {
+        $prices = QuestionPrice::prices($tid);
+        $data = [];
+        foreach ($prices as $price)
+            $data[] = $price->info();
+        return Tool::reJson([
+            "prices" => $data
+        ]);
     }
 
     public function actionOrder() {
-        $tid = $this->getPost("tid", 0);
-
+        $pid = $this->getPost("pid", 0);
+        $p = QuestionPrice::findOne($pid);
+        if (!$p || $p->status != Status::PASS)
+            return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
+        $type = $p->questionType;
+        if (!$type || $type->status != Status::PASS)
+            return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
+        $order = new Order;
+        $order->title = $p->title;
+        $order->cover = $p->cover();
+        $order->uid = $this->user_id();
+        $order->openId = $this->getUser()->openId;
+        $order->formId = $this->getPost("formId");
+        $order->price = $p->price;
+        $order->hour = $p->hour;
+        $order->status = Status::WAIT_PAY;
+        $order->created_at = time();
+        if ($order->save())
+            return Tool::reJson(["oid" => $order->attributes['id']]);
+        else {
+            Yii::warning($order->errors, "新建Order失败");
+            return Tool::reJson(null, "下单失败,请重试", Tool::FAIL);
+        }
     }
 }

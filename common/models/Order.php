@@ -51,4 +51,8 @@ class Order extends \common\models\base\Order
         if ($insert || isset($changedAttributes['status']))
             OrderStatus::saveRecord($this->id, $this->status);
     }
+
+    public static function getOutTradeNo() {
+        return (string)intval(microtime(true) * 1000) . (string)mt_rand(10000, 99999);
+    }
 }

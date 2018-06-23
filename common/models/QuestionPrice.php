@@ -39,18 +39,15 @@ class QuestionPrice extends \common\models\base\QuestionPrice
         return $prices;
     }
 
-    public function info($isSimple = true) {
-        return $isSimple ? [
-            "pid"   => $this->id,
-            "tid"   => $this->tid,
-            "cover" => $this->cover(),
-        ] : [
+    public function info() {
+        return [
             "pid"      => $this->id,
             "tid"      => $this->tid,
             "cover"    => $this->cover(),
             "status"   => $this->status,
             "start_at" => date("Y-m-d H:i:s", $this->start_at),
-            "end_at"   => date("Y-m-d H:i:s", $this->end_at)
+            "end_at"   => date("Y-m-d H:i:s", $this->end_at),
+            "hourStr"  => $this->hourStr()
         ];
 
     }

@@ -14,6 +14,7 @@ use Yii;
  * @property string $openId
  * @property string $formId
  * @property string $title
+ * @property string $cover
  * @property int $price
  * @property int $hour
  * @property string $out_trade_no
@@ -41,11 +42,9 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'tid', 'pid', 'price', 'hour', 'payat', 'paytime', 'created_at', 'updated_at'], 'integer'],
-            [['payat'], 'required'],
-            [['openId', 'formId', 'title', 'prepay_id'], 'string', 'max' => 255],
+            [['uid', 'tid', 'pid', 'price', 'hour', 'payat', 'paytime', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['openId', 'formId', 'title', 'cover', 'prepay_id'], 'string', 'max' => 255],
             [['out_trade_no', 'trade_no'], 'string', 'max' => 32],
-            [['status'], 'string', 'max' => 1],
             [['out_trade_no'], 'unique'],
         ];
     }
@@ -63,6 +62,7 @@ class Order extends \yii\db\ActiveRecord
             'openId' => 'Open ID',
             'formId' => 'Form ID',
             'title' => 'Title',
+            'cover' => 'Cover',
             'price' => 'Price',
             'hour' => 'Hour',
             'out_trade_no' => 'Out Trade No',
