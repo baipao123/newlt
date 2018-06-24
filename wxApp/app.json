@@ -2,6 +2,9 @@
   "pages": [
     "pages/home/home",
     "pages/user/user",
+    "pages/question/index",
+    "pages/order/pay",
+    "pages/order/info",
     "pages/common/webView"
   ],
   "tabBar": {

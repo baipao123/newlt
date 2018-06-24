@@ -1,0 +1,33 @@
+<view class="page">
+    <view class="top">
+
+    </view>
+    <view class="prices" wx:if="{{!isBuy}}">
+        <view class="list">
+            <view class="weui-panel">
+                <view class="weui-panel__bd">
+                    <block wx:for="{{prices}}" wx:key="price-key" >
+                        <view class="weui-media-box weui-media-box_appmsg" wx:if="{{item.status==2}}" data-pid="{{item.pid}}" data-index="{{index}}" bindtap="order">
+                            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" wx:if="{{item.cover != ''}}">
+                                <image class="weui-media-box__thumb" src="{{item.cover}}"/>
+                            </view>
+                            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                                <view class="weui-media-box__title">
+                                    <view class="weui-flex">
+                                        <view class="weui-flex__item">{{item.hourStr}}</view>
+                                        <view class="weui-flex__item">¥ {{item.price/100}}</view>
+                                    </view>
+                                </view>
+                                <view class="weui-media-box__desc">{{item.note}}</view>
+                                <view class="weui-media-box__info weui-flex">
+                                    <view class="" wx:if="{{item.oldPrice>0}}">原价:¥ {{item.oldPrice/100}}</view>
+                                    <view class="weui-flex__item a-r"  wx:if="{{item.timeStr!=''}}">{{item.timeStr}}</view>
+                                </view>
+                            </view>
+                        </view>
+                    </block>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

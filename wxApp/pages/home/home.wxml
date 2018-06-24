@@ -2,25 +2,9 @@
     <slider id="slider" sliders="{{sliders}}" style="margin:0;">
     </slider>
     <view class="bg-white weui-flex index-icon-list">
-        <navigator url="" class="weui-flex__item">
-            <view class="index-icon" style="background-image:url({{domain}}/wxApp/wyc.png-icon)" />
-            <view class="text-m a-c">网约车</view>
-        </navigator>
-        <navigator class="weui-flex__item">
-            <view class="index-icon" style="background-image:url({{domain}}/wxApp/kyc.png-icon)" />
-            <view class="text-m a-c">客运车</view>
-        </navigator>
-        <navigator class="weui-flex__item">
-            <view class="index-icon" style="background-image:url({{domain}}/wxApp/czc.png-icon)" />
-            <view class="text-m a-c">出租车</view>
-        </navigator>
-        <navigator class="weui-flex__item">
-            <view class="index-icon" style="background-image:url({{domain}}/wxApp/hc.png-icon)" />
-            <view class="text-m a-c">货车</view>
-        </navigator>
-        <navigator class="weui-flex__item">
-            <view class="index-icon" style="background-image:url({{domain}}/wxApp/wxp.png-icon)" />
-            <view class="text-m a-c">危险品</view>
+        <navigator url="/pages/question/index?id={{item.tid}}" class="weui-flex__item" wx:for="{{types}}" wx:key="type">
+            <view class="index-icon" style="background-image:url({{domain}}{{item.icon}})" />
+            <view class="text-m a-c">{{item.name}}</view>
         </navigator>
     </view>
     <include src="/pages/common/footer.wxml"/>

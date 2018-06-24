@@ -25,6 +25,6 @@ class Status
     const WAIT_NOTIFY = 11;
     const IS_PAY = 20;
     const IS_REFUND = 30;
-    const CANCEL = 101;
+    const CANCEL_PAY = 101;
 
 }

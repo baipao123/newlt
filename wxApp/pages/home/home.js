@@ -4,10 +4,12 @@ Page({
     data: {
         user: {},
         sliders: [],
+        types:[],
         domain:app.globalData.qiNiuDomain,
     },
     onLoad: function () {
         this.getSlider()
+        this.getTypes()
     },
     onShow: function () {
         let that = this
@@ -23,6 +25,14 @@ Page({
         app.get("slider/index", {}, function (res) {
             that.setData({
                 sliders: res.list
+            })
+        })
+    },
+    getTypes: function () {
+        let that = this
+        app.get("goods/types", {}, function (res) {
+            that.setData({
+                types: res.types
             })
         })
     }

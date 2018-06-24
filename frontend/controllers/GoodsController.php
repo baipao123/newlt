@@ -29,12 +29,16 @@ class GoodsController extends BaseController
 
 
     public function actionPrices($tid) {
+        $type = QuestionType::findOne($tid);
+        if (!$type || $type->status != Status::PASS)
+            return Tool::reJson(null, "分类不存在", Tool::FAIL);
         $prices = QuestionPrice::prices($tid);
         $data = [];
         foreach ($prices as $price)
             $data[] = $price->info();
         return Tool::reJson([
-            "prices" => $data
+            "prices" => $data,
+            "type" => $type->info()
         ]);
     }
 
@@ -48,10 +52,10 @@ class GoodsController extends BaseController
             return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
         $order = new Order;
         $order->title = $p->title;
-        $order->cover = $p->cover();
+        $order->cover = empty($p->cover) ? $type->icon : $p->cover;
         $order->uid = $this->user_id();
         $order->openId = $this->getUser()->openId;
-        $order->formId = $this->getPost("formId");
+//        $order->formId = $this->getPost("formId");
         $order->price = $p->price;
         $order->hour = $p->hour;
         $order->status = Status::WAIT_PAY;

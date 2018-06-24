@@ -43,11 +43,16 @@ class QuestionPrice extends \common\models\base\QuestionPrice
         return [
             "pid"      => $this->id,
             "tid"      => $this->tid,
+            "title"    => $this->title,
             "cover"    => $this->cover(),
+            "note"     => $this->note,
+            "start_at" => $this->start_at,
+            "end_at"   => $this->end_at,
+            "hourStr"  => $this->hourStr(),
+            "price"    => $this->price,
+            "oldPrice" => $this->oldPrice,
+            "timeStr"  => $this->timeStrForApi(),// 在这个里面判断 status是否过期
             "status"   => $this->status,
-            "start_at" => date("Y-m-d H:i:s", $this->start_at),
-            "end_at"   => date("Y-m-d H:i:s", $this->end_at),
-            "hourStr"  => $this->hourStr()
         ];
 
     }
@@ -76,6 +81,26 @@ class QuestionPrice extends \common\models\base\QuestionPrice
         else
             $str .= " - 永久";
         return trim($str, " -");
+    }
+
+    public function timeStrForApi() {
+        if ($this->end_at > 0 && $this->end_at <= time()) {
+            if ($this->status == Status::PASS) {
+                $this->status = Status::EXPIRE;
+                $this->save();
+            }
+            return "已停售";
+        }
+        $str = "";
+        if ($this->start_at > 0 && $this->start_at > time()) {
+            $formatStr = date("Y") == date("Y", $this->start_at) ? "m-d H:i" : "Y-m-d H:i";
+            $str .= date($formatStr, $this->start_at) . " - ";
+        }
+        if ($this->end_at > 0 && $this->end_at > time()) {
+            $formatStr = date("Y") == date("Y", $this->end_at) ? "m-d H:i" : "Y-m-d H:i";
+            $str .= date($formatStr, $this->end_at) . (empty($str) ? "截止" : "");
+        }
+        return $str;
     }
 
 }
