@@ -10,9 +10,6 @@ use Yii;
 
 class User extends \common\models\base\User
 {
-    const TYPE_USER = 1;
-    const TYPE_COMPANY = 2;
-    const TYPE_USER_BOSS = 3;
 
     /**
      * @param string $code
@@ -52,14 +49,15 @@ class User extends \common\models\base\User
 
     public function info() {
         return [
-            "uid"         => $this->id,
-            "type"        => $this->type,
-            "nickname"    => $this->nickname,
-            "realname"    => $this->realname,
-            "avatar"      => Img::format($this->avatar),
-            "phone"       => $this->phone(),
-            "purePhone"   => $this->phone(true),
-            "gender"      => $this->gender
+            "uid"       => $this->id,
+            "tid"       => $this->tid,
+            "expire_at" => $this->expire_at <= time() ? -1 : $this->expire_at,
+            "nickname"  => $this->nickname,
+            "realname"  => $this->realname,
+            "avatar"    => Img::format($this->avatar),
+            "phone"     => $this->phone(),
+            "purePhone" => $this->phone(true),
+            "gender"    => $this->gender
         ];
     }
 

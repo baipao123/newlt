@@ -10,6 +10,7 @@ namespace common\models;
 
 use common\tools\Status;
 use common\tools\StringHelper;
+use console\worker\SendTpl;
 use Yii;
 use common\tool\WxPay;
 
@@ -78,8 +79,25 @@ class Order extends \common\models\base\Order
 
     }
 
-    public function afterPay(){
-
+    public function afterPay() {
+        if ($this->status != Status::IS_PAY)
+            return true;
+        $expire_at = UserQuestionType::find()->where(["tid" => $this->tid, "uid" => $this->uid])->orderBy("expire_at DESC")->limit(1)->select("expire_at")->scalar();
+        $record = new UserQuestionType;
+        $record->uid = $this->uid;
+        $record->tid = $this->tid;
+        $record->oid = $this->id;
+        $record->created_at = time();
+        $record->expire_at = max(time(), $expire_at) + $this->hour * 3600;
+        $record->save();
+        $user = $this->user;
+        if ($user->tid == 0 || $user->tid == $this->tid) {
+            $user->expire_at = $record->expire_at;
+            $user->tid = $this->tid;
+            $user->save();
+        }
+//        $user->sendTplByQueue();
+        return true;
     }
 
     public function afterSave($insert, $changedAttributes) {

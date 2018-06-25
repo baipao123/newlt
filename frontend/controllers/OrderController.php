@@ -53,6 +53,10 @@ class OrderController extends BaseController
         $redisKey = "DK-PAY-UID:" . $this->user_id();
         if (Yii::$app->redis->setnx($redisKey, 1) == 0)
             return Tool::reJson(null, "3秒内只允许支付一次，请稍后重试", Tool::FAIL);
+
+        $order->formId = $this->getPost("formId");
+        $order->save();
+
         Yii::$app->redis->expire($redisKey, 3);
         $params = $order->wxPayParams();
         if ($params === false)

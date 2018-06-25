@@ -5,14 +5,17 @@ namespace common\models\base;
 use Yii;
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "{{%user}}".
  *
  * @property int $id
- * @property int $type
+ * @property int $tid
+ * @property int $expire_at
  * @property string $openId
  * @property string $unionId
  * @property string $session_key
+ * @property string $realname
  * @property string $phone
+ * @property string $username
  * @property string $nickname
  * @property int $gender
  * @property string $avatar
@@ -21,9 +24,8 @@ use Yii;
  * @property string $country
  * @property int $status
  * @property string $auth_key
- * @property string $realname
- * @property int $created_at
  * @property int $real_at
+ * @property int $created_at
  * @property int $last_login
  */
 class User extends \yii\db\ActiveRecord
@@ -31,17 +33,20 @@ class User extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName() {
-        return 'user';
+    public static function tableName()
+    {
+        return '{{%user}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['created_at', 'real_at', 'type', 'gender', 'status', 'last_login'], 'integer'],
-            [['openId', 'unionId', 'session_key', 'phone', 'nickname', 'avatar', 'cityName', 'province', 'country', 'auth_key', 'realname'], 'string', 'max' => 255],
+            [['tid', 'expire_at', 'real_at', 'created_at', 'last_login'], 'integer'],
+            [['openId', 'unionId', 'session_key', 'realname', 'phone', 'username', 'nickname', 'avatar', 'cityName', 'province', 'country', 'auth_key'], 'string', 'max' => 255],
+            [['gender', 'status'], 'string', 'max' => 1],
             [['openId'], 'unique'],
         ];
     }
@@ -49,26 +54,29 @@ class User extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
-            'id'          => 'ID',
-            'type'        => 'Type',
-            'openId'      => 'Open ID',
-            'unionId'     => 'Union ID',
+            'id' => 'ID',
+            'tid' => 'Tid',
+            'expire_at' => 'Expire At',
+            'openId' => 'Open ID',
+            'unionId' => 'Union ID',
             'session_key' => 'Session Key',
-            'phone'       => 'Phone',
-            'nickname'    => 'Nickname',
-            'gender'      => 'Gender',
-            'avatar'      => 'Avatar',
-            'cityName'    => 'City Name',
-            'province'    => 'Province',
-            'country'     => 'Country',
-            'status'      => 'Status',
-            'auth_key'    => 'Auth Key',
-            'realname'    => 'Realname',
-            'created_at'  => 'Created At',
-            'real_at'     => 'Real At',
-            'last_login'  => 'Last Login',
+            'realname' => 'Realname',
+            'phone' => 'Phone',
+            'username' => 'Username',
+            'nickname' => 'Nickname',
+            'gender' => 'Gender',
+            'avatar' => 'Avatar',
+            'cityName' => 'City Name',
+            'province' => 'Province',
+            'country' => 'Country',
+            'status' => 'Status',
+            'auth_key' => 'Auth Key',
+            'real_at' => 'Real At',
+            'created_at' => 'Created At',
+            'last_login' => 'Last Login',
         ];
     }
 }
