@@ -75,12 +75,10 @@ class WxPay extends WxPayBase
     /**
      *统一下单, 下单成功后，返回调起支付所需的信息
      * @param $data array  商品的信息  包括body、detail、out_trade_no、total_fee。。。
-     * @param int $time_expire 支付时间，默认30分钟
-     * @param int $timeOut 接口访问超时时间，默认6秒
      * @return array|bool
      * @throws yii\base\ExitException
      */
-    public function UnifiedOrder($data, $time_expire = 900, $timeOut = 6) {
+    public function UnifiedOrder($data) {
         $notify_url = rtrim(Yii::$app->params['api_url'], "/") . $this->notify_end;
         //跨时区大作战，不然就是X小时15分钟的支付时间
         $timeZone = date_default_timezone_get();
@@ -93,8 +91,6 @@ class WxPay extends WxPayBase
             'notify_url'       => $notify_url,
             'trade_type'       => 'JSAPI',
             'nonce_str'        => $this->getNonceStr(),
-            'time_start'       => date("YmdHis"),
-            'time_expire'      => date("YmdHis", time() + $time_expire),
         ];
         date_default_timezone_set($timeZone);
         if (isset($data['body']))
@@ -103,18 +99,7 @@ class WxPay extends WxPayBase
         $response = $this->Post("pay/unifiedorder", $params);
         if ($response === false || isset($response['report']) || !empty($this->getError()))
             return false;
-        //下单完成，返回调起支付所需要的信息
-        $data = [
-            'appid'     => $response['appid'],
-            'partnerid' => $response['mch_id'],
-            'prepayid'  => $response['prepay_id'],
-            'package'   => "Sign=WXPay",
-            'noncestr'  => $response['nonce_str'],
-            'timestamp' => (string)time(),
-            //                'sign'=>$res['sign']
-        ];
-        $data['sign'] = $this->MakeSign($data);
-        return $data;
+        return $response;
     }
 
     /**
@@ -155,7 +140,7 @@ class WxPay extends WxPayBase
      * @param string $out_trade_no
      * @return mixed
      */
-    public function OrderQuery($out_trade_no = '', $transaction_id = '') {
+    public function Query($out_trade_no = '', $transaction_id = '') {
         $params = [
             'appid'     => $this->wxPay['appid'],
             'mch_id'    => $this->wxPay['mchid'],

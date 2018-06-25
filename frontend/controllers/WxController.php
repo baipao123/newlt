@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use common\models\Order;
 use common\models\OrderNotify;
 use common\tool\WxPay;
@@ -65,10 +66,12 @@ class WxController extends Controller
             return 0;
         }
 
+        Yii::$app->redis->setnx(Order::NotifyRedisKey . $order->id, 1);
+        Yii::$app->redis->expire(Order::NotifyRedisKey . $order->id, 3);
 
         $order->status = Status::IS_PAY;
-        $order->trade_no = ArrayHelper::getValue($params, "trade_no");
-        $order->paytime = ArrayHelper::getValue($params, "paytime");
+        $order->trade_no = ArrayHelper::getValue($params, "transaction_id");
+        $order->paytime = ArrayHelper::getValue($params, "time_end");
         $order->save();
 
         if ($order->afterPay())

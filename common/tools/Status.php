@@ -21,7 +21,7 @@ class Status
 
     // 支付相关
     const WAIT_PAY = 1;
-    const PAYING = 10;
+    const IS_UNIFY_ORDER = 10;
     const WAIT_NOTIFY = 11;
     const IS_PAY = 20;
     const IS_REFUND = 30;
