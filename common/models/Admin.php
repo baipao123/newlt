@@ -26,6 +26,6 @@ class Admin extends \common\models\base\Admin
     }
 
     public function avatar() {
-        return Img::format("youzhun.jpeg", 100, 100, true);
+        return Img::format("logo.jpeg", 100, 100, true);
     }
 }

@@ -91,7 +91,7 @@ class Order extends \common\models\base\Order
         $record->expire_at = max(time(), $expire_at) + $this->hour * 3600;
         $record->save();
         $user = $this->user;
-        if ($user->tid == 0 || $user->tid == $this->tid) {
+        if ($user->tid == 0 || $user->tid == $this->tid || $user->expire_at <= time()) {
             $user->expire_at = $record->expire_at;
             $user->tid = $this->tid;
             $user->save();

@@ -1,0 +1,29 @@
+.header{
+    height:0;
+    width:100%;
+    position:relative;
+    padding-top:60%;
+    background: url(http://img.newlt.justyoujob.com/user_bg.png) no-repeat 100% 100%;
+    background-size:100%;
+}
+
+.header .block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.header image {
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    width: 150rpx;
+    height: 150rpx;
+    background: url(http://img.newlt.justyoujob.com/logo.jpeg-icon) no-repeat 100% 100%;
+    background-size: 100%;
+}

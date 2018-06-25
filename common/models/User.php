@@ -8,8 +8,15 @@ use common\tools\WxApp;
 use console\worker\SendTpl;
 use Yii;
 
+/**
+ * @property QuestionType $questionType
+ */
 class User extends \common\models\base\User
 {
+
+    public function getQuestionType() {
+        return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
+    }
 
     /**
      * @param string $code
@@ -51,7 +58,8 @@ class User extends \common\models\base\User
         return [
             "uid"       => $this->id,
             "tid"       => $this->tid,
-            "expire_at" => $this->expire_at <= time() ? -1 : $this->expire_at,
+            "tName"     => $this->questionType ? $this->questionType->name : "",
+            "expire_at" => $this->expire_at <= time() ? 0 : $this->expire_at,
             "nickname"  => $this->nickname,
             "realname"  => $this->realname,
             "avatar"    => Img::format($this->avatar),
