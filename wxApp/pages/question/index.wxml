@@ -3,10 +3,13 @@
         <view class="countDown text text-red a-c">{{type.timeStr}}</view>
         <view class="a-c text-m title">学习考试</view>
         <view class="weui-flex bg-white padding-b">
-            <view class="weui-flex__item" bindtap="train">
-                <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
-                <view class="text-m a-c">全真练习</view>
-            </view>
+            <picker class="weui-flex__item" range="{{types}}" rangeKey="name" disabled="{{types.length<2}}">
+                <view bindtap="train">
+                    <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
+                    <view class="text-m a-c">全真练习</view>
+                </view>
+            </picker>
+
             <view class="weui-flex__item" bindtap="exam">
                 <image class="icon" src="{{domain}}wxApp/mokao.png"/>
                 <view class="text-m a-c">全真模考</view>

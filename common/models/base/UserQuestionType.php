@@ -12,6 +12,7 @@ use Yii;
  * @property int $tid
  * @property int $expire_at
  * @property int $oid
+ * @property int $status
  * @property int $created_at
  */
 class UserQuestionType extends \yii\db\ActiveRecord
@@ -30,7 +31,7 @@ class UserQuestionType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'tid', 'expire_at', 'oid', 'created_at'], 'integer'],
+            [['uid', 'tid', 'expire_at', 'oid', 'status', 'created_at'], 'integer'],
         ];
     }
 

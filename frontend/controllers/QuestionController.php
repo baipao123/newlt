@@ -36,10 +36,11 @@ class QuestionController extends BaseController
 
     }
 
-    //
-    public function actionList($tid) {
-        if ($this->getUser()->getTidExpire($tid) == 0)
-            return Tool::reJson(null, "请先购买题库", Tool::FAIL);
+    public function actionInfo($tid) {
+        $type = QuestionType::findOne($tid);
+        if (!$type || $type->status != Status::PASS)
+            return Tool::reJson(null, "不存在的分类", Tool::FAIL);
+        $expire = $this->getUser()->getTidExpire($tid);
         $types = QuestionType::getList($tid);
         $data = [];
         foreach ($types as $type)
@@ -48,20 +49,13 @@ class QuestionController extends BaseController
                 "name" => $type->name
             ];
         return Tool::reJson([
-            "list" => $data
-        ]);
-    }
-
-    public function actionInfo($tid) {
-        $type = QuestionType::findOne($tid);
-        if (!$type || $type->status != Status::PASS)
-            return Tool::reJson(null, "不存在的分类", Tool::FAIL);
-        $expire = $this->getUser()->getTidExpire($tid);
-        return Tool::reJson([
-            "on"     => $expire > time(),
-            "tid"    => $type->id,
-            "name"   => $type->name,
-            "expire" => $expire
+            "type"  => [
+                "on"     => $expire > time(),
+                "tid"    => $type->id,
+                "name"   => $type->name,
+                "expire" => $expire
+            ],
+            "types" => $data
         ]);
     }
 }

@@ -8,6 +8,7 @@ Page({
         prices: [],
         type: {},
         countIndex: 0,
+        types: [],
     },
     onLoad: function (options) {
         let tid = options && options.hasOwnProperty("id") ? options.id : 0
@@ -51,10 +52,11 @@ Page({
         let that = this
         app.get("question/info", {tid: that.data.tid}, function (res) {
             that.setData({
-                type: res
+                type: res.type,
+                types: res.types
             })
-            app.setTitle(res.name)
-            if (!res.on)
+            app.setTitle(res.type.name)
+            if (!res.type.on)
                 that.getPrices()
             else {
                 that.data.countIndex++
@@ -90,21 +92,23 @@ Page({
         }
     },
     train: function (e) {
-        let that = this
-        if (!that.data.type.on) {
+        let that = this,
+            type = that.data.type,
+            list = that.data.types
+        if (!type.on) {
             app.toast("请先购买题库", "none")
             return false
         }
-        app.get("question/list",{tid:tid},function (res) {
-            let list = res.list
-            if(list.length == 1){
-                that.goTrain(list[0].tid)
-                return true
-            }
-            
-        })
+        if (list.length <= 0) {
+            app.toast("题库内暂无题目", "none")
+            return false
+        }
+        if (list.length == 1) {
+            that.goTrain(list[0].tid)
+            return true
+        }
     },
     goTrain: function (tid) {
-
+        app.turnPage("question/train")
     }
 })

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\tools\Img;
+use common\tools\Status;
 use common\tools\Tool;
 use common\tools\WxApp;
 use console\worker\SendTpl;
@@ -23,8 +24,8 @@ class User extends \common\models\base\User
             return 0;
         if ($this->tid == $tid)
             return $this->expire_at > time() ? $this->expire_at : 0;
-        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid])->andWhere([">", "expire_at", time()])->one();
-        /* @var $type UserQuestionType*/
+        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid, "status" => Status::PASS])->andWhere([">", "expire_at", time()])->one();
+        /* @var $type UserQuestionType */
         return $type ? $type->expire_at : 0;
     }
 
