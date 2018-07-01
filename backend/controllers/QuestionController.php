@@ -43,6 +43,7 @@ class QuestionController extends BaseController
             }
         }
         if (Yii::$app->request->isPost) {
+            Yii::warning($_POST);
             $type->name = Yii::$app->request->post("name");
             $type->icon = Yii::$app->request->post("icon");
             $type->sort = Yii::$app->request->post("sort");
@@ -54,9 +55,10 @@ class QuestionController extends BaseController
                 Yii::$app->session->setFlash("warning", "名称必填");
             elseif (empty($type->icon) && $type->parentId == 0)
                 Yii::$app->session->setFlash("warning", "请上传图标");
-            elseif ($type->save())
+            elseif ($type->save()) {
                 Yii::$app->session->setFlash("success", "保存成功");
-            else {
+                $type->updateSetting(Yii::$app->request->post("setting"));
+            } else {
                 Yii::$app->session->setFlash("warning", "保存失败");
                 Yii::warning($type->errors, "保存QuestionType失败");
             }

@@ -11,6 +11,7 @@ namespace common\models;
 
 use common\tools\Img;
 use common\tools\Status;
+use yii\helpers\ArrayHelper;
 
 class QuestionType extends \common\models\base\QuestionType
 {
@@ -39,5 +40,18 @@ class QuestionType extends \common\models\base\QuestionType
 
     public function icon($full = false) {
         return Img::icon($this->icon, $full);
+    }
+
+    public function setting($key = "") {
+        $setting = empty($this->setting) ? [] : json_decode($this->setting, true);
+        return empty($key) ? $setting : ArrayHelper::getValue($setting, $key, 0);
+    }
+
+    public function updateSetting($arr) {
+        $setting = $this->setting();
+        foreach ($arr as $key => $value)
+            $setting[ $key ] = intval($value);
+        $this->setting = json_encode($setting);
+        $this->save();
     }
 }

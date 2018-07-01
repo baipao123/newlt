@@ -58,6 +58,74 @@ use layuiAdm\tools\Url;
         </div>
     </div>
 
+    <?php if ($type->parentId > 0): ?>
+    <fieldset class="layui-elem-field" style="margin-top: 20px;">
+        <legend>模考相关</legend>
+        <div class="layui-field-box">
+            <div class="layui-form-item">
+                <label class="layui-form-label">分值</label>
+                <div class="layui-form-mid">总分:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[totalScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("totalScore") ?>">
+                </div>
+                <div class="layui-form-mid"> 合格:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[passScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("passScore") ?>">
+                </div>
+                <div class="layui-form-mid">分</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">判断题</label>
+                <div class="layui-form-mid">数量:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[judgeNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("judgeNum") ?>">
+                </div>
+                <div class="layui-form-mid"> 每道:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[judgeScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("judgeScore") ?>">
+                </div>
+                <div class="layui-form-mid">分</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">单选题</label>
+                <div class="layui-form-mid">数量:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[selectNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("selectNum") ?>">
+                </div>
+                <div class="layui-form-mid"> 每道:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[selectScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("selectScore") ?>">
+                </div>
+                <div class="layui-form-mid">分</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">多选题</label>
+                <div class="layui-form-mid">数量:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[multiNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("multiNum") ?>">
+                </div>
+                <div class="layui-form-mid"> 每道:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[multiScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("multiScore") ?>">
+                </div>
+                <div class="layui-form-mid">分</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">填空题</label>
+                <div class="layui-form-mid">数量:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[blankNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("blankNum") ?>">
+                </div>
+                <div class="layui-form-mid"> 每道:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[blankScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("blankScore") ?>">
+                </div>
+                <div class="layui-form-mid">分</div>
+            </div>
+        </div>
+    </fieldset>
+    <?php endif; ?>
+
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
