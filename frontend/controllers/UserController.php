@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\UserQuestionType;
 use frontend\models\UserIdentify;
 use common\tools\Tool;
 use common\tools\WxApp;
@@ -15,6 +16,10 @@ use Yii;
 
 class UserController extends BaseController
 {
+    public function actionCheckTid($tid = 0) {
+        return Tool::reJson(["result" => !!$this->getUser()->getTidExpire($tid)]);
+    }
+
     // 获取用户信息
     public function actionUserInfo() {
         return Tool::reJson(["user" => $this->getUser()->info()]);

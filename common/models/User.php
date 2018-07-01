@@ -18,6 +18,17 @@ class User extends \common\models\base\User
         return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
     }
 
+    public function getTidExpire($tid) {
+        if ($tid <= 0)
+            return 0;
+        if ($this->tid == $tid)
+            return $this->expire_at > time() ? $this->expire_at : 0;
+        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid])->andWhere([">", "expire_at", time()])->one();
+        /* @var $type UserQuestionType*/
+        return $type ? $type->expire_at : 0;
+    }
+
+
     /**
      * @param string $code
      * @return static

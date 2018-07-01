@@ -185,6 +185,14 @@ button.low{
     padding-bottom: 0;
 }
 
+.margin-b{
+    margin-bottom:40rpx;
+}
+
+.padding-b{
+    padding-bottom: 20rpx;
+}
+
 .border-none {
     border: none;
 }

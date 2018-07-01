@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $oid
- * @property int $status
+ * @property string $status
  * @property int $created_at
  */
 class OrderStatus extends \yii\db\ActiveRecord
@@ -28,7 +28,8 @@ class OrderStatus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['oid', 'created_at', 'status'], 'integer'],
+            [['oid', 'created_at'], 'integer'],
+            [['status'], 'string', 'max' => 255],
         ];
     }
 

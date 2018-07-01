@@ -16,6 +16,19 @@ App({
         qiNiuDomain: 'http://img.newlt.justyoujob.com/',
         systemInfo: null
     },
+    checkTid: function (tid, success, fail, refresh) {
+        let that = this,
+            time = parseInt((new Date()).getTime() / 1000),
+            user = that.globalData.user;
+        if (!refresh && (tid == 0 || tid == user.tid) && user.expire_at && time < user.expire_at)
+            return success()
+        that.get("user/check-tid", {tid: tid}, function (res) {
+            if (res.result)
+                success()
+            else
+                fail()
+        })
+    },
     commonOnShow: function () {
 
     },
@@ -74,6 +87,14 @@ App({
         let that = this
         that.post("user/user-info", {}, function (data) {
             that.globalData.user = data.user
+            if (success)
+                success()
+        })
+    },
+    setUserInfoByWx: function (res, success) {
+        let that = this;
+        request.post("user/app-user", res, function (data) {
+            that.globalData.user = data.user;
             if (success)
                 success()
         })
@@ -248,5 +269,23 @@ App({
                 url: "/pages/" + url,
                 success: success
             })
+    },
+    formatSecondStr: function (s) {
+        if (s <= 0)
+            return "00:00";
+        let day = Math.floor(s / 86400),
+            hour = Math.floor(s / 3600) % 24,
+            min = Math.floor(s / 60) % 60,
+            second = Math.floor(s % 60),
+            str = ""
+        if (day > 0)
+            str = day + "天 "
+        str += this.PrefixInteger(hour, 2) + " : "
+        str += this.PrefixInteger(min, 2) + " : "
+        str += this.PrefixInteger(second, 2)
+        return str;
+    },
+    PrefixInteger: (num, length) => {
+        return (Array(length).join('0') + num).slice(-length);
     }
 })

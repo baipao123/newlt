@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\OrderStatus;
 use Yii;
 use common\models\Order;
 use common\models\OrderNotify;
@@ -59,15 +60,19 @@ class WxController extends Controller
         $record->save();
 
         if ($order->status == Status::IS_PAY) {
-            echo $wxPay->ToXml([
-                "return_code" => "SUCCESS",
-                "return_msg"  => "OK"
-            ]);
+            $this->echoSuccess($wxPay);
             return 0;
         }
 
         Yii::$app->redis->setnx(Order::NotifyRedisKey . $order->id, 1);
         Yii::$app->redis->expire(Order::NotifyRedisKey . $order->id, 3);
+
+        $result = ArrayHelper::getValue($params, "result_code", "ParamsNoneResult");
+        OrderStatus::saveRecord($order->id, $result);
+        if ($result != "SUCCESS") {
+            $this->echoSuccess($wxPay);
+            return 0;
+        }
 
         $order->status = Status::IS_PAY;
         $order->trade_no = ArrayHelper::getValue($params, "transaction_id");
@@ -75,10 +80,17 @@ class WxController extends Controller
         $order->save();
 
         if ($order->afterPay())
-            echo $wxPay->ToXml([
-                "return_code" => "SUCCESS",
-                "return_msg"  => "OK"
-            ]);
+            $this->echoSuccess($wxPay);
         return 0;
+    }
+
+    /**
+     * @param WxPay $wxPay
+     */
+    private function echoSuccess($wxPay) {
+        echo $wxPay->ToXml([
+            "return_code" => "SUCCESS",
+            "return_msg"  => "OK"
+        ]);
     }
 }

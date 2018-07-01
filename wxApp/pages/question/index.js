@@ -4,10 +4,10 @@ Page({
     data: {
         tid: 0,
         user: {},
-        domain:app.globalData.qiNiuDomain,
+        domain: app.globalData.qiNiuDomain,
         prices: [],
         type: {},
-        isBuy: false
+        countIndex: 0,
     },
     onLoad: function (options) {
         let tid = options && options.hasOwnProperty("id") ? options.id : 0
@@ -23,9 +23,9 @@ Page({
             that.setData({
                 user: app.globalData.user
             })
-            that.getPrices()
             app.commonOnShow()
         })
+        this.info()
     },
     getPrices: function () {
         let that = this,
@@ -33,9 +33,7 @@ Page({
         app.get("goods/prices", {tid: tid}, function (data) {
             that.setData({
                 prices: data.prices,
-                type: data.type
             })
-            app.setTitle(data.type.name)
         })
     },
     order: function (e) {
@@ -48,5 +46,65 @@ Page({
                 app.turnPage("order/pay?id=" + res.oid)
             })
         });
+    },
+    info: function () {
+        let that = this
+        app.get("question/info", {tid: that.data.tid}, function (res) {
+            that.setData({
+                type: res
+            })
+            app.setTitle(res.name)
+            if (!res.on)
+                that.getPrices()
+            else {
+                that.data.countIndex++
+                that.countDown(that.data.countIndex)
+            }
+        })
+    },
+    countDown: function (index) {
+        let that = this,
+            expire = that.data.type.expire,
+            time = parseInt((new Date()).getTime() / 1000)
+        if (index != that.data.countIndex)
+            return false
+        if (time >= expire) {
+            that.info()
+            that.setData({
+                "type.timeStr": ""
+            })
+            return false
+        }
+        that.setData({
+            "type.timeStr": app.formatSecondStr(expire - time)
+        })
+        setTimeout(() => {
+            that.countDown(index)
+        }, 1000)
+    },
+    exam: function (e) {
+        let that = this
+        if (!that.data.type.on) {
+            app.toast("请先购买题库", "none")
+            return false
+        }
+    },
+    train: function (e) {
+        let that = this
+        if (!that.data.type.on) {
+            app.toast("请先购买题库", "none")
+            return false
+        }
+        app.get("question/list",{tid:tid},function (res) {
+            let list = res.list
+            if(list.length == 1){
+                that.goTrain(list[0].tid)
+                return true
+            }
+            
+        })
+    },
+    goTrain: function (tid) {
+
     }
 })

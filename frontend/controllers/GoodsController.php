@@ -38,7 +38,6 @@ class GoodsController extends BaseController
             $data[] = $price->info();
         return Tool::reJson([
             "prices" => $data,
-            "type" => $type->info()
         ]);
     }
 

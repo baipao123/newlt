@@ -100,12 +100,18 @@ class Order extends \common\models\base\Order
         return true;
     }
 
+    public function beforeSave($insert) {
+        if(empty($this->out_trade_no))
+            $this->out_trade_no = self::generateOutTradeNo();
+        return parent::beforeSave($insert);
+    }
+
     public function afterSave($insert, $changedAttributes) {
         if ($insert || isset($changedAttributes['status']))
             OrderStatus::saveRecord($this->id, $this->status);
     }
 
-    public static function getOutTradeNo() {
+    public static function generateOutTradeNo() {
         return (string)intval(microtime(true) * 1000) . (string)mt_rand(10000, 99999);
     }
 }

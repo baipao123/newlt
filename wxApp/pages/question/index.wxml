@@ -1,8 +1,20 @@
 <view class="page">
     <view class="top">
-
+        <view class="countDown text text-red a-c">{{type.timeStr}}</view>
+        <view class="a-c text-m title">学习考试</view>
+        <view class="weui-flex bg-white padding-b">
+            <view class="weui-flex__item" bindtap="train">
+                <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
+                <view class="text-m a-c">全真练习</view>
+            </view>
+            <view class="weui-flex__item" bindtap="exam">
+                <image class="icon" src="{{domain}}wxApp/mokao.png"/>
+                <view class="text-m a-c">全真模考</view>
+            </view>
+        </view>
     </view>
-    <view class="prices" wx:if="{{!isBuy}}">
+    <view class="prices" wx:if="{{!type.on}}">
+        <view class="a-c text-m title">购买习题</view>
         <view class="list">
             <view class="weui-panel">
                 <view class="weui-panel__bd">
