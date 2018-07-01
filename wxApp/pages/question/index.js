@@ -9,6 +9,7 @@ Page({
         type: {},
         countIndex: 0,
         types: [],
+        typesChild: [],
     },
     onLoad: function (options) {
         let tid = options && options.hasOwnProperty("id") ? options.id : 0
@@ -53,7 +54,8 @@ Page({
         app.get("question/info", {tid: that.data.tid}, function (res) {
             that.setData({
                 type: res.type,
-                types: res.types
+                types: res.types,
+                typesChild: res.types[0].child
             })
             app.setTitle(res.type.name)
             if (!res.type.on)
@@ -110,5 +112,10 @@ Page({
     },
     goTrain: function (tid) {
         app.turnPage("question/train")
+    },
+    picker:function (e) {
+        let arr = e.detail.value
+        console.log(e)
+        console.log(arr)
     }
 })

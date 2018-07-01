@@ -41,20 +41,22 @@ class QuestionController extends BaseController
         if (!$type || $type->status != Status::PASS)
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
         $expire = $this->getUser()->getTidExpire($tid);
+        $typeData = [
+            "on"     => $expire > time(),
+            "tid"    => $type->id,
+            "name"   => $type->name,
+            "expire" => $expire
+        ];
         $types = QuestionType::getList($tid);
         $data = [];
         foreach ($types as $type)
             $data[] = [
-                "tid"  => $type->id,
-                "name" => $type->name
+                "tid"   => $type->id,
+                "name"  => $type->name,
+                "child" => $type->nums()
             ];
         return Tool::reJson([
-            "type"  => [
-                "on"     => $expire > time(),
-                "tid"    => $type->id,
-                "name"   => $type->name,
-                "expire" => $expire
-            ],
+            "type"  => $typeData,
             "types" => $data
         ]);
     }

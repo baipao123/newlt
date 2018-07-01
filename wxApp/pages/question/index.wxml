@@ -3,12 +3,13 @@
         <view class="countDown text text-red a-c">{{type.timeStr}}</view>
         <view class="a-c text-m title">学习考试</view>
         <view class="weui-flex bg-white padding-b">
-            <picker class="weui-flex__item" range="{{types}}" rangeKey="name" disabled="{{types.length<2}}">
+            <picker class="weui-flex__item" range="{{types}}" rangeKey="name" disabled="{{!type.on}}">
                 <view bindtap="train">
                     <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
                     <view class="text-m a-c">全真练习</view>
                 </view>
             </picker>
+
 
             <view class="weui-flex__item" bindtap="exam">
                 <image class="icon" src="{{domain}}wxApp/mokao.png"/>
@@ -44,5 +45,16 @@
                 </view>
             </view>
         </view>
+    </view>
+    <view>
+
+    <picker-view class="bg-grey" style="width: 100%; height: 300rpx;" bindchange="picker">
+        <picker-view-column>
+            <view wx:for="{{types}}" class="a-c" style="line-height:34px;">{{item.name}}</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view wx:for="{{typesChild}}" class="a-c" style="line-height:34px;">{{item.name}}</view>
+        </picker-view-column>
+    </picker-view>
     </view>
 </view>
