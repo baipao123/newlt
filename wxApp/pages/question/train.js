@@ -4,6 +4,8 @@ Page({
     data: {
         user: {},
         domain: app.globalData.qiNiuDomain,
+        questions: [],
+        question:{},
         tid: 0,
         type: 0,
         offset: 0
@@ -32,5 +34,14 @@ Page({
             })
             app.commonOnShow()
         })
+    },
+    getList: function () {
+
+    },
+    prev: function () {
+
+    },
+    next: function () {
+
     }
 })

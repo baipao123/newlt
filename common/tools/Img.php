@@ -53,4 +53,19 @@ class Img
         $src = $isHost ? Yii::$app->params['qiniu']['domain'] . "/" . ltrim($path, "/") : ltrim($path, "/");
         return $src . "-icon";
     }
+
+    //适用 多个img的json，兼容单个
+    public static function formatFromJson($json, $ext = "") {
+        if (empty($json))
+            return [];
+        $attaches = json_decode($json, true);
+        $attaches = is_array($attaches) ? $attaches : [$attaches];
+        if (empty($ext))
+            return $attaches;
+        $data = [];
+        foreach ($attaches as $attach) {
+            $data[] = $attach . "-" . $ext;
+        }
+        return $data;
+    }
 }
