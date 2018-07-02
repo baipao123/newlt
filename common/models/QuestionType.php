@@ -49,8 +49,10 @@ class QuestionType extends \common\models\base\QuestionType
 
     public function updateSetting($arr) {
         $setting = $this->setting();
-        foreach ($arr as $key => $value)
-            $setting[ $key ] = intval($value);
+        foreach ($arr as $key => $value) {
+            $value = number_format($value, 1);
+            $setting[ $key ] = intval($value) == $value ? intval($value) : $value;
+        }
         $this->setting = json_encode($setting);
         $this->save();
     }

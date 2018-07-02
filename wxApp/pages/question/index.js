@@ -111,10 +111,17 @@ Page({
             pickerShow: true
         })
     },
-    goTrain: function (tid) {
-        app.turnPage("question/train")
+    goTrain: function (e) {
+        // app.turnPage("question/train")
+        let that = this,
+            value = that.data.pickerValue,
+            type = that.data.types[value[0]],
+            tid = type.tid,
+            t = type.child[value[1]].type,
+            offset = 0
+        app.turnPage("question/train?tid=" + tid + "&type=" + t + "&offset=" + offset);
     },
-    pickerChange:function (e) {
+    pickerChange: function (e) {
         let that = this,
             oldValue = that.data.pickerValue,
             value = e.detail.value,
@@ -123,6 +130,7 @@ Page({
             type = that.data.types[typeIndex],
             children = type.child
         if (oldValue[0] != typeIndex) {
+            value[1] = 0
             that.setData({
                 pickerValue: value,
                 typesChild: children
@@ -132,5 +140,11 @@ Page({
                 pickerValue: value,
             })
         }
+    },
+    cancel:function (e) {
+        this.setData({
+            pickerValue: [0,0],
+            pickerShow: false
+        })
     }
 })

@@ -44,12 +44,12 @@
     </view>
 
 
-    <view class="picker-bg" catchtouchmove="true" wx:if="{{pickerShow}}">
+    <view class="picker-bg" catchtouchmove="true" wx:if="{{pickerShow}}" bindtap="cancel">
         <view class="picker-contain">
             <view class="picker-header weui-flex">
-                <view class="picker-cancel">取消</view>
+                <view class="picker-cancel" bindtap="cancel">取消</view>
                 <view class="weui-flex__item"> </view>
-                <view class="picker-submit text-green">确定</view>
+                <view class="picker-submit text-green" bindtap="goTrain">确定</view>
             </view>
             <view class="picker">
                 <picker-view class="picker-view" value="{{pickerValue}}" bindchange="pickerChange">

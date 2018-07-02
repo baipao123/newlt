@@ -57,6 +57,10 @@ class QuestionController extends BaseController
         ]);
     }
 
+    public function actionTrainHistory() {
+
+    }
+
     public function actionTrainList($tid = 0, $qid = 0, $type = Question::TypeJudge, $before = 0) {
         $type = QuestionType::findOne($tid);
         if (!$type || $type->status != Status::PASS)

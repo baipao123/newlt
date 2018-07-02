@@ -75,6 +75,14 @@ use layuiAdm\tools\Url;
                 <div class="layui-form-mid">分</div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-form-mid"> 总计:</div>
+                <div class="layui-input-inline" style="width: 60px;">
+                    <input type="number" name="setting[time]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("time") ?>">
+                </div>
+                <div class="layui-form-mid">分钟</div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">判断题</label>
                 <div class="layui-form-mid">数量:</div>
                 <div class="layui-input-inline" style="width: 60px;">
@@ -82,7 +90,7 @@ use layuiAdm\tools\Url;
                 </div>
                 <div class="layui-form-mid"> 每道:</div>
                 <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[judgeScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("judgeScore") ?>">
+                    <input type="text" name="setting[judgeScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("judgeScore") ?>">
                 </div>
                 <div class="layui-form-mid">分</div>
             </div>
@@ -94,7 +102,7 @@ use layuiAdm\tools\Url;
                 </div>
                 <div class="layui-form-mid"> 每道:</div>
                 <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[selectScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("selectScore") ?>">
+                    <input type="text" name="setting[selectScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("selectScore") ?>">
                 </div>
                 <div class="layui-form-mid">分</div>
             </div>
@@ -106,7 +114,7 @@ use layuiAdm\tools\Url;
                 </div>
                 <div class="layui-form-mid"> 每道:</div>
                 <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[multiScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("multiScore") ?>">
+                    <input type="text" name="setting[multiScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("multiScore") ?>">
                 </div>
                 <div class="layui-form-mid">分</div>
             </div>
@@ -118,7 +126,7 @@ use layuiAdm\tools\Url;
                 </div>
                 <div class="layui-form-mid"> 每道:</div>
                 <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[blankScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("blankScore") ?>">
+                    <input type="text" name="setting[blankScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("blankScore") ?>">
                 </div>
                 <div class="layui-form-mid">分</div>
             </div>
