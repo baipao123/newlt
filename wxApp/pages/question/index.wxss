@@ -15,3 +15,37 @@ image.icon{
     -moz-border-radius: 100%;
     border-radius: 100%;
 }
+
+.picker-bg{
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    left:0;
+    top:0;
+    background: rgba(0,0,0,.3);
+}
+
+.picker-contain{
+    position: absolute;
+    bottom:0;
+    left:0;
+    width: 100%;
+    height: 400rpx;
+}
+.picker-header{
+    height: 60rpx;
+    line-height: 60rpx;
+    font-size: 40rpx;
+    padding: 20rpx 30rpx;
+    background: white;
+    border-top: 1rpx solid #ccc;
+    border-bottom: 1rpx solid #ccc;
+}
+.picker-view{
+    height: 300rpx;
+    width: 100%;
+}
+.picker-column{
+    background-color: #ddd;
+    text-align: center;
+}

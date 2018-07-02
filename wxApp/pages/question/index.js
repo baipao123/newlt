@@ -8,8 +8,10 @@ Page({
         prices: [],
         type: {},
         countIndex: 0,
+        pickerShow: false,
         types: [],
         typesChild: [],
+        pickerValue: [0, 0],
     },
     onLoad: function (options) {
         let tid = options && options.hasOwnProperty("id") ? options.id : 0
@@ -105,17 +107,30 @@ Page({
             app.toast("题库内暂无题目", "none")
             return false
         }
-        if (list.length == 1) {
-            that.goTrain(list[0].tid)
-            return true
-        }
+        that.setData({
+            pickerShow: true
+        })
     },
     goTrain: function (tid) {
         app.turnPage("question/train")
     },
-    picker:function (e) {
-        let arr = e.detail.value
-        console.log(e)
-        console.log(arr)
+    pickerChange:function (e) {
+        let that = this,
+            oldValue = that.data.pickerValue,
+            value = e.detail.value,
+            typeIndex = value[0],
+            childIndex = value[1],
+            type = that.data.types[typeIndex],
+            children = type.child
+        if (oldValue[0] != typeIndex) {
+            that.setData({
+                pickerValue: value,
+                typesChild: children
+            })
+        } else if (oldValue[1] != childIndex) {
+            that.setData({
+                pickerValue: value,
+            })
+        }
     }
 })

@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 
 
+use common\models\Question;
 use common\models\QuestionType;
 use common\models\UserQuestionType;
 use common\tools\Status;
@@ -29,11 +30,6 @@ class QuestionController extends BaseController
         $user->expire_at = intval($expireAt);
         $user->save();
         return Tool::reJson(["user" => $user->info()]);
-    }
-
-    // 练习 --- 子分类列表
-    public function actionIndex() {
-
     }
 
     public function actionInfo($tid) {
@@ -59,5 +55,11 @@ class QuestionController extends BaseController
             "type"  => $typeData,
             "types" => $data
         ]);
+    }
+
+    public function actionTrainList($tid = 0, $qid = 0, $type = Question::TypeJudge, $before = 0) {
+        $type = QuestionType::findOne($tid);
+        if (!$type || $type->status != Status::PASS)
+            return Tool::reJson(null, "不存在的分类", Tool::FAIL);
     }
 }
