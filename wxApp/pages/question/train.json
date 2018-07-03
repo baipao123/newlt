@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "questionInfo": "/components/question/questionInfo"
+  }
+}

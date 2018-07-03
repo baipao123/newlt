@@ -1,0 +1,65 @@
+.weui-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex
+}
+
+.weui-flex__item-auto {
+    min-width:40px;
+    flex:auto;
+}
+
+.container{
+    width: 100%;
+}
+.body{
+    padding: 30rpx;
+    margin: 30rpx;
+    background: white;
+    font-size: 30rpx;
+    position: relative;
+}
+.header{
+    color: #337ab7;
+    font-weight:bold;
+    border-bottom: 1rpx solid #ddd;
+    padding-left: 5rpx;
+    padding-bottom: 10rpx;
+    font-size: 40rpx;
+    position: relative;
+}
+.header:after{
+    content: " ";
+    height: 4rpx;
+    width: 140rpx;
+    background: #337ab7;
+    position: absolute;
+    left:0;
+    bottom: -1rpx;
+}
+.title{
+    margin:20rpx auto;
+}
+
+.attach {
+    width: 95%;
+    display: block;
+    margin: 20rpx auto;
+}
+.option{
+    width: 100%;
+    flex-wrap: wrap;
+}
+.option .center{
+    text-align: center;
+}
+.option-title{
+    display: inline-block;
+    padding:15rpx 10rpx;
+}
+.option-img{
+    width: 95%;
+    display: block;
+    margin: 20rpx auto;
+}
+

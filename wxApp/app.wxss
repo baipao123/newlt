@@ -33,6 +33,11 @@ button.clear::after {
     flex: 3;
 }
 
+.weui-flex__item-auto {
+    -webkit-flex: auto;
+    flex:auto;
+}
+
 .text {
     font-size: 40rpx;
 }

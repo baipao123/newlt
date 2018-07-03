@@ -1,0 +1,18 @@
+<view class="container">
+    <slot> </slot>
+    <view class="body">
+        <view class="header">第{{offset}}题</view>
+        <view class="title" wx:if="{{question.title}}"><text space="nbsp">{{question.title}}</text></view>
+        <view class="attaches weui-flex" wx:if="{{question.attaches.length>0}}">
+            <image src="{{domain+item}}" wx:for="{{question.attaches}}" class="weui-flex__item-auto attach" bindtap="preview" data-url="{{domain+item}}"/>
+        </view>
+        <view class="option weui-flex" wx:if="{{question.type==1 || question.type == 2 }}">
+            <view class="weui-flex__item-auto {{item.img == '' ? '' : 'center'}}" wx:for="{{question.options}}" bindtap="chose" data-option="{{item.option}}">
+                <view class="option-title">
+                    <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
+                </view>
+                <image src="{{domain+item.img}}" class="option-img" wx:if="{{item.img != ''}}" bindtap="preview" data-url="{{domain+item.img}}"/>
+            </view>
+        </view>
+    </view>
+</view>

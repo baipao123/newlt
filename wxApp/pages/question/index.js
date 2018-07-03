@@ -118,7 +118,7 @@ Page({
             type = that.data.types[value[0]],
             tid = type.tid,
             t = type.child[value[1]].type,
-            offset = 0
+            offset = 1
         app.turnPage("question/train?tid=" + tid + "&type=" + t + "&offset=" + offset);
     },
     pickerChange: function (e) {

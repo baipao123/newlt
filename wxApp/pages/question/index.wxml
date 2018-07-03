@@ -45,7 +45,7 @@
 
 
     <view class="picker-bg" catchtouchmove="true" wx:if="{{pickerShow}}" bindtap="cancel">
-        <view class="picker-contain">
+        <view class="picker-contain" catchtap='tap'>
             <view class="picker-header weui-flex">
                 <view class="picker-cancel" bindtap="cancel">取消</view>
                 <view class="weui-flex__item"> </view>

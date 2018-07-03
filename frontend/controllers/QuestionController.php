@@ -61,16 +61,16 @@ class QuestionController extends BaseController
 
     }
 
-    public function actionTrainList($tid = 0, $offset = 0, $type = Question::TypeJudge) {
+    public function actionTrainList($tid = 0, $offset = 1, $type = Question::TypeJudge) {
         $type = QuestionType::findOne($tid);
         if (!$type || $type->status != Status::PASS)
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
 
-        $questions = Question::find()->where(["tid" => $tid, "type" => $type])->offset($offset)->limit(10)->all();
+        $questions = Question::find()->where(["tid" => $tid, "type" => $type])->offset($offset - 1)->limit(10)->all();
         /* @var $questions Question[] */
         $data = [];
         foreach ($questions as $index => $question) {
-            $data[ $offset + 1 + $index ] = $question->info();
+            $data[ $offset + $index ] = $question->info();
         }
 
         return Tool::reJson(["list" => $data]);

@@ -23,32 +23,49 @@ class Question extends \common\models\base\Question
             "qid"      => $this->id,
             "type"     => $this->type,
             "title"    => $this->title,
-            "attaches" => Img::formatFromJson($this->attaches, "question"),
+            "attaches" => Img::formatFromJson($this->attaches),
             "options"  => $this->options(),
         ];
     }
 
     public function options() {
+        if($this->type == self::TypeJudge)
+            return [
+                [
+                    "option" => "A",
+                    "text"   => "对",
+                    "img"    => [],
+                ],
+                [
+                    "option" => "B",
+                    "text"   => "错",
+                    "img"    => []
+                ]
+            ];
         $data = [];
-        if (!empty($this->a) && !empty($this->aImg))
-            $data["A"] = [
+        if (!empty($this->a) || !empty($this->aImg))
+            $data[] = [
+                "option" => "A",
                 "text" => $this->a,
-                "img"  => Img::formatFromJson($this->aImg, "question"),
+                "img"  => $this->aImg,
             ];
-        if (!empty($this->b) && !empty($this->bImg))
-            $data["B"] = [
+        if (!empty($this->b) || !empty($this->bImg))
+            $data[] = [
+                "option" => "B",
                 "text" => $this->b,
-                "img"  => Img::formatFromJson($this->bImg, "question"),
+                "img"  => $this->bImg,
             ];
-        if (!empty($this->c) && !empty($this->cImg))
-            $data["C"] = [
+        if (!empty($this->c) || !empty($this->cImg))
+            $data[] = [
+                "option" => "C",
                 "text" => $this->c,
-                "img"  => Img::formatFromJson($this->cImg, "question"),
+                "img"  => $this->cImg,
             ];
-        if (!empty($this->d) && !empty($this->dImg))
-            $data["D"] = [
+        if (!empty($this->d) || !empty($this->dImg))
+            $data[] = [
+                "option" => "D",
                 "text" => $this->d,
-                "img"  => Img::formatFromJson($this->dImg, "question"),
+                "img"  => $this->dImg,
             ];
         return $data;
     }
