@@ -287,5 +287,19 @@ App({
     },
     PrefixInteger: (num, length) => {
         return (Array(length).join('0') + num).slice(-length);
+    },
+    fullImg: function (urls) {
+        let domain = this.globalData.qiNiuDomain
+        if (typeof urls == "Array") {
+            let i = 0,
+                src = []
+            for (i; i < urls.length; i++) {
+                src.push(this.fullImg(urls[i]))
+            }
+            return src
+        } else if (typeof urls == "String")
+            return urls.substr(0, 4) == "http" ? urls : domain + urls
+        else
+            return urls
     }
 })

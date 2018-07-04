@@ -70,13 +70,6 @@ Component({
                 that.getMore(prev ? offset - 9 : offset)
             }
         },
-        preview: function (e) {
-            let that = this,
-                url = e.currentTarget.dataset.url
-            wx.previewImage({
-                urls: [url]
-            })
-        },
         chose: function (e) {
             let that = this,
                 option = e.currentTarget.dataset.option

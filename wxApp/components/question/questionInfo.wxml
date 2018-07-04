@@ -3,15 +3,28 @@
     <view class="body">
         <view class="header">第{{offset}}题</view>
         <view class="title" wx:if="{{question.title}}"><text space="nbsp">{{question.title}}</text></view>
-        <view class="attaches weui-flex" wx:if="{{question.attaches.length>0}}">
-            <image src="{{domain+item}}" wx:for="{{question.attaches}}" class="weui-flex__item-auto attach" bindtap="preview" data-url="{{domain+item}}"/>
+        <view class="attaches">
+            <img urls="{{question.attaches}}"/>
         </view>
         <view class="option weui-flex" wx:if="{{question.type==1 || question.type == 2 }}">
-            <view class="weui-flex__item-auto {{item.img == '' ? '' : 'center'}}" wx:for="{{question.options}}" bindtap="chose" data-option="{{item.option}}">
+            <view class="weui-flex__item-auto {{item.img == '' ? '' : 'center'}}" wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
                 <view class="option-title">
                     <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
                 </view>
-                <image src="{{domain+item.img}}" class="option-img" wx:if="{{item.img != ''}}" bindtap="preview" data-url="{{domain+item.img}}"/>
+                <view class="option-img" wx:if="{{item.img}}">
+                    <img src="{{item.img}}"/>
+                </view>
+            </view>
+        </view>
+        <view class="actions weui-flex">
+            <view class="weui-flex__item-auto prev" bindtap="prev">
+                <span class="myIcon icon-left">上一题</span>
+            </view>
+            <view class="weui-flex__item-auto see" bindtap="see">
+                <span class="myIcon icon-eye">查看答案</span>
+            </view>
+            <view class="weui-flex__item-auto next" bindtap="next">
+                下一题<span class="myIcon icon-right"/>
             </view>
         </view>
     </view>

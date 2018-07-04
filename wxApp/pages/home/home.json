@@ -3,6 +3,7 @@
         "navigationBarTitleText": "领图司机"
     },
     "usingComponents": {
-        "slider": "/components/slider"
+        "slider": "/components/slider",
+        "img" :"/components/img"
     }
 }

@@ -62,9 +62,11 @@ class QuestionController extends BaseController
     }
 
     public function actionTrainList($tid = 0, $offset = 1, $type = Question::TypeJudge) {
-        $type = QuestionType::findOne($tid);
-        if (!$type || $type->status != Status::PASS)
+        $qType = QuestionType::findOne($tid);
+        if (!$qType || $qType->status != Status::PASS)
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
+
+        $offset = $offset <= 1 ? 1 : $offset;
 
         $questions = Question::find()->where(["tid" => $tid, "type" => $type])->offset($offset - 1)->limit(10)->all();
         /* @var $questions Question[] */
