@@ -29,6 +29,11 @@ class User extends \common\models\base\User
         return $type ? $type->expire_at : 0;
     }
 
+    public function updateQuestionRecord($offset) {
+        if ($offset <= 1)
+            return false;
+    }
+
 
     /**
      * @param string $code

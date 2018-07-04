@@ -29,6 +29,8 @@ Component({
         windowWidth: 300,
         domain: app.globalData.qiNiuDomain,
         question: {},
+        result: {},
+        answer: []
     },
     ready: function () {
         let that = this
@@ -49,7 +51,7 @@ Component({
             this.setOffset()
         },
         getMore: function (offset) {
-            this.triggerEvent('MoreList', {offset:offset})
+            this.triggerEvent('MoreList', {offset: offset})
         },
         setOffset: function (prev) {
             let that = this,
@@ -63,7 +65,8 @@ Component({
             if (questions[offset]) {
                 that.setData({
                     question: questions[offset],
-                    offset: offset
+                    offset: offset,
+                    result: {}
                 })
                 console.log(questions[offset])
             } else {
@@ -72,11 +75,49 @@ Component({
         },
         chose: function (e) {
             let that = this,
-                option = e.currentTarget.dataset.option
-            console.log(option)
+                option = e.currentTarget.dataset.option,
+                question = that.data.question,
+                offset = that.data.offset,
+                answer = that.data.answer
+            if(that.data.result.answer)
+                return true
+            if (question.type <= 2) {
+                that.answer({
+                    qid: question.qid,
+                    offset: offset,
+                    answer: option
+                })
+                that.setData({
+                    answer: [option]
+                })
+            } else {
+                if (answer.indexOf(option) > -1)
+                    answer.pop(option)
+                else
+                    answer.push(option)
+                that.setData({
+                    answer: answer
+                })
+            }
         },
-        answer: function (e) {
+        answer: function (data) {
+            let that = this
+            app.post("question/answer", data, function (res) {
+                that.setData({
+                    result: res.result
+                })
+            })
+        },
+        see: function (e) {
+            let that = this,
+                offset = that.data.offset,
+                qid = that.data.question.qid
+            if(that.data.result.answer)
+                return true
+            app.confirm("确定直接查看答案？", function () {
+                that.answer({qid: qid, offset: offset})
+            })
+        },
 
-        }
     }
 })

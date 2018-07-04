@@ -11,11 +11,10 @@
 }
 
 .container{
-    width: 100%;
+    padding: 30rpx;
 }
 .body{
     padding: 30rpx;
-    margin: 30rpx;
     background: white;
     font-size: 30rpx;
     position: relative;

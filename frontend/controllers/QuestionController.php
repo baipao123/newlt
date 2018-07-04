@@ -73,8 +73,31 @@ class QuestionController extends BaseController
         $data = [];
         foreach ($questions as $index => $question) {
             $data[ $offset + $index ] = $question->info();
+            $question->addViewNum();
         }
 
         return Tool::reJson(["list" => $data]);
+    }
+
+    public function actionAnswer() {
+        $qid = $this->getPost("qid", 0);
+        $answer = $this->getPost("answer", "");
+        $offset = $this->getPost("offset", 0);
+        $question = Question::findOne($qid);
+        if (!$question)
+            return Tool::reJson(null, "未发现题目", Tool::FAIL);
+        $result = $question->answer();
+        if (!empty($answer)) {
+            $answer = asort(str_split($answer));
+            if ($answer == $result['answer']) {
+                $result['result'] = true;
+                $question->addSuccessNum();
+            } else {
+                $question->addErrNum();
+                $result['result'] = false;
+            }
+        }
+        $this->getUser()->updateQuestionRecord($offset);
+        return Tool::reJson(["result" => $result]);
     }
 }

@@ -20,8 +20,7 @@ use Yii;
  * @property string $cImg
  * @property string $d
  * @property string $dImg
- * @property int $answer
- * @property string $answerText
+ * @property string $answer
  * @property string $description
  * @property string $knowledge
  * @property int $difficulty
@@ -44,10 +43,10 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'type', 'answer', 'difficulty', 'created_at', 'updated_at'], 'integer'],
+            [['tid', 'type', 'difficulty', 'created_at', 'updated_at'], 'integer'],
             //            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'description', 'knowledge'], 'required'],
             [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'description', 'knowledge'], 'string'],
-            [['answerText'], 'string', 'max' => 255],
+            [['answer'], 'string', 'max' => 255],
         ];
     }
 
@@ -71,7 +70,6 @@ class Question extends \yii\db\ActiveRecord
             'd' => 'D',
             'dImg' => 'D Img',
             'answer' => 'Answer',
-            'answerText' => 'Answer Text',
             'description' => 'Description',
             'knowledge' => 'Knowledge',
             'difficulty' => 'Difficulty',

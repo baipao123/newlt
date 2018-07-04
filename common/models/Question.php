@@ -70,4 +70,24 @@ class Question extends \common\models\base\Question
         return $data;
     }
 
+    public function answer() {
+        return [
+            "answer"      => str_split($this->answer),
+            "description" => $this->description,
+            "knowledge"   => $this->knowledge,
+            "difficulty"  => $this->difficulty
+        ];
+    }
+
+    public function addErrNum() {
+
+    }
+
+    public function addSuccessNum() {
+
+    }
+
+    public function addViewNum() {
+
+    }
 }
