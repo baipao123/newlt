@@ -4,9 +4,22 @@ Page({
     data: {
         user: {},
         domain: app.globalData.qiNiuDomain,
+        questions: [],
+        tid: 0,
+        offset: 1
     },
-    onLoad: function () {
-
+    onLoad: function (options) {
+        let that = this,
+            tid = options.hasOwnProperty("tid") ? options.tid : 0,
+            offset = options.hasOwnProperty("offset") ? options.offset : 1
+        if (tid <= 0) {
+            app.toast("未知题库", "none", function () {
+                wx.navigateBack()
+            })
+        }
+        that.data.tid = tid
+        that.data.offset = offset
+        that.getList()
     },
     onShow: function () {
         let that = this
@@ -15,6 +28,28 @@ Page({
                 user: app.globalData.user
             })
             app.commonOnShow()
+        })
+    },
+    moreList: function (e) {
+        let that = this
+        that.data.offset = e.detail.offset
+        that.getList()
+    },
+    getList: function () {
+        let that = this,
+            data = {
+                tid: that.data.tid,
+                type: that.data.type,
+                offset: that.data.offset
+            }
+        app.get("exam/list", data, function (res) {
+            if (res.list.length == 0)
+                app.toast("没有更多题目了")
+            else
+                that.setData({
+                    questions: res.list,
+                    offset: that.data.offset
+                })
         })
     }
 })
