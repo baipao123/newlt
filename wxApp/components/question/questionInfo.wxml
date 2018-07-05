@@ -7,14 +7,15 @@
     </view>
     <view class="body">
         <view class="header">第{{offset}}题</view>
+        <view class="weui-loading big {{question.title ? 'hidden' : ''}}"/>
         <view class="title" wx:if="{{question.title}}">
             <text space="nbsp">{{question.title}}</text>
         </view>
         <view class="attaches">
             <img urls="{{question.attaches}}"/>
         </view>
-        <view class="option weui-flex" wx:if="{{question.type==1 || question.type == 2 }}">
-            <view class="weui-flex__item-auto {{item.img == '' ? '' : 'center'}} {{answer.indexOf(item.option)>-1 ? 'select':''}} {{result.answer && result.answer.indexOf(item.option)>-1 ? 'success':''}} "
+        <view class="option weui-flex" >
+            <view class="weui-flex__item-auto {{item.img == '' ? '' : 'center'}} {{answer.indexOf(item.option)>-1 ? 'select':''}} {{result.answer && result.answer.indexOf(item.option)>-1 ? 'green-block':''}} "
                   wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
                 <view class="option-title">
                     <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
@@ -26,12 +27,33 @@
         </view>
 
         <view class="answer" wx:if="{{result.answer}}">
-
+            <view class="weui-form-preview">
+                <view class="weui-form-preview__hd">
+                    <view class="weui-form-preview__item">
+                        <view class="weui-form-preview__label">正确答案</view>
+                        <view class="weui-form-preview__value_in-hd">{{result.answerStr}}</view>
+                    </view>
+                </view>
+                <view class="weui-form-preview__bd">
+                    <view class="weui-form-preview__item">
+                        <view class="weui-form-preview__label">知识点</view>
+                        <view class="weui-form-preview__value">{{result.knowledge}}</view>
+                    </view>
+                    <view class="weui-form-preview__item">
+                        <view class="weui-form-preview__label">难度</view>
+                        <view class="weui-form-preview__value">{{result.difficulty}}</view>
+                    </view>
+                    <view class="weui-form-preview__item">
+                        <view class="weui-form-preview__label">答案解析</view>
+                        <view class="weui-form-preview__value">{{result.description}}</view>
+                    </view>
+                </view>
+            </view>
         </view>
 
         <view class="actions weui-flex">
             <view class="weui-flex__item-auto prev" bindtap="prev">
-                <span class="myIcon icon-left">上一题</span>
+                <span class="myIcon icon-left" wx:if="{{offset > 1}}">上一题</span>
             </view>
             <view class="weui-flex__item-auto see" bindtap="see">
                 <span class="myIcon icon-eye">查看答案</span>

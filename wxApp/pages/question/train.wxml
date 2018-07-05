@@ -1,5 +1,3 @@
 <view class="page">
-    <questionInfo bindMoreList="moreList" questions="{{questions}}" offset="{{offset}}">
-        <view>练习</view>
-    </questionInfo>
+    <questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>
 </view>

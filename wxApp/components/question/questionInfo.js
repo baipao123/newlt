@@ -5,7 +5,7 @@ Component({
         multipleSlots: false // 在组件定义时的选项中启用多slot支持
     },
     properties: {
-        questions: {
+        list: {
             type: Object,
             value: [],
             observer: function (newData, oldData) {
@@ -26,31 +26,30 @@ Component({
         }
     },
     data: {
-        windowWidth: 300,
         domain: app.globalData.qiNiuDomain,
+        questions:[],
         question: {},
         result: {},
-        answer: []
+        answer: [],
+        loading: false,
     },
     ready: function () {
-        let that = this
-        app.getSystemInfo(function (info) {
-            that.setData({
-                windowWidth: info.windowWidth
-            })
-        })
-        console.log(123)
     },
     methods: {
         prev: function () {
+            if(this.data.loading)
+                return true
             this.data.offset--
             this.setOffset(true)
         },
         next: function () {
+            if(this.data.loading)
+                return true
             this.data.offset++
             this.setOffset()
         },
         getMore: function (offset) {
+            this.data.loading = true
             this.triggerEvent('MoreList', {offset: offset})
         },
         setOffset: function (prev) {
@@ -61,15 +60,19 @@ Component({
                 app.toast("已经是第一题了", "none")
                 return false
             }
-
             if (questions[offset]) {
                 that.setData({
                     question: questions[offset],
                     offset: offset,
                     result: {}
                 })
-                console.log(questions[offset])
+                that.data.loading = false
             } else {
+                that.setData({
+                    question: {},
+                    offset: offset,
+                    result: {}
+                })
                 that.getMore(prev ? offset - 9 : offset)
             }
         },

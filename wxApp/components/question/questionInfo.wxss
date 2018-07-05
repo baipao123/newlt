@@ -1,13 +1,7 @@
-@import "../../wxss/icon.wxss";
-.weui-flex {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex
-}
+@import "../../app.wxss";
 
 .weui-flex__item-auto {
     min-width:40px;
-    flex:auto;
 }
 
 .container{

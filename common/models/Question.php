@@ -29,7 +29,7 @@ class Question extends \common\models\base\Question
     }
 
     public function options() {
-        if($this->type == self::TypeJudge)
+        if ($this->type == self::TypeJudge)
             return [
                 [
                     "option" => "A",
@@ -46,32 +46,33 @@ class Question extends \common\models\base\Question
         if (!empty($this->a) || !empty($this->aImg))
             $data[] = [
                 "option" => "A",
-                "text" => $this->a,
-                "img"  => $this->aImg,
+                "text"   => $this->a,
+                "img"    => $this->aImg,
             ];
         if (!empty($this->b) || !empty($this->bImg))
             $data[] = [
                 "option" => "B",
-                "text" => $this->b,
-                "img"  => $this->bImg,
+                "text"   => $this->b,
+                "img"    => $this->bImg,
             ];
         if (!empty($this->c) || !empty($this->cImg))
             $data[] = [
                 "option" => "C",
-                "text" => $this->c,
-                "img"  => $this->cImg,
+                "text"   => $this->c,
+                "img"    => $this->cImg,
             ];
         if (!empty($this->d) || !empty($this->dImg))
             $data[] = [
                 "option" => "D",
-                "text" => $this->d,
-                "img"  => $this->dImg,
+                "text"   => $this->d,
+                "img"    => $this->dImg,
             ];
         return $data;
     }
 
     public function answer() {
         return [
+            "answerStr"   => $this->answer,
             "answer"      => str_split($this->answer),
             "description" => $this->description,
             "knowledge"   => $this->knowledge,
