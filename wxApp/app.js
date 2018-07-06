@@ -123,6 +123,7 @@ App({
         let that = this;
         wx.login({
             success: function (res) {
+                console.log(res)
                 if (res.code) {
                     that.post("user/app-login", {code: res.code}, data => {
                         that.globalData.user = data.user;
