@@ -1,3 +1,8 @@
 {
-  "navigationBarTitleText": "个人中心"
+	"windows":{
+  		"navigationBarTitleText": "个人中心"
+	},
+    "usingComponents": {
+	    "questionInfo": "/components/question/questionInfo"
+	}
 }
