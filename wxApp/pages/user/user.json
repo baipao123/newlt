@@ -1,8 +1,6 @@
 {
-	"windows":{
-  		"navigationBarTitleText": "个人中心"
-	},
-    "usingComponents": {
-	    "select": "/components/select"
-	}
+  "navigationBarTitleText": "个人中心",
+  "usingComponents": {
+    "select": "/components/select"
+  }
 }

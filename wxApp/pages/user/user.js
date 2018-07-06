@@ -78,17 +78,16 @@ Page({
             type = that.data.qTypes[index].type
         app.get("question/train-last-offset", {type: type}, function (res) {
             res.offset = !res.offset || res.offset == 0 ? 1 : res.offset
-            let url = "question/train?tid=" + res.tid + "&type=" + type + "&offset=" + res.offset
+            let url = "question/train?tid=" + res.tid + "&type=" + type
             if (res.offset == 1) {
                 app.turnPage(url)
                 return true
             } else {
                 app.confirm("您上次练习到第" + res.offset + "题，需要继续练习吗？", function () {
+                    app.turnPage(url + "&offset=" + res.offset)
+                }, function () {
                     app.turnPage(url)
-                },function () {
-                    let url = "question/train?tid=" + res.tid + "&type=" + type + "&offset=1"
-                    app.turnPage(url)
-                })
+                }, "提示", "继续上次", "重新开始")
             }
         })
     },
@@ -96,6 +95,9 @@ Page({
         let that = this
         if (!that.common())
             return true
+        app.get("exam/last", {}, function (re) {
+
+        })
     },
     common: function () {
         return true

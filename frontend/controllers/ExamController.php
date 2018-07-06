@@ -12,11 +12,17 @@ namespace frontend\controllers;
 class ExamController extends BaseController
 {
 
-    public function actionExam(){
+    public function actionLast($tid = 0) {
+        if ($tid <= 0)
+            $tid = $this->getUser()->tid2;
 
     }
 
-    public function actionRecords(){
+    public function actionExam() {
+
+    }
+
+    public function actionRecords() {
 
     }
 

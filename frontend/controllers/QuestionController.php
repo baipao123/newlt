@@ -66,7 +66,7 @@ class QuestionController extends BaseController
                 break;
             }
         }
-        return Tool::reJson(["user" => $user->info(), "value" => $value,"qTypes"=> $type->qTypes()]);
+        return Tool::reJson(["user" => $user->info(), "value" => $value, "qTypes" => $type->qTypes()]);
     }
 
     public function actionInfo($tid) {
@@ -97,6 +97,8 @@ class QuestionController extends BaseController
     public function actionTrainLastOffset($tid = 0, $type = Question::TypeJudge) {
         if (empty($tid))
             $tid = $this->getUser()->tid2;
+        if (empty($tid))
+            return Tool::reJson(null, "请先选择一个分类", Tool::FAIL);
         $offset = UserTrainRecord::lastOffset($this->user_id(), $tid, $type);
         return Tool::reJson([
             "offset" => $offset,

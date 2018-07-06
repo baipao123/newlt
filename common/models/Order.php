@@ -26,13 +26,13 @@ class Order extends \common\models\base\Order
     }
 
 
-    public function info(){
+    public function info() {
         return [
-            "oid" => $this->id,
+            "oid"    => $this->id,
             "openId" => $this->openId,
-            "title" => $this->title,
-            "cover" => $this->cover,
-            "price" => $this->price,
+            "title"  => $this->title,
+            "cover"  => $this->cover,
+            "price"  => $this->price,
         ];
     }
 
@@ -71,11 +71,11 @@ class Order extends \common\models\base\Order
         return $prepayId;
     }
 
-    public function wxRefund(){
+    public function wxRefund() {
 
     }
 
-    public function wxQuery(){
+    public function wxQuery() {
 
     }
 
@@ -93,15 +93,21 @@ class Order extends \common\models\base\Order
         $user = $this->user;
         if ($user->tid == 0 || $user->tid == $this->tid || $user->expire_at <= time()) {
             $user->expire_at = $record->expire_at;
+            if ($user->tid == 0) {
+                $types = QuestionType::getList($this->tid);
+                if (count($types) == 1) {
+                    $user->tid2 = $types[0]->id;
+                }
+            }
             $user->tid = $this->tid;
             $user->save();
         }
-//        $user->sendTplByQueue();
+        //        $user->sendTplByQueue();
         return true;
     }
 
     public function beforeSave($insert) {
-        if(empty($this->out_trade_no))
+        if (empty($this->out_trade_no))
             $this->out_trade_no = self::generateOutTradeNo();
         return parent::beforeSave($insert);
     }

@@ -18,7 +18,7 @@ class CloseOrder extends BaseJob
 
     public function execute($queue) {
         $order = Order::findOne($this->id);
-        if (!$order || in_array($order->status, [Status::IS_PAY, Status::IS_REFUND, Status::CANCEL]))
+        if (!$order || in_array($order->status, [Status::IS_PAY, Status::IS_REFUND, Status::CANCEL_PAY]))
             return 0;
         $query = $order->wxQuery();
         if ($query) {
@@ -27,7 +27,7 @@ class CloseOrder extends BaseJob
             $order->afterPay();
             return 0;
         } else {
-            $order->status = Status::CANCEL;
+            $order->status = Status::CANCEL_PAY;
             $order->save();
             return 0;
         }
