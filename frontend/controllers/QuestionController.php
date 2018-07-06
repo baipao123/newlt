@@ -35,7 +35,8 @@ class QuestionController extends BaseController
                     break;
                 }
             }
-        return Tool::reJson(["types" => array_values($types), "value" => $value]);
+        $type = QuestionType::findOne($user->tid2);
+        return Tool::reJson(["types" => array_values($types), "value" => $value, "qTypes" => $type ? $type->qTypes() : []]);
     }
 
     public function actionChangeType() {
@@ -53,10 +54,10 @@ class QuestionController extends BaseController
         $user->save();
         $types = QuestionType::all();
         $value = [0, 0];
-        foreach ($types as $i => $type) {
-            if ($user->tid == $type['tid']) {
+        foreach ($types as $i => $t) {
+            if ($user->tid == $t['tid']) {
                 $value[0] = $i;
-                foreach ($type['child'] as $j => $val) {
+                foreach ($t['child'] as $j => $val) {
                     if ($user->tid2 == $val['tid']) {
                         $value[1] = $j;
                         break;
@@ -65,7 +66,7 @@ class QuestionController extends BaseController
                 break;
             }
         }
-        return Tool::reJson(["user" => $user->info(), "value" => $value]);
+        return Tool::reJson(["user" => $user->info(), "value" => $value,"qTypes"=> $type->qTypes()]);
     }
 
     public function actionInfo($tid) {
@@ -85,7 +86,7 @@ class QuestionController extends BaseController
             $data[] = [
                 "tid"   => $type->id,
                 "name"  => $type->name,
-                "child" => $type->nums()
+                "child" => $type->qTypes()
             ];
         return Tool::reJson([
             "type"  => $typeData,

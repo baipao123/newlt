@@ -85,7 +85,7 @@ class QuestionType extends \common\models\base\QuestionType
         $this->save();
     }
 
-    public function nums() {
+    public function qTypes() {
         $setting = $this->setting();
         $data = [];
         $judge = ArrayHelper::getValue($setting, "judgeTotal", 0);
