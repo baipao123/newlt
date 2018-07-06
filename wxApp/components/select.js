@@ -11,79 +11,112 @@ Component({
             observer: function (newData, oldData) {
             }
         },
-        rangeKey:{
+        childKey: {
             type: Array,
             value: [],
             observer: function (newData, oldData) {
             }
         },
-        valueKey:{
+        rangeKey: {
             type: Array,
             value: [],
             observer: function (newData, oldData) {
             }
         },
-        value:{
+        valueKey: {
             type: Array,
             value: [],
             observer: function (newData, oldData) {
+            }
+        },
+        value: {
+            type: Array,
+            value: [],
+            observer: function (newData, oldData) {
+            }
+        },
+        show: {
+            type: Boolean,
+            value: false,
+            observer: function (newData, oldData) {
+                if(newData)
+                    this.loadValue()
             }
         }
     },
     data: {
-        ranges:[],
+        ranges: [],
+        title: '',
     },
     ready: function () {
-        let that = this
-        for(let i=0;i<that.data.value.length;i++){
-
-        }
     },
     methods: {
-        change:function(e){
+        loadValue:function () {
+            let that = this,
+                range = that.data.range,
+                rangeKey = that.data.rangeKey,
+                value = that.data.value,
+                childKey = that.data.childKey,
+                ranges = [],
+                title = ''
+            if(range.length == 0)
+                return false
+            ranges[0] = range
+            title = range[value[0]][rangeKey[0]]
+            for (let i = 1; i < value.length; i++) {
+                ranges[i] = range[value[i - 1]][childKey[i - 1]]
+                title += ' ' + ranges[i][value[i]][rangeKey[i]]
+            }
+            that.setData({
+                ranges: ranges,
+                value: value,
+                title: title
+            })
+        },
+        change: function (e) {
             let that = this,
                 newValue = e.detail.value,
                 value = that.data.value,
                 ranges = that.data.ranges,
-                rangeKey = that.data.rangeKey,
-                i=0,
+                childKey = that.data.childKey,
+                i = 0,
                 j
-            for(i;i<value.length;i++){
-                if(i+1 != value.length && newValue[i] != value[i]){
-                    ranges[i+1] = ranges[i][rangeKey[i]]
-                    for(j=i;j<value.length;j++){
-                        ranges[j+2]=ranges[j+1][rangeKey[j+1]]
+            console.log(newValue)
+            for (i; i < value.length; i++) {
+                if (i + 1 != value.length && newValue[i] != value[i]) {
+                    for (j = i+1; j < value.length; j++) {
+                        newValue[j] = 0
                     }
-                    that.setData({
-                        ranges:ranges,
-                        value:newValue
-                    })    
+                    that.data.value = newValue
+                    that.loadValue()
                     return false
                 }
             }
-            that.setData({
-                value: newValue,
-            })
+            that.data.value = newValue
+            that.loadValue()
         },
-        empty:function(){
+        empty: function () {
 
         },
-        cancel:function(){
+        cancel: function () {
             this.setData({
-                show:false
+                show: false
             })
         },
-        submit:function(e){
+        submit: function (e) {
             let that = this,
                 value = that.data.value,
                 valueKey = that.data.valueKey,
                 i = 0,
-                result=[],
+                result = [],
                 ranges = that.data.ranges
-            for(i;i<value.length;i++){
-                result.push(ranges[i][valueKey[i]])
+            for (i; i < value.length; i++) {
+                result.push(ranges[i][value[i]][valueKey[i]])
             }
-            this.triggerEvent('submit', {value:result})
+            that.setData({
+                show:false
+            })
+            this.triggerEvent('submit', {value: result})
         }
     }
 })

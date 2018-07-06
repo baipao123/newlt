@@ -18,7 +18,7 @@ use common\tools\Tool;
 class QuestionController extends BaseController
 {
     public function actionAllTypes() {
-        $types = QuestionType::all(true);
+        $types = QuestionType::all();
         $user = $this->getUser();
         $value = [0, 0];
         if ($user->tid > 0)
@@ -34,7 +34,7 @@ class QuestionController extends BaseController
                     break;
                 }
             }
-        return Tool::reJson(["types" => $types, "value" => $value]);
+        return Tool::reJson(["types" => array_values($types), "value" => $value]);
     }
 
     public function actionChangeType() {

@@ -3,6 +3,6 @@
   		"navigationBarTitleText": "个人中心"
 	},
     "usingComponents": {
-	    "questionInfo": "/components/question/questionInfo"
+	    "select": "/components/select"
 	}
 }

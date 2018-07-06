@@ -56,6 +56,5 @@
         <button class="weui-btn register" type="primary" bindgetuserinfo="register" open-type="getUserInfo" lang="zh_CN">注册</button>
     </block>
     <include src="/pages/common/footer.wxml"/>
+    <select range="{{typesData}}" rangeKey="{{['name','name']}}" childKey="{{['child']}}" value="{{pickerValue}}" valueKey="{{['tid','tid']}}" show="{{picker}}" bindsubmit="pickerSubmit" />
 </view>
-
-<select ranges="{{}}" rangeKey="{{}}" value="{{}}" show="{{}}"  />

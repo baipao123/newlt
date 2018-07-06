@@ -2,13 +2,13 @@
     <view class="picker-contain" catchtap='empty'>
         <view class="picker-header weui-flex">
             <view class="picker-cancel" bindtap="cancel">取消</view>
-            <view class="weui-flex__item">{{title}}</view>
-            <view class="picker-submit text-green" bindtap="goTrain">确定</view>
+            <view class="weui-flex__item a-c text-m text-grey">{{title}}</view>
+            <view class="picker-submit text-green" bindtap="submit">确定</view>
         </view>
         <view class="picker">
             <picker-view class="picker-view" value="{{value}}" bindchange="change">
-                <picker-view-column class="picker-column" wx:for="{{ranges}}">
-                    <view wx:for="{{item}}" style="line-height:34px;">{{item[rangeKey[index]]}}</view>
+                <picker-view-column class="picker-column" wx:for="{{ranges}}" wx:key="ranges-key">
+                    <view wx:for="{{item}}" wx:for-index="idx" style="line-height:34px;" wx:key="item-key">{{item[rangeKey[index]]}}</view>
                 </picker-view-column>
             </picker-view>
         </view>

@@ -38,6 +38,7 @@ class QuestionType extends \common\models\base\QuestionType
                     "name" => $type->name
                 ];
         }
+        $data = array_values($data);
         Yii::$app->cache->set($cacheKey, $data, 3600);
         return $data;
     }

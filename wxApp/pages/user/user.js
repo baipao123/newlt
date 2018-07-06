@@ -44,10 +44,13 @@ Page({
         })
     },
     pickerSubmit: function (e) {
+        console.log(e)
         let that = this,
-            tid = e.detail.tid
+            value = e.detail.value,
+            tid = value[1]
         app.post("question/change-type",{tid:tid},function (res) {
             app.globalData.user = res.user
+            app.toast("切换分类成功","success")
             that.setData({
                 pickerValue:res.value,
                 user:res.user
