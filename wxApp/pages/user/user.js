@@ -26,7 +26,7 @@ Page({
             app.commonOnShow()
         })
     },
-    register:function (e) {
+    register: function (e) {
         let that = this
         console.log(e)
         app.setUserInfo(e.detail, function () {
@@ -48,12 +48,12 @@ Page({
         let that = this,
             value = e.detail.value,
             tid = value[1]
-        app.post("question/change-type",{tid:tid},function (res) {
+        app.post("question/change-type", {tid: tid}, function (res) {
             app.globalData.user = res.user
-            app.toast("切换分类成功","success")
+            app.toast("切换分类成功", "success")
             that.setData({
-                pickerValue:res.value,
-                user:res.user
+                pickerValue: res.value,
+                user: res.user
             })
         })
     },
@@ -68,6 +68,20 @@ Page({
         if (!that.common())
             return true
         app.turnPage("question/examRecord")
+    },
+    train: function () {
+        let that = this
+        app.get("question/train-last-offset", {}, function (res) {
+            let url = "question/train?tid=" + res.tid + "&type=" + res.type + "&offset=" + res.offset
+            if (res.offset == 0) {
+                app.turnPage(url)
+                return true
+            } else {
+                app.confirm(res.text, function () {
+                    app.turnPage(url)
+                })
+            }
+        })
     },
     exam: function () {
         let that = this

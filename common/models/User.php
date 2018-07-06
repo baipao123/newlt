@@ -29,9 +29,10 @@ class User extends \common\models\base\User
         return $type ? $type->expire_at : 0;
     }
 
-    public function updateQuestionRecord($offset) {
-        if ($offset <= 1)
+    public function updateTrainRecord($tid, $type, $offset) {
+        if ($tid <= 0 || $offset <= 1)
             return false;
+        return Yii::$app->db->createCommand("INSERT INTO `user_train_record` (`uid`, `tid`, `type`, `offset`, `last_at`) VALUE (:uid, :tid, :type, :offset, :time) ON DUPLICATE KEY UPDATE `offset`=:offset,`last_at`=:time;", [":uid" => $this->id, ":tid" => $tid, ":type" => $type, ":offset" => $offset, ":time" => time()])->execute();
     }
 
 

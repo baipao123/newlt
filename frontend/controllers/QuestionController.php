@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\UserTrainRecord;
 use Yii;
 use common\models\Question;
 use common\models\QuestionType;
@@ -92,8 +93,14 @@ class QuestionController extends BaseController
         ]);
     }
 
-    public function actionTrainHistory() {
-
+    public function actionTrainLastOffset($tid = 0, $type = Question::TypeJudge) {
+        if (empty($tid))
+            $tid = $this->getUser()->tid2;
+        $offset = UserTrainRecord::lastOffset($this->user_id(), $tid, $type);
+        return Tool::reJson([
+            "offset" => $offset,
+            "tid"    => $tid
+        ]);
     }
 
     public function actionTrainList($tid = 0, $offset = 1, $type = Question::TypeJudge) {
@@ -132,7 +139,7 @@ class QuestionController extends BaseController
                 $result['result'] = false;
             }
         }
-        $this->getUser()->updateQuestionRecord($offset);
+        $this->getUser()->updateTrainRecord($question->tid, $question->type, $offset);
         return Tool::reJson(["result" => $result]);
     }
 }
