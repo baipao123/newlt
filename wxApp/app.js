@@ -103,7 +103,10 @@ App({
     checkSessionAndLogin: function (success) {
         let that = this
         wx.checkSession({
-            success: success,
+            success: function (e) {
+                console.log(e)
+                if(success) success()
+            },
             fail: function () {
                 that.login(success);
             }
