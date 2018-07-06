@@ -47,3 +47,5 @@
     </view>
     <include src="/pages/common/footer.wxml"/>
 </view>
+
+<select ranges="{{}}" rangeKey="{{}}" value="{{}}" show="{{}}"  />
