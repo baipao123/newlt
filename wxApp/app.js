@@ -91,12 +91,13 @@ App({
                 success()
         })
     },
-    setUserInfoByWx: function (res, success) {
+    setUserInfo: function (data, callBack) {
         let that = this;
-        request.post("user/app-user", res, function (data) {
+        that.post("user/app-user", data, function (data) {
             that.globalData.user = data.user;
-            if (success)
-                success()
+            if (typeof callBack == "function") {
+                callBack();
+            }
         })
     },
     checkSessionAndLogin: function (success) {

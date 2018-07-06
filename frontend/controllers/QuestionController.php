@@ -8,7 +8,7 @@
 
 namespace frontend\controllers;
 
-
+use Yii;
 use common\models\Question;
 use common\models\QuestionType;
 use common\models\UserQuestionType;
@@ -17,19 +17,54 @@ use common\tools\Tool;
 
 class QuestionController extends BaseController
 {
+    public function actionAllTypes() {
+        $types = QuestionType::all(true);
+        $user = $this->getUser();
+        $value = [0, 0];
+        if ($user->tid > 0)
+            foreach ($types as $i => $type) {
+                if ($user->tid == $type['tid']) {
+                    $value[0] = $i;
+                    foreach ($type['child'] as $j => $val) {
+                        if ($user->tid2 == $val['tid']) {
+                            $value[1] = $j;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        return Tool::reJson(["types" => $types, "value" => $value]);
+    }
+
     public function actionChangeType() {
         $tid = $this->getPost("tid");
         $type = QuestionType::findOne($tid);
         if (!$type || $type->status != Status::PASS)
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
         $user = $this->getUser();
-        if ($user->tid == $tid)
+        if ($user->tid == $type->parentId && $user->tid2 == $tid)
             return Tool::reJson(null, "已在当前分类", Tool::FAIL);
         $expireAt = UserQuestionType::find()->where(["uid" => $user->id, "tid" => $tid])->orderBy("expire_at desc")->select("expire_at")->scalar();
-        $user->tid = $tid;
+        $user->tid = $type->parentId;
+        $user->tid2 = $tid;
         $user->expire_at = intval($expireAt);
         $user->save();
-        return Tool::reJson(["user" => $user->info()]);
+        $types = QuestionType::all();
+        $value = [0, 0];
+        foreach ($types as $i => $type) {
+            if ($user->tid == $type['tid']) {
+                $value[0] = $i;
+                foreach ($type['child'] as $j => $val) {
+                    if ($user->tid2 == $val['tid']) {
+                        $value[1] = $j;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return Tool::reJson(["user" => $user->info(), "value" => $value]);
     }
 
     public function actionInfo($tid) {

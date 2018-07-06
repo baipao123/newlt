@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $tid
+ * @property int $tid2
  * @property int $expire_at
  * @property string $openId
  * @property string $unionId
@@ -44,9 +45,8 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'expire_at', 'real_at', 'created_at', 'last_login'], 'integer'],
+            [['tid', 'tid2', 'expire_at', 'gender', 'status', 'real_at', 'created_at', 'last_login'], 'integer'],
             [['openId', 'unionId', 'session_key', 'realname', 'phone', 'username', 'nickname', 'avatar', 'cityName', 'province', 'country', 'auth_key'], 'string', 'max' => 255],
-            [['gender', 'status'], 'string', 'max' => 1],
             [['openId'], 'unique'],
         ];
     }
@@ -59,6 +59,7 @@ class User extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'tid' => 'Tid',
+            'tid2' => 'Tid2',
             'expire_at' => 'Expire At',
             'openId' => 'Open ID',
             'unionId' => 'Union ID',

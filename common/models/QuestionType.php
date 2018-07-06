@@ -8,13 +8,40 @@
 
 namespace common\models;
 
-
+use yii;
 use common\tools\Img;
 use common\tools\Status;
 use yii\helpers\ArrayHelper;
 
 class QuestionType extends \common\models\base\QuestionType
 {
+
+    public function afterSave($insert, $changedAttributes) {
+        if ($insert || isset($changedAttributes['name']) || isset($changedAttributes['status']))
+            Yii::$app->cache->delete("Question-Type-All");
+    }
+
+    public static function all($refresh = false) {
+        $cacheKey = "Question-Type-All";
+        if (!$refresh && Yii::$app->cache->exists($cacheKey))
+            return Yii::$app->cache->get($cacheKey);
+        $types = QuestionType::find()->where(["status" => Status::PASS])->orderBy("parentId ASC,sort DESC,id ASC")->all();
+        /* @var $types self[] */
+        $data = [];
+        foreach ($types as $type) {
+            if ($type->parentId == 0) {
+                $data[ $type->id ]['tid'] = $type->id;
+                $data[ $type->id ]['name'] = $type->name;
+            } else
+                $data[ $type->parentId ]['child'][] = [
+                    "tid"  => $type->id,
+                    "name" => $type->name
+                ];
+        }
+        Yii::$app->cache->set($cacheKey, $data, 3600);
+        return $data;
+    }
+
 
     /**
      * @param int $tid
@@ -57,13 +84,13 @@ class QuestionType extends \common\models\base\QuestionType
         $this->save();
     }
 
-    public function nums(){
+    public function nums() {
         $setting = $this->setting();
         $data = [];
-        $judge = ArrayHelper::getValue($setting,"judgeTotal",0);
-        $select = ArrayHelper::getValue($setting,"selectTotal",0);
-        $multi = ArrayHelper::getValue($setting,"multiTotal",0);
-        $blank = ArrayHelper::getValue($setting,"blankTotal",0);
+        $judge = ArrayHelper::getValue($setting, "judgeTotal", 0);
+        $select = ArrayHelper::getValue($setting, "selectTotal", 0);
+        $multi = ArrayHelper::getValue($setting, "multiTotal", 0);
+        $blank = ArrayHelper::getValue($setting, "blankTotal", 0);
         if ($judge > 0)
             $data[] = [
                 "type" => Question::TypeJudge,

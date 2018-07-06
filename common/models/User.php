@@ -16,7 +16,7 @@ class User extends \common\models\base\User
 {
 
     public function getQuestionType() {
-        return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
+        return $this->hasOne(QuestionType::className(), ["id" => "tid2"]);
     }
 
     public function getTidExpire($tid) {

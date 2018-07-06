@@ -1,49 +1,59 @@
 <view class="page">
     <view class="header">
         <view class="block">
-            <image src="{{user.avatar}}"/>
-            <view class="a-c">{{user.nickname}}黄琛</view>
+            <image src="{{user.avatar || domain+'logo.jpeg'}}" wx:if="{{domain}}"/>
+            <view class="a-c">{{user.nickname}}</view>
         </view>
     </view>
 
-    <view class="weui-cells__title">常用</view>
-    <view class="weui-cells weui-cells_after-title">
-        <view bindtap="goIndex" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />我的分类</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{user.tName == '' ? "去选择" : user.tName}}</view>
+    <block wx:if="{{user.avatar}}">
+        <view class="weui-cells__title">常用</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view bindtap="picker" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />我的分类</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">{{user.tName == '' ? "去选择" : user.tName}}</view>
+            </view>
+
+            <view bindtap="order" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />我的订单</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </view>
+
+            <view bindtap="record" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />考试记录</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </view>
+
+            <view bindtap="train" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />一键练习</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </view>
+
+            <view bindtap="exam" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />一键模考</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </view>
         </view>
 
-        <view bindtap="goIndex" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />我的订单</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" />
+
+        <view class="weui-cells__title">关于</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/common/concat" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-phone" />联系我们</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </navigator>
+            <navigator url="/pages/common/note" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-form" />用户协议</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </navigator>
+            <navigator url="/pages/common/question" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-help" />常见问题</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
+            </navigator>
         </view>
-
-        <view bindtap="goIndex" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />考试记录</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" />
-        </view>
-
-        <view bindtap="goIndex" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />一键模考</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" />
-        </view>
-    </view>
-
-
-    <view class="weui-cells__title">关于</view>
-    <view class="weui-cells weui-cells_after-title">
-        <navigator url="/pages/common/concat" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-phone" />联系我们</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" />
-        </navigator>
-        <navigator url="/pages/common/note" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-form" />用户协议</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" />
-        </navigator>
-        <navigator url="/pages/common/question" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-help" />常见问题</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" />
-        </navigator>
-    </view>
+    </block>
+    <block wx:else>
+        <button class="weui-btn register" type="primary" bindgetuserinfo="register" open-type="getUserInfo" lang="zh_CN">注册</button>
+    </block>
     <include src="/pages/common/footer.wxml"/>
 </view>

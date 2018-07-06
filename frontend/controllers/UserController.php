@@ -51,7 +51,7 @@ class UserController extends BaseController
         $signature = $this->getPost("signature");
         if ($user->verifyUserInfo($rawData, $signature))
             return Tool::reJson(["user" => $user->info()]);
-        return Tool::reJson(null, "用户信息不匹配失败", Tool::FAIL);
+        return Tool::reJson(null, "用户信息不匹配失败", Tool::NEED_LOGIN);
     }
 
 
