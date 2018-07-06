@@ -42,6 +42,9 @@ App({
         let that = this
         if (url.substr(0, 5) != "https")
             url = that.globalData.apiDomain + url;
+        wx.showLoading({
+            title: "加载中..."
+        })
         wx.request({
             url: url,
             data: params,
@@ -72,7 +75,11 @@ App({
                     that.toast("500,服务器解析异常")
             },
             fail: fail,
-            compete: complete
+            complete: function (e) {
+                wx.hideLoading()
+                if (complete)
+                    complete(e)
+            }
         });
     },
     getUserInfo: function (success, refresh) {
