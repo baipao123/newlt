@@ -83,13 +83,40 @@ class ExamController extends BaseController
         return $this->send(["list" => $data]);
     }
 
-    public function actionFinsh() {
+    public function actionInfo() {
+        $eid = $this->getPost("eid", 0);
+        $exam = UserExam::findOne($eid);
+        if (!$exam || $exam->uid != $this->user_id())
+            return $this->sendError("未找到考卷");
+        return $this->send([
+            "exam"    => $exam->info(),
+            "answers" => $exam->finishQuestions(),
+        ]);
+    }
+
+    public function actionList() {
+        $eid = $this->getPost("eid", 0);
+        $exam = UserExam::findOne($eid);
+        if (!$exam || $exam->uid != $this->user_id())
+            return $this->sendError("未找到考卷");
+        $offset = $this->getPost("offset", 1);
+        $qIds = $exam->getQIdsByOffset($offset);
+        $questions = Question::find()->where(["id" => $qIds])->orderBy(["id" => $qIds])->all();
+        /* @var $questions Question[] */
+        $data = [];
+        foreach ($questions as $index => $question) {
+            $data[ $offset + $index ] = $question->info();
+        }
+        return $this->send(["list" => $data]);
+    }
+
+    public function actionFinish() {
         $eid = $this->getPost("eid", 0);
         $exam = UserExam::findOne($eid);
         if (!$exam || $exam->uid != $this->user_id())
             return $this->sendError("未找到考卷");
         if ($exam->status == UserExam::ExamFinish)
             return $this->sendError("已经交过卷了");
-        
+
     }
 }

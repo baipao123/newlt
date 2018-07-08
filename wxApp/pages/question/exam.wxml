@@ -1,8 +1,17 @@
 <view class="page">
-    <questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>
-
+    <view class="index" wx:if="{{showIndex}}">
+    </view>
+    <view class="questions" wx:else>
+        <!--<questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>-->
+    </view>
     <include src="/pages/common/footer.wxml"/>
     <view class="bottom">
-
+        <view class="weui-flex bg-green a-c text-m text-white">
+            <view class="weui-flex__item" bindtap="examIndex"><span class="myIcon margin icon-list-light"/>{{showIndex ? '去考试' : '题序'}}</view>
+            <block wx:if="{{exam.status == 0}}">
+                <view class="weui-flex__item"><span class="myIcon margin icon-clock"/>{{exam.timeStr}}</view>
+                <view class="weui-flex__item" bindtap="finish"><span class="myIcon margin icon-form"/>交卷</view>
+            </block>
+        </view>
     </view>
 </view>

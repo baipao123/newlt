@@ -89,7 +89,7 @@ Page({
                     app.turnPage(url + "&offset=" + res.offset)
                 }, function () {
                     app.turnPage(url)
-                }, "提示",  "重新开始", "继续上次")
+                }, "提示", "继续上次", "重新开始")
             }
         })
     },
@@ -105,7 +105,7 @@ Page({
                     app.turnPage("question/exam?eid=" + re.exam.eid + '&all=1')
                 }, function () {
                     that.generateExam()
-                }, "提示", "重新开始", "继续考试")
+                }, "提示", "继续考试", "重新开始")
             } else
                 that.generateExam()
         })

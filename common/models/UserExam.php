@@ -9,6 +9,8 @@
 namespace common\models;
 
 
+use yii\helpers\ArrayHelper;
+
 class UserExam extends \common\models\base\UserExam
 {
     const ExamIng = 0;
@@ -49,5 +51,24 @@ class UserExam extends \common\models\base\UserExam
             "expire_at" => $this->expire_at,
             "finish_at" => $this->finish_at,
         ];
+    }
+
+    public function finishQuestions() {
+        $data = UserExamQuestion::find()->where(["eid" => $this->id])->select("id,userAnswer")->column();
+        return ArrayHelper::map($data, "id", "userAnswer");
+    }
+
+    /**
+     * @param int $offset
+     * @return array
+     */
+    public function getQIdsByOffset($offset = 1) {
+        $Ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
+        $Ids = empty($Ids) ? [] : array_merge(array_values($Ids));
+        $data = [];
+        for (intval($offset); $offset <= count($Ids); $offset++) {
+            $data[] = $Ids[ $offset - 1 ];
+        }
+        return $data;
     }
 }
