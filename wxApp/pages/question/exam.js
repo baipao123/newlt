@@ -15,8 +15,7 @@ Page({
     onLoad: function (options) {
         let that = this,
             eid = options.hasOwnProperty("eid") ? options.eid : 0,
-            all = options.hasOwnProperty("all") ? options.all : 0,
-            offset = options.hasOwnProperty("offset") ? options.offset : 1
+            all = options.hasOwnProperty("all") ? options.all : 0
         if (eid <= 0) {
             app.toast("未知考卷", "none", function () {
                 wx.navigateBack()
@@ -25,7 +24,6 @@ Page({
         if (all > 0)
             that.setData({showIndex: all > 0})
         that.data.eid = eid
-        that.data.offset = offset
         that.getList()
         that.getInfo()
     },
@@ -129,7 +127,13 @@ Page({
         let that = this,
             type = e.currentTarget.dataset.type,
             offset = e.currentTarget.dataset.offset
+        that.setData({
+            showIndex: false
+        })
         console.log(type)
         console.log(offset)
-    }
+    },
+    empty:function () {
+        
+    },
 })

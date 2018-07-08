@@ -1,5 +1,5 @@
 .bottom{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     line-height: 80rpx;
@@ -42,7 +42,15 @@
     background: #fff;
     text-align: center;
 }
-.offsetList .index.do{
+.offsetList .index.success{
     color: #fff;
     background: #1aad19;
+}
+.offsetList .index.done{
+    color: #fff;
+    background: #337ab7;
+}
+.offsetList .index.fail{
+    color: #fff;
+    background: #e64340;
 }

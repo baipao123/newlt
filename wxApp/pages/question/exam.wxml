@@ -6,7 +6,7 @@
             <view class="header" wx:elif="{{type == 3}}">多选题</view>
             <view class="header" wx:elif="{{type == 4}}">填空题</view>
             <view class="weui-flex offsetList">
-                <view class="weui-flex__item text-m index {{q.uA ? 'do':''}}" wx:for="{{item}}" wx:for-index="i" wx:for-item="q" data-offset="{{i}}" data-type="{{type}}" bindtap="goSingle">{{i}}</view>
+                <view class="weui-flex__item text-m index {{q.status > 0 ? (q.status == 2 ? 'success' : (q.status== 3 ? 'fail' : 'done')) : ''}}" wx:for="{{item}}" wx:for-index="i" wx:for-item="q" data-offset="{{i}}" data-type="{{type}}" bindtap="goSingle">{{i}}</view>
             </view>
         </view>
     </view>
@@ -14,7 +14,8 @@
         <!--<questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>-->
     </view>
     <include src="/pages/common/footer.wxml"/>
-    <view class="bottom">
+    <view style="height:100rpx"/>
+    <view class="bottom" catchtap="empty">
         <view class="weui-flex bg-green a-c text-m text-white">
             <view class="weui-flex__item" bindtap="examIndex"><span class="myIcon margin icon-list-light"/>{{showIndex ? '去考试' : '题序'}}</view>
             <block wx:if="{{exam.status == 0}}">

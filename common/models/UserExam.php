@@ -54,8 +54,8 @@ class UserExam extends \common\models\base\UserExam
     }
 
     public function finishQuestions() {
-        $data = UserExamQuestion::find()->where(["eid" => $this->id])->select("id,userAnswer")->column();
-        return ArrayHelper::map($data, "id", "userAnswer");
+        $data = UserExamQuestion::find()->where(["eid" => $this->id])->select("qid,userAnswer,status")->column();
+        return ArrayHelper::index($data, "qid");
     }
 
     /**
@@ -82,7 +82,8 @@ class UserExam extends \common\models\base\UserExam
             foreach ($ids as $index => $qid) {
                 $data[ $type ][ $index + 1 ] = [
                     "qid" => $qid,
-                    "uA"  => isset($answers[ $qid ]) ? $answers[ $qid ] : ''
+                    "uA"  => isset($answers[ $qid ]) ? $answers[ $qid ]['userAnswer'] : '',
+                    "status" => isset($answers[ $qid ]) ? $answers[ $qid ]['status'] : 0,
                 ];
             }
         }
