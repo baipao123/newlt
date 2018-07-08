@@ -71,4 +71,21 @@ class UserExam extends \common\models\base\UserExam
         }
         return $data;
     }
+
+    public function qNum() {
+        $Ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
+        if (empty($Ids))
+            return [];
+        $answers = $this->finishQuestions();
+        $data = [];
+        foreach ($Ids as $type => $ids) {
+            foreach ($ids as $index => $qid) {
+                $data[ $type ][ $index + 1 ] = [
+                    "qid" => $qid,
+                    "uA"  => isset($answers[ $qid ]) ? $answers[ $qid ] : ''
+                ];
+            }
+        }
+        return $data;
+    }
 }

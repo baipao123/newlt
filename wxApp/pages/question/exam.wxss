@@ -5,3 +5,44 @@
     line-height: 80rpx;
     width: 100%;
 }
+.indexList{
+    margin: 0 30rpx;
+}
+.indexBlock{
+    margin-top: 10rpx;
+}
+.header{
+    color: #337ab7;
+    font-weight:bold;
+    border-bottom: 1rpx solid #ddd;
+    padding-left: 5rpx;
+    padding-bottom: 10rpx;
+    font-size: 40rpx;
+    position: relative;
+}
+.header:after{
+    content: " ";
+    height: 4rpx;
+    width: 140rpx;
+    background: #337ab7;
+    position: absolute;
+    left:0;
+    bottom: -1rpx;
+}
+
+.offsetList{
+    flex-wrap: wrap;
+}
+.offsetList .index{
+    min-width: 60rpx;
+    max-width: 60rpx;
+    line-height: 60rpx;
+    margin: 10rpx 20rpx 10rpx 0;
+    border: 1rpx solid #ddd;
+    background: #fff;
+    text-align: center;
+}
+.offsetList .index.do{
+    color: #fff;
+    background: #1aad19;
+}

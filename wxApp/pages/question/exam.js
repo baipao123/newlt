@@ -4,23 +4,26 @@ Page({
     data: {
         user: {},
         domain: app.globalData.qiNiuDomain,
-        questions: [],
         exam: {},
-        answers: [],
+        qNum: [],
+        questions: [],
         eid: 0,
         offset: 1,
-        showIndex:false,
+        showIndex: true,
         timeStrIndex: 0,
     },
     onLoad: function (options) {
         let that = this,
             eid = options.hasOwnProperty("eid") ? options.eid : 0,
+            all = options.hasOwnProperty("all") ? options.all : 0,
             offset = options.hasOwnProperty("offset") ? options.offset : 1
         if (eid <= 0) {
             app.toast("未知考卷", "none", function () {
                 wx.navigateBack()
             })
         }
+        if (all > 0)
+            that.setData({showIndex: all > 0})
         that.data.eid = eid
         that.data.offset = offset
         that.getList()
@@ -62,7 +65,7 @@ Page({
         app.post("exam/info", {eid: that.data.eid}, function (res) {
             that.setData({
                 exam: res.exam,
-                answers: res.answers
+                qNum: res.qNum
             })
             that.timeStr(0)
         })
@@ -121,5 +124,12 @@ Page({
         this.setData({
             showIndex: !this.data.showIndex
         })
+    },
+    goSingle:function (e) {
+        let that = this,
+            type = e.currentTarget.dataset.type,
+            offset = e.currentTarget.dataset.offset
+        console.log(type)
+        console.log(offset)
     }
 })

@@ -90,7 +90,7 @@ class ExamController extends BaseController
             return $this->sendError("未找到考卷");
         return $this->send([
             "exam"    => $exam->info(),
-            "answers" => $exam->finishQuestions(),
+            "qNum" => $exam->qNum()
         ]);
     }
 

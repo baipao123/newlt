@@ -1,5 +1,14 @@
 <view class="page">
-    <view class="index" wx:if="{{showIndex}}">
+    <view class="indexList" wx:if="{{showIndex}}">
+        <view class="indexBlock" wx:for="{{qNum}}" wx:for-index="type">
+            <view class="header" wx:if="{{type == 1}}">判断题</view>
+            <view class="header" wx:elif="{{type == 2}}">单选题</view>
+            <view class="header" wx:elif="{{type == 3}}">多选题</view>
+            <view class="header" wx:elif="{{type == 4}}">填空题</view>
+            <view class="weui-flex offsetList">
+                <view class="weui-flex__item text-m index {{q.uA ? 'do':''}}" wx:for="{{item}}" wx:for-index="i" wx:for-item="q" data-offset="{{i}}" data-type="{{type}}" bindtap="goSingle">{{i}}</view>
+            </view>
+        </view>
     </view>
     <view class="questions" wx:else>
         <!--<questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>-->
