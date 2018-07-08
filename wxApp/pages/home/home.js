@@ -35,5 +35,11 @@ Page({
                 types: res.types
             })
         })
+    },
+    play:function (e) {
+        let that = this,
+            video = wx.createVideoContext("video")
+        console.log(1)
+        video.requestFullScreen()
     }
 })

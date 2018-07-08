@@ -14,7 +14,7 @@ return [
     'modules' => [],
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-hc-backend',
+            'csrfParam' => '_wx_dk',
         ],
         'user' => [
             'identityClass'   => 'backend\models\UserIdentify',

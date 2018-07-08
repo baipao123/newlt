@@ -10,3 +10,11 @@
     background: no-repeat;
     background-size: 100% 100%;
 }
+
+.school{
+    margin-top: 60rpx;
+}
+.video{
+    width: 240rpx;
+    height: 160rpx;
+}

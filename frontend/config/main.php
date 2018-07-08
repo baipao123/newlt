@@ -13,7 +13,8 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-frontend',
+            'csrfParam' => '_wx_dk',
+            'enableCsrfValidation' => false
         ],
         'user' => [
             'identityClass' => 'frontend\models\UserIdentify',
