@@ -48,10 +48,10 @@ class ExamController extends BaseController
         $multi = ArrayHelper::getValue($setting, "multiNum", 0);
         $blank = ArrayHelper::getValue($setting, "blankNum", 0);
         $qIds = [
-            Question::TypeJudge  => $judge > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeJudge])->orderBy("")->limit($judge)->select("id")->column() : [],
-            Question::TypeSelect => $select > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeSelect])->orderBy("")->limit($select)->select("id")->column() : [],
-            Question::TypeMulti  => $multi > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeMulti])->orderBy("")->limit($multi)->select("id")->column() : [],
-            Question::TypeBlank  => $blank > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeBlank])->orderBy("")->limit($blank)->select("id")->column() : []
+            Question::TypeJudge  => $judge > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeJudge])->orderBy("RAND()")->limit($judge)->select("id")->column() : [],
+            Question::TypeSelect => $select > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeSelect])->orderBy("RAND()")->limit($select)->select("id")->column() : [],
+            Question::TypeMulti  => $multi > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeMulti])->orderBy("RAND()")->limit($multi)->select("id")->column() : [],
+            Question::TypeBlank  => $blank > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeBlank])->orderBy("RAND()")->limit($blank)->select("id")->column() : []
         ];
         $exam = new UserExam;
         $exam->uid = $user->id;
@@ -62,15 +62,34 @@ class ExamController extends BaseController
         $exam->created_at = time();
         if (!$exam->save())
             Yii::warning($exam->errors, "保存UserExam错误");
-
         return $this->send([
             "eid" => $exam->attributes['id']
         ]);
     }
 
-    public function actionRecords() {
-
+    public function actionRecords($page = 1, $limit = 10) {
+        $exams = UserExam::find()
+            ->where(["uid" => $this->user_id()])
+            ->andWhere(["<>", "status", UserExam::ExamExpire])
+            ->offset(($page - 1) * $limit)
+            ->limit($limit)
+            ->orderBy("created_at desc")
+            ->all();
+        /* @var $exams UserExam[] */
+        $data = [];
+        foreach ($exams as $exam) {
+            $data[] = $exam->info();
+        }
+        return $this->send(["list" => $data]);
     }
 
-
+    public function actionFinsh() {
+        $eid = $this->getPost("eid", 0);
+        $exam = UserExam::findOne($eid);
+        if (!$exam || $exam->uid != $this->user_id())
+            return $this->sendError("未找到考卷");
+        if ($exam->status == UserExam::ExamFinish)
+            return $this->sendError("已经交过卷了");
+        
+    }
 }

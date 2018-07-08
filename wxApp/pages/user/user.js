@@ -76,6 +76,8 @@ Page({
         let that = this,
             index = e.detail.value,
             type = that.data.qTypes[index].type
+        if (!that.common())
+            return true
         app.get("question/train-last-offset", {type: type}, function (res) {
             res.offset = !res.offset || res.offset == 0 ? 1 : res.offset
             let url = "question/train?tid=" + res.tid + "&type=" + type
@@ -93,6 +95,8 @@ Page({
     },
     exam: function () {
         let that = this
+        if (!that.common())
+            return true
         app.get("exam/last", {}, function (re) {
             if (re.exam.eid) {
                 let time = parseInt((new Date()).getTime() / 1000),
@@ -109,10 +113,20 @@ Page({
     generateExam: function () {
         let that = this
         app.post("exam/exam", {}, function (res) {
-
+            if (res.eid && res.eid > 0)
+                app.turnPage("question/exam?eid=" + res.eid)
+            else
+                app.toast("生成考卷失败，请重试");
         })
     },
     common: function () {
+        if (!this.data.user.nickname) {
+            app.toast("请先注册")
+            this.setData({
+                user: {}
+            })
+            return false
+        }
         return true
     },
 })
