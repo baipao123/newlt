@@ -95,6 +95,8 @@ class QuestionController extends BaseController
     }
 
     public function actionTrainLastOffset($tid = 0, $type = Question::TypeJudge) {
+        if (time() > $this->getUser()->getTidExpire($tid))
+            return Tool::reJson(null, '请先购买此分类', Tool::FAIL);
         if (empty($tid))
             $tid = $this->getUser()->tid2;
         if (empty($tid))

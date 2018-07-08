@@ -21,9 +21,13 @@ class User extends \common\models\base\User
 
     public function getTidExpire($tid) {
         if ($tid <= 0)
-            return 0;
-        if ($this->tid == $tid)
+            return $this->expire_at;
+        if ($this->tid == $tid || $this->tid2 == $tid)
             return $this->expire_at > time() ? $this->expire_at : 0;
+        $questionType = QuestionType::findOne($tid);
+        if (!$questionType)
+            return 0;
+        $tid = $questionType->parentId > 0 ? $questionType->parentId : $tid;
         $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid, "status" => Status::PASS])->andWhere([">", "expire_at", time()])->one();
         /* @var $type UserQuestionType */
         return $type ? $type->expire_at : 0;

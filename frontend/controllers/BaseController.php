@@ -38,11 +38,19 @@ class BaseController extends Controller
         return Yii::$app->user->getIdentity() ? Yii::$app->user->getIdentity() : new UserIdentify();
     }
 
-    public function user_id(){
+    public function user_id() {
         return Yii::$app->user->id;
     }
 
     public function actionQiniuToken() {
         return ["uptoken" => QiNiu::getToken()];
+    }
+
+    protected function sendError($text, $code = Tool::FAIL) {
+        return Tool::reJson(null, $text, $code);
+    }
+
+    protected function send($data, $text = '', $code = Tool::SUCCESS) {
+        return Tool::reJson($data, $text, $code);
     }
 }

@@ -8,18 +8,64 @@
 
 namespace frontend\controllers;
 
+use yii;
+use common\models\Question;
+use common\models\QuestionType;
+use common\models\UserExam;
+use common\tools\Status;
+use yii\helpers\ArrayHelper;
 
 class ExamController extends BaseController
 {
 
     public function actionLast($tid = 0) {
+        $user = $this->getUser();
+        $expire_at = $user->getTidExpire($tid);
+        if ($expire_at <= time())
+            return $this->sendError("请先购买此分类");
         if ($tid <= 0)
-            $tid = $this->getUser()->tid2;
-
+            $tid = $user->tid2;
+        $exam = UserExam::getLastExam($this->user_id(), $tid);
+        return $this->send([
+            "exam" => $exam ? $exam->simpleInfo() : []
+        ]);
     }
 
     public function actionExam() {
+        $tid = $this->getPost("tid", 0);
+        $user = $this->getUser();
+        $expire_at = $user->getTidExpire($tid);
+        if ($expire_at <= time())
+            return $this->sendError("请先购买此分类");
+        if ($tid <= 0)
+            $tid = $user->tid2;
+        $type = QuestionType::findOne($tid);
+        if (!$type || $type->status != Status::PASS)
+            return $this->sendError("不存在的分类");
+        $setting = $type->setting();
+        $judge = ArrayHelper::getValue($setting, "judgeNum", 0);
+        $select = ArrayHelper::getValue($setting, "selectNum", 0);
+        $multi = ArrayHelper::getValue($setting, "multiNum", 0);
+        $blank = ArrayHelper::getValue($setting, "blankNum", 0);
+        $qIds = [
+            Question::TypeJudge  => $judge > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeJudge])->orderBy("")->limit($judge)->select("id")->column() : [],
+            Question::TypeSelect => $select > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeSelect])->orderBy("")->limit($select)->select("id")->column() : [],
+            Question::TypeMulti  => $multi > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeMulti])->orderBy("")->limit($multi)->select("id")->column() : [],
+            Question::TypeBlank  => $blank > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeBlank])->orderBy("")->limit($blank)->select("id")->column() : []
+        ];
+        $exam = new UserExam;
+        $exam->uid = $user->id;
+        $exam->tid = $tid;
+        $exam->expire_at = time() + ArrayHelper::getValue($setting, "time", 0) * 60;
+        $exam->status = UserExam::ExamIng;
+        $exam->qIds = json_encode($qIds);
+        $exam->created_at = time();
+        if (!$exam->save())
+            Yii::warning($exam->errors, "保存UserExam错误");
 
+        return $this->send([
+            "eid" => $exam->attributes['id']
+        ]);
     }
 
     public function actionRecords() {

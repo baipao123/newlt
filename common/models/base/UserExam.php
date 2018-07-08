@@ -12,9 +12,10 @@ use Yii;
  * @property int $tid
  * @property int $expire_at
  * @property int $score
- * @property int $success_num
- * @property int $fail_num
+ * @property int $status
+ * @property string $qIds
  * @property int $created_at
+ * @property int $finish_at
  */
 class UserExam extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,8 @@ class UserExam extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'tid', 'expire_at', 'score', 'success_num', 'fail_num', 'created_at'], 'integer'],
+            [['uid', 'tid', 'expire_at', 'score', 'status', 'created_at', 'finish_at'], 'integer'],
+            [['qIds'], 'string'],
         ];
     }
 
@@ -47,9 +49,10 @@ class UserExam extends \yii\db\ActiveRecord
             'tid' => 'Tid',
             'expire_at' => 'Expire At',
             'score' => 'Score',
-            'success_num' => 'Success Num',
-            'fail_num' => 'Fail Num',
+            'status' => 'Status',
+            'qIds' => 'Q Ids',
             'created_at' => 'Created At',
+            'finish_at' => 'Finish At',
         ];
     }
 }

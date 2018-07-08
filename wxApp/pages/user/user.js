@@ -87,15 +87,28 @@ Page({
                     app.turnPage(url + "&offset=" + res.offset)
                 }, function () {
                     app.turnPage(url)
-                }, "提示", "继续上次", "重新开始")
+                }, "提示",  "重新开始", "继续上次")
             }
         })
     },
     exam: function () {
         let that = this
-        if (!that.common())
-            return true
         app.get("exam/last", {}, function (re) {
+            if (re.exam.eid) {
+                let time = parseInt((new Date()).getTime() / 1000),
+                    timeStr = app.formatSecondStr(re.exam.expire_at - time)
+                app.confirm("您上次的模考还有 " + timeStr + " 结束，需要继续考试吗？", function () {
+                    app.turnPage("question/exam?eid=" + re.exam.eid + '&all=1')
+                }, function () {
+                    that.generateExam()
+                }, "提示", "重新开始", "继续考试")
+            } else
+                that.generateExam()
+        })
+    },
+    generateExam: function () {
+        let that = this
+        app.post("exam/exam", {}, function (res) {
 
         })
     },
