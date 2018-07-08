@@ -9,7 +9,7 @@ Page({
         questions: [],
         eid: 0,
         offset: 1,
-        showIndex: true,
+        showIndex: false,
         timeStrIndex: 0,
     },
     onLoad: function (options) {
