@@ -4,13 +4,15 @@ Page({
     data: {
         user: {},
         domain: app.globalData.qiNiuDomain,
+        eid: 0,
         exam: {},
         qNum: [],
-        questions: [],
-        eid: 0,
+        questions: {},
+        question: {},
+        type: 0,   // 题型
         offset: 1,
         showIndex: false,
-        timeStrIndex: 0,
+        timeStrIndex: 0, // 倒计时
     },
     onLoad: function (options) {
         let that = this,
@@ -36,27 +38,57 @@ Page({
             app.commonOnShow()
         })
     },
-    moreList: function (e) {
-        let that = this
-        that.data.offset = e.detail.offset
-        that.getList()
+    setQuestion: function (again) {
+        let that = this,
+            type = that.data.type,
+            offset = that.data.offset,
+            questions = that.data.questions
+        if (questions[type] && questions[type][offset]) {
+            console.log(questions[type][offset])
+            that.setData({
+                question: questions[type][offset],
+                type: type,
+                offset: offset
+            })
+        } else if (again) {
+            app.toast("没有题目了")
+        } else
+            that.getList()
     },
     getList: function () {
-        // let that = this,
-        //     data = {
-        //         tid: that.data.tid,
-        //         type: that.data.type,
-        //         offset: that.data.offset
-        //     }
-        // app.get("exam/list", data, function (res) {
-        //     if (res.list.length == 0)
-        //         app.toast("没有更多题目了")
-        //     else
-        //         that.setData({
-        //             questions: res.list,
-        //             offset: that.data.offset
-        //         })
-        // })
+        let that = this,
+            data = {
+                eid: that.data.eid,
+                type: that.data.type,
+                offset: that.data.offset
+            }
+        app.post("exam/list", data, function (res) {
+            if (res.list.length == 0)
+                app.toast("没有更多题目了")
+            else {
+                let questions = that.data.questions
+                console.log(res.list)
+                for (let type in res.list) {
+                    for (let offset in res.list[type]) {
+                        if (!questions[type])
+                            questions[type] = {}
+                        questions[type][offset] = res.list[type][offset]
+                    }
+                }
+                that.data.questions = questions
+                that.setQuestion(true)
+            }
+        })
+    },
+    chose:function (e) {
+        let that = this,
+            option = e.currentTarget.dataset.option
+    },
+    goAnswer:function (e) {
+
+    },
+    answer:function (data) {
+
     },
     getInfo: function () {
         let that = this
@@ -130,8 +162,9 @@ Page({
         that.setData({
             showIndex: false
         })
-        console.log(type)
-        console.log(offset)
+        that.data.type = type,
+        that.data.offset = offset
+        that.setQuestion()
     },
     empty:function () {
         

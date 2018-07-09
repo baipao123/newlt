@@ -96,16 +96,23 @@ class ExamController extends BaseController
 
     public function actionList() {
         $eid = $this->getPost("eid", 0);
+        $type = $this->getPost("type", Question::TypeJudge);
         $exam = UserExam::findOne($eid);
         if (!$exam || $exam->uid != $this->user_id())
             return $this->sendError("未找到考卷");
         $offset = $this->getPost("offset", 1);
-        $qIds = $exam->getQIdsByOffset($offset);
-        $questions = Question::find()->where(["id" => $qIds])->orderBy(["id" => $qIds])->all();
+        $qIds = $exam->getQIdsByOffset($type, $offset);
+        $questions = Question::find()->where(["id" => $qIds])->orderBy(["type" => SORT_ASC, "id" => $qIds])->all();
         /* @var $questions Question[] */
         $data = [];
+        $tmpType = $type;
         foreach ($questions as $index => $question) {
-            $data[ $offset + $index ] = $question->info();
+            if ($tmpType != $question->type) {
+                $tmpType = $question->type;
+                $offset = 1;
+            }
+            $data[ $tmpType ][ $offset ] = $question->info();
+            $offset++;
         }
         return $this->send(["list" => $data]);
     }

@@ -72,8 +72,7 @@ class Question extends \common\models\base\Question
 
     public function answer() {
         return [
-            "answerStr"   => $this->answer,
-            "answer"      => str_split($this->answer),
+            "answer"      => $this->answer,
             "description" => $this->description,
             "knowledge"   => $this->knowledge,
             "difficulty"  => $this->difficulty

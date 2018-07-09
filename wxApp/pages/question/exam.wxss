@@ -1,3 +1,6 @@
+@import "./../../components/question/questionInfo.wxss";
+
+
 .bottom{
     position: fixed;
     bottom: 0;
@@ -10,24 +13,6 @@
 }
 .indexBlock{
     margin-top: 10rpx;
-}
-.header{
-    color: #337ab7;
-    font-weight:bold;
-    border-bottom: 1rpx solid #ddd;
-    padding-left: 5rpx;
-    padding-bottom: 10rpx;
-    font-size: 40rpx;
-    position: relative;
-}
-.header:after{
-    content: " ";
-    height: 4rpx;
-    width: 140rpx;
-    background: #337ab7;
-    position: absolute;
-    left:0;
-    bottom: -1rpx;
 }
 
 .offsetList{

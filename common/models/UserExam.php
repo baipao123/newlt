@@ -59,17 +59,24 @@ class UserExam extends \common\models\base\UserExam
     }
 
     /**
+     * @param int $type
      * @param int $offset
+     * @param int $limit
      * @return array
      */
-    public function getQIdsByOffset($offset = 1) {
-        $Ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
-        $Ids = empty($Ids) ? [] : array_merge(array_values($Ids));
+    public function getQIdsByOffset($type = 0, $offset = 1, $limit = 10) {
+        $ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
         $data = [];
-        for (intval($offset); $offset <= count($Ids); $offset++) {
-            $data[] = $Ids[ $offset - 1 ];
+        if (isset($ids[ $type ]) && isset($ids[ $type ][ $offset - 1 ])) {
+            $max = min(count($ids[ $type ]), $offset + $limit);
+            for (intval($offset); $offset < $max; $offset++)
+                $data[] = $ids[ $type ][ $offset - 1 ];
         }
-        return $data;
+        if (count($data) < $limit) {
+            $_ids = $this->getQIdsByOffset($type + 1, 1, $limit - count($data));
+            return array_merge($data, $_ids);
+        } else
+            return $data;
     }
 
     public function qNum() {
