@@ -41,12 +41,15 @@
     display: block;
     margin: 20rpx auto;
 }
-.option{
+.options{
     width: 100%;
     flex-wrap: wrap;
 }
-.option .center{
+.options .center{
     text-align: center;
+}
+.option{
+    margin-bottom: 20rpx;
 }
 .option-title{
     display: inline-block;
@@ -55,7 +58,7 @@
 .option-img{
     width: 95%;
     display: block;
-    margin: 0 auto 20rpx;
+    margin: 0 auto;
 }
 
 .actions{

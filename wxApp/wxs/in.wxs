@@ -1,0 +1,10 @@
+var inString = function(a,string){
+   return a && string && string.indexOf(a) > -1
+}
+var inArray = function(a,arr){
+   return a && arr.indexOf(a) > -1
+}
+module.exports = {
+    inString: inString,
+    inArray: inArray
+}

@@ -64,14 +64,16 @@ Component({
                 that.setData({
                     question: questions[offset],
                     offset: offset,
-                    result: {}
+                    result: {},
+                    answer: [],
                 })
                 that.data.loading = false
             } else {
                 that.setData({
                     question: {},
                     offset: offset,
-                    result: {}
+                    result: {},
+                    answer: [],
                 })
                 that.getMore(prev ? offset - 9 : offset)
             }

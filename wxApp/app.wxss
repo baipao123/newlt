@@ -97,16 +97,10 @@ button.clear::after {
     text-overflow: ellipsis;
 }
 
-.blue-block{
+.blue-block {
     color: #31708f;
     background-color: #d9edf7;
     border-color: #bce8f1;
-}
-
-.green-block {
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
 }
 
 .orange-block {
@@ -120,6 +114,14 @@ button.clear::after {
     background-color: #f2dede;
     border-color: #ebccd1;
 }
+
+.green-block {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+
 
 .f-l{
     float: left;
