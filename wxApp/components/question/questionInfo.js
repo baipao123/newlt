@@ -32,6 +32,7 @@ Component({
         result: {},
         answer: [],
         loading: false,
+        maxOffset: 0,
     },
     ready: function () {
     },

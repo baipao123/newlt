@@ -58,8 +58,10 @@
                 <span class="myIcon icon-eye">查看答案</span>
             </view>
             <view class="weui-flex__item-auto next" bindtap="next">
+                <block wx:if="{{offset < maxOffset || maxOffset == 0}}">
                 下一题
                 <span class="myIcon icon-right"/>
+                </block>
             </view>
         </view>
     </view>
