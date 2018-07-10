@@ -28,7 +28,6 @@ Page({
         if (all > 0)
             that.setData({showIndex: all > 0})
         that.data.eid = eid
-        that.getList()
         that.getInfo()
     },
     onShow: function () {
@@ -64,17 +63,17 @@ Page({
             lastOffset: false
         })
     },
-    prev:function () {
+    prev: function () {
         let that = this,
             offset = that.data.offset,
             type = that.data.type,
             qNum = that.data.qNum
-        if(that.data.firstOffset)
+        if (that.data.firstOffset)
             return true
         if (offset > 1) {
             that.data.offset--
             that.setQuestion(true)
-        }else{
+        } else {
             let prevType = 0
             for (let t in qNum) {
                 if (t == type) {
@@ -114,7 +113,7 @@ Page({
             app.toast("最后一题了")
         }
     },
-    setQuestion: function (isPrev,again) {
+    setQuestion: function (isPrev, again) {
         let that = this,
             type = that.data.type,
             offset = that.data.offset,
@@ -133,7 +132,7 @@ Page({
                 offset: offset
             })
             that.isFirstOrLast()
-        }  else if (again) {
+        } else if (again) {
             app.toast("没有题目了")
         } else
             that.getList(isPrev)
@@ -159,7 +158,7 @@ Page({
                     }
                 }
                 that.data.questions = questions
-                that.setQuestion(isPrev,true)
+                that.setQuestion(isPrev, true)
             }
         })
     },
@@ -196,11 +195,11 @@ Page({
                 qid: that.data.question.qid,
                 answer: that.data.question.user.uA
             }
-        if(that.data.type != 3)
+        if (that.data.type != 3)
             return true
         that.answer(data)
     },
-    answer:function (data) {
+    answer: function (data) {
         console.log("提交题答案")
         console.log(data)
     },
@@ -209,22 +208,26 @@ Page({
         app.post("exam/info", {eid: that.data.eid}, function (res) {
             that.setData({
                 exam: res.exam,
-                qNum: res.qNum,
-                type: res.type,
+                qNum: res.qNum
             })
+            for (let t in res.qNum) {
+                that.data.type = t
+                that.getList()
+                return true
+            }
             that.timeStr(0)
         })
     },
     timeStr: function (index) {
         let that = this
-        if(index != that.data.timeStrIndex)
+        if (index != that.data.timeStrIndex)
             return false
         if (that.data.exam) {
             if (that.data.exam.status == 0) {
                 let expire = that.data.exam.expire_at,
                     nowTime = parseInt((new Date()).getTime() / 1000)
                 if (expire > nowTime) {
-                    console.log(expire-nowTime)
+                    console.log(expire - nowTime)
                     that.setData({
                         "exam.timeStr": app.formatSecondStr(expire - nowTime)
                     })
@@ -270,7 +273,7 @@ Page({
             showIndex: !this.data.showIndex
         })
     },
-    goSingle:function (e) {
+    goSingle: function (e) {
         let that = this,
             type = e.currentTarget.dataset.type,
             offset = e.currentTarget.dataset.offset
@@ -278,10 +281,10 @@ Page({
             showIndex: false
         })
         that.data.type = type,
-        that.data.offset = offset
+            that.data.offset = offset
         that.setQuestion()
     },
-    empty:function () {
-        
+    empty: function () {
+
     },
 })
