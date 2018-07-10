@@ -30,7 +30,7 @@
                 </view>
                 <view class="options weui-flex" >
                     <wxs src="./../../wxs/in.wxs" module="tools"/>
-                    <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,qNum[question.type][offset].uA)  ? 'blue-block':''}} {{question.answer ? (tools.inString(item.option,question.answer) ? 'green-block': (tools.inString(item.option,qNum[question.type][offset].uA) ? 'red-block' : '' )) : '' }} "
+                    <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,question.user.uA) ? 'blue-block':''}} {{question.answer ? (tools.inString(item.option,question.answer) ? 'green-block': (tools.inString(question.user.uA) ? 'red-block' : '' )) : '' }} "
                           wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
                         <view class="option-title">
                             <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
@@ -68,11 +68,13 @@
 
                 <view class="actions weui-flex">
                     <view class="weui-flex__item-auto prev" bindtap="prev">
-                        <span class="myIcon icon-left">上一题</span>
+                        <span class="myIcon icon-left" wx:if="{{!firstOffset}}">上一题</span>
                     </view>
-                    <view class="weui-flex__item-auto" bindtap="empty"/>
+                    <view class="weui-flex__item-auto" bindtap="goAnswer">
+                        <span class="myIcon icon-pass-cycle" wx:if="{{type == 3}}">提交答案</span>
+                    </view>
                     <view class="weui-flex__item-auto next" bindtap="next">
-                        <block>
+                        <block  wx:if="{{!lastOffset}}">
                             下一题
                             <span class="myIcon icon-right"/>
                         </block>

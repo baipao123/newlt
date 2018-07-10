@@ -1,5 +1,4 @@
 var inString = function(a,string){
-    console.log(string)
    return a && string && string.indexOf(a) > -1
 }
 var inArray = function(a,arr){

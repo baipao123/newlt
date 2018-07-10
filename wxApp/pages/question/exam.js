@@ -11,6 +11,8 @@ Page({
         question: {},
         type: 0,   // 题型
         offset: 1,
+        firstOffset: false, // 是否第一题
+        lastOffset: false, // 是否最后一题
         showIndex: false,
         timeStrIndex: 0, // 倒计时
     },
@@ -38,29 +40,110 @@ Page({
             app.commonOnShow()
         })
     },
-    setQuestion: function (again) {
+    isFirstOrLast: function () {
+        let that = this,
+            offset = that.data.offset,
+            type = that.data.type,
+            qNum = that.data.qNum,
+            typeKeys = Object.keys(qNum)
+        if (offset == 1 && typeKeys[0] == type) {
+            that.setData({
+                firstOffset: true,
+                lastOffset: false,
+            })
+            return true
+        } else if (offset == qNum[type].length && typeKeys[typeKeys.length - 1] == type) {
+            that.setData({
+                firstOffset: false,
+                lastOffset: true
+            })
+            return true
+        }
+        that.setData({
+            firstOffset: false,
+            lastOffset: false
+        })
+    },
+    prev:function () {
+        let that = this,
+            offset = that.data.offset,
+            type = that.data.type,
+            qNum = that.data.qNum
+        if(that.data.firstOffset)
+            return true
+        if (offset > 1) {
+            that.data.offset--
+            that.setQuestion(true)
+        }else{
+            let prevType = 0
+            for (let t in qNum) {
+                if (t == type) {
+                    console.log(prevType)
+                    that.data.type = prevType
+                    that.data.offset = Object.keys(qNum[prevType]).length
+                    that.setQuestion(true)
+                    return true
+                }
+                prevType = t
+            }
+            app.toast("已经是第一题了")
+        }
+    },
+    next: function () {
+        let that = this,
+            offset = that.data.offset,
+            type = that.data.type,
+            qNum = that.data.qNum
+        if (that.data.lastOffset)
+            return true
+        if (offset < Object.keys(qNum[type]).length) {
+            that.data.offset++
+            that.setQuestion()
+        } else {
+            let tmp = false
+            for (let t in qNum) {
+                if (tmp) {
+                    that.data.type = t
+                    that.data.offset = 1
+                    that.setQuestion()
+                    return true
+                }
+                if (t == type)
+                    tmp = true
+            }
+            app.toast("最后一题了")
+        }
+    },
+    setQuestion: function (isPrev,again) {
         let that = this,
             type = that.data.type,
             offset = that.data.offset,
-            questions = that.data.questions
+            questions = that.data.questions,
+            question
+        console.log("setQuestion")
+        console.log(type)
+        console.log(offset)
         if (questions[type] && questions[type][offset]) {
-            console.log(questions[type][offset])
+            question = questions[type][offset]
+            question.user = that.data.qNum[type] && that.data.qNum[type][offset] ? that.data.qNum[type][offset] : {}
+            console.log(question)
             that.setData({
-                question: questions[type][offset],
+                question: question,
                 type: type,
                 offset: offset
             })
-        } else if (again) {
+            that.isFirstOrLast()
+        }  else if (again) {
             app.toast("没有题目了")
         } else
-            that.getList()
+            that.getList(isPrev)
     },
-    getList: function () {
+    getList: function (isPrev) {
         let that = this,
             data = {
                 eid: that.data.eid,
                 type: that.data.type,
-                offset: that.data.offset
+                offset: isPrev ? Math.max(1, that.data.offset - 9) : that.data.offset
             }
         app.post("exam/list", data, function (res) {
             if (res.list.length == 0)
@@ -76,26 +159,58 @@ Page({
                     }
                 }
                 that.data.questions = questions
-                that.setQuestion(true)
+                that.setQuestion(isPrev,true)
             }
         })
     },
-    chose:function (e) {
+    chose: function (e) {
         let that = this,
-            option = e.currentTarget.dataset.option
+            option = e.currentTarget.dataset.option,
+            qNum = that.data.qNum,
+            type = that.data.type,
+            offset = that.data.offset,
+            question = that.data.question,
+            uA = question.user.uA ? question.user.uA.split('') : []
+        console.log(uA)
+        if (type != 3) {
+            let data = {
+                eid: that.data.eid,
+                qid: that.data.question.qid,
+                answer: option
+            }
+            that.answer(data)
+        } else {
+            if (uA.pop(option) == '')
+                uA.push(option)
+            userAnswer = uA.join("")
+            console.log(userAnswer)
+            that.setData({
+                "question.user.uA": userAnswer
+            })
+        }
     },
-    goAnswer:function (e) {
-
+    goAnswer: function (e) {
+        let that = this,
+            data = {
+                eid: that.data.eid,
+                qid: that.data.question.qid,
+                answer: that.data.question.user.uA
+            }
+        if(that.data.type != 3)
+            return true
+        that.answer(data)
     },
     answer:function (data) {
-
+        console.log("提交题答案")
+        console.log(data)
     },
     getInfo: function () {
         let that = this
         app.post("exam/info", {eid: that.data.eid}, function (res) {
             that.setData({
                 exam: res.exam,
-                qNum: res.qNum
+                qNum: res.qNum,
+                type: res.type,
             })
             that.timeStr(0)
         })

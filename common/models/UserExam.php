@@ -69,7 +69,7 @@ class UserExam extends \common\models\base\UserExam
         $data = [];
         if (isset($ids[ $type ]) && isset($ids[ $type ][ $offset - 1 ])) {
             $max = min(count($ids[ $type ]), $offset + $limit);
-            for (intval($offset); $offset < $max; $offset++)
+            for (intval($offset); $offset <= $max; $offset++)
                 $data[] = $ids[ $type ][ $offset - 1 ];
         }
         if (count($data) < $limit) {
