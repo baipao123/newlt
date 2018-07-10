@@ -114,4 +114,14 @@ class QuestionType extends \common\models\base\QuestionType
             ];
         return $data;
     }
+
+    public function typeEnStr($type) {
+        $arr = [
+            Question::TypeJudge  => "judge",
+            Question::TypeSelect => "select",
+            Question::TypeMulti  => "multi",
+            Question::TypeBlank  => "blank",
+        ];
+        return ArrayHelper::getValue($arr, $type, "");
+    }
 }

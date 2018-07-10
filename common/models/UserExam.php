@@ -96,4 +96,9 @@ class UserExam extends \common\models\base\UserExam
         }
         return $data;
     }
+
+    public function Score($type) {
+        $qType = QuestionType::findOne($this->tid);
+        return $qType->setting($qType->typeEnStr($type) . "Score");
+    }
 }

@@ -90,4 +90,8 @@ class Question extends \common\models\base\Question
     public function addViewNum() {
 
     }
+
+    public static function getIds($tid, $type, $limit) {
+        return Question::find()->where(["tid" => $tid, "type" => $type])->orderBy("RAND()")->limit($limit)->select("id")->column();
+    }
 }

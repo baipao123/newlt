@@ -49,10 +49,10 @@ class ExamController extends BaseController
         $multi = ArrayHelper::getValue($setting, "multiNum", 0);
         $blank = ArrayHelper::getValue($setting, "blankNum", 0);
         $qIds = [
-            Question::TypeJudge  => $judge > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeJudge])->orderBy("RAND()")->limit($judge)->select("id")->column() : [],
-            Question::TypeSelect => $select > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeSelect])->orderBy("RAND()")->limit($select)->select("id")->column() : [],
-            Question::TypeMulti  => $multi > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeMulti])->orderBy("RAND()")->limit($multi)->select("id")->column() : [],
-            Question::TypeBlank  => $blank > 0 ? Question::find()->where(["tid" => $tid, "type" => Question::TypeBlank])->orderBy("RAND()")->limit($blank)->select("id")->column() : []
+            Question::TypeJudge  => $judge > 0 ? Question::getIds($tid, Question::TypeJudge, $judge) : [],
+            Question::TypeSelect => $select > 0 ? Question::getIds($tid, Question::TypeSelect, $select) : [],
+            Question::TypeMulti  => $multi > 0 ? Question::getIds($tid, Question::TypeMulti, $multi) : [],
+            Question::TypeBlank  => $blank > 0 ? Question::getIds($tid, Question::TypeBlank, $blank) : [],
         ];
         $exam = new UserExam;
         $exam->uid = $user->id;
@@ -149,6 +149,7 @@ class ExamController extends BaseController
         $u->answer = $question->answer;
         $u->userAnswer = $answer;
         $u->status = Status::VERIFY;
+        $u->score = (string)$exam->Score($question->type);
         if ($u->isNewRecord)
             $u->created_at = time();
         else
