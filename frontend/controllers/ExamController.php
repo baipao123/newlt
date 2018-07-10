@@ -113,6 +113,7 @@ class ExamController extends BaseController
                 $offset = 1;
             }
             $data[ $tmpType ][ $offset ] = $question->info();
+            $question->addViewNum();
             $offset++;
         }
         return $this->send(["list" => $data]);
@@ -155,6 +156,10 @@ class ExamController extends BaseController
         else
             $u->updated_at = time();
         $u->save();
+        if ($u->answer == $u->userAnswer)
+            $question->addSuccessNum();
+        else
+            $question->addErrNum();
         return $this->send([
             "user" => [
                 "qid"    => $qid,
@@ -171,6 +176,14 @@ class ExamController extends BaseController
             return $this->sendError("未找到考卷");
         if ($exam->status == UserExam::ExamFinish)
             return $this->sendError("已经交过卷了");
-
+        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,2,3) WHERE `eid`=:eid;", [":eid" => $eid])->execute();
+        $score = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("sum(score)")->scalar();
+        $exam->score = $score;
+        $exam->status = UserExam::ExamFinish;
+        $exam->finish_at = time();
+        $exam->save();
+        return $this->send([
+            "exam" => $exam->info(),
+        ]);
     }
 }

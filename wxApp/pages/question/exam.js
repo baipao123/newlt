@@ -266,11 +266,14 @@ Page({
         let that = this
         console.log(123)
         that.data.exam.status = 1
+        app.post("exam/finish",{eid:that.data.eid},function (res) {
+            
+        })
     },
     finish: function () {
         let that = this,
-            total = that.data.questions.length,
-            num = that.data.answers.length
+            total = 100,
+            num = 20
         app.confirm("共有试题" + total + "题，已做" + num + "题，确定交卷吗？", function () {
             that.finishExam()
         }, function () {
