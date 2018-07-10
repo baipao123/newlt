@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\UserExamQuestion;
 use yii;
 use common\models\Question;
 use common\models\QuestionType;
@@ -102,7 +103,7 @@ class ExamController extends BaseController
             return $this->sendError("未找到考卷");
         $offset = $this->getPost("offset", 1);
         $qIds = $exam->getQIdsByOffset($type, $offset);
-        $questions = Question::find()->where(["id" => $qIds])->orderBy(["type" => SORT_ASC, "id" => $qIds])->all();
+        $questions = Question::find()->where(["id" => $qIds])->orderBy(["type" => SORT_ASC, new \yii\db\Expression('FIELD (`id`,' . implode(',', $qIds) . ')')])->all();
         /* @var $questions Question[] */
         $data = [];
         $tmpType = $type;
@@ -115,6 +116,51 @@ class ExamController extends BaseController
             $offset++;
         }
         return $this->send(["list" => $data]);
+    }
+
+    public function actionAnswer() {
+        $eid = $this->getPost("eid", 0);
+        $exam = UserExam::findOne($eid);
+        if (!$exam || $exam->uid != $this->user_id())
+            return $this->sendError("未找到考卷");
+        if ($exam->status != UserExam::ExamIng || $exam->expire_at <= time())
+            return $this->sendError("考试已结束");
+        $qid = $this->getPost("qid", 0);
+        $answer = $this->getPost("answer", "");
+        if (empty($answer))
+            return $this->sendError("请选择答案");
+        $answerArr = str_split($answer, 1);
+        asort($answerArr);
+        $answer = join($answerArr);
+
+        $question = Question::findOne($qid);
+        if (!$question)
+            return $this->sendError("未找到试题");
+        $ids = json_decode($exam->qIds, true);
+        if (!isset($ids[ $question->type ]) || !in_array($qid, $ids[ $question->type ]))
+            return $this->sendError("考卷中未发现此试题");
+        $u = UserExamQuestion::findOne(["eid" => $eid, "qid" => $qid, "uid" => $this->user_id()]);
+        if (!$u)
+            $u = new UserExamQuestion;
+        $u->eid = $eid;
+        $u->uid = $this->user_id();
+        $u->tid = $question->tid;
+        $u->qid = $qid;
+        $u->answer = $question->answer;
+        $u->userAnswer = $answer;
+        $u->status = Status::VERIFY;
+        if ($u->isNewRecord)
+            $u->created_at = time();
+        else
+            $u->updated_at = time();
+        $u->save();
+        return $this->send([
+            "user" => [
+                "qid"    => $qid,
+                "uA"     => $answer,
+                "status" => Status::VERIFY
+            ]
+        ]);
     }
 
     public function actionFinish() {

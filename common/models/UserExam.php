@@ -54,7 +54,7 @@ class UserExam extends \common\models\base\UserExam
     }
 
     public function finishQuestions() {
-        $data = UserExamQuestion::find()->where(["eid" => $this->id])->select("qid,userAnswer,status")->column();
+        $data = UserExamQuestion::find()->where(["eid" => $this->id, "uid" => $this->uid])->select("qid,userAnswer,status")->asArray()->all();
         return ArrayHelper::index($data, "qid");
     }
 
@@ -70,7 +70,7 @@ class UserExam extends \common\models\base\UserExam
         if (isset($ids[ $type ]) && isset($ids[ $type ][ $offset - 1 ])) {
             $max = min(count($ids[ $type ]), $offset + $limit);
             for (intval($offset); $offset <= $max; $offset++)
-                $data[] = $ids[ $type ][ $offset - 1 ];
+                $data[] = (int)$ids[ $type ][ $offset - 1 ];
         }
         if (count($data) < $limit) {
             $_ids = $this->getQIdsByOffset($type + 1, 1, $limit - count($data));

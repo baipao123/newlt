@@ -200,8 +200,17 @@ Page({
         that.answer(data)
     },
     answer: function (data) {
-        console.log("提交题答案")
-        console.log(data)
+        let that = this
+        app.post("exam/answer", data, function (res) {
+            let qNum = that.data.qNum,
+                type = that.data.type,
+                offset = that.data.offset
+            qNum[type][offset] = res.user
+            that.setData({
+                "question.user": res.user,
+                qNum: qNum
+            })
+        })
     },
     getInfo: function () {
         let that = this
@@ -213,9 +222,9 @@ Page({
             for (let t in res.qNum) {
                 that.data.type = t
                 that.getList()
+                that.timeStr(0)
                 return true
             }
-            that.timeStr(0)
         })
     },
     timeStr: function (index) {
