@@ -267,7 +267,7 @@ Page({
         console.log(123)
         that.data.exam.status = 1
         app.post("exam/finish",{eid:that.data.eid},function (res) {
-            
+
         })
     },
     finish: function () {

@@ -176,7 +176,7 @@ class ExamController extends BaseController
             return $this->sendError("未找到考卷");
         if ($exam->status == UserExam::ExamFinish)
             return $this->sendError("已经交过卷了");
-        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,2,3) WHERE `eid`=:eid;", [":eid" => $eid])->execute();
+        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,:pass,:forbid) WHERE `eid`=:eid;", [":eid" => $eid, ":pass" => Status::PASS, ":forbid" => Status::FORBID])->execute();
         $score = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("sum(score)")->scalar();
         $exam->score = $score;
         $exam->status = UserExam::ExamFinish;
