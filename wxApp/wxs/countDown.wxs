@@ -1,0 +1,25 @@
+var formatSecondStr = function (s,now) {
+    s = s - now
+    if (s <= 0)
+        return "00:00"
+    var day = Math.floor(s / 86400),
+        hour = Math.floor(s / 3600) % 24,
+        min = Math.floor(s / 60) % 60,
+        second = Math.floor(s % 60),
+        str = ""
+    if (day > 0)
+        str = day + "天 "
+    str += PrefixInteger(hour) + " : "
+    str += PrefixInteger(min) + " : "
+    str += PrefixInteger(second)
+    return str
+}
+var PrefixInteger =  function(num){
+    if(num == 0)
+        return "00";
+    return num < 10 ? "0" + num : num
+}
+
+module.exports = {
+    formatSecondStr: formatSecondStr
+}

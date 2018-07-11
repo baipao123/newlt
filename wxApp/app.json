@@ -2,6 +2,7 @@
   "pages": [
     "pages/home/home",
     "pages/user/user",
+    "pages/user/exam",
     "pages/question/index",
     "pages/question/exam",
     "pages/question/train",

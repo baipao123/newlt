@@ -16,6 +16,7 @@ use Yii;
  * @property string $qIds
  * @property int $created_at
  * @property int $finish_at
+ * @property string $detail
  */
 class UserExam extends \yii\db\ActiveRecord
 {
@@ -34,7 +35,7 @@ class UserExam extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'tid', 'expire_at', 'score', 'status', 'created_at', 'finish_at'], 'integer'],
-            [['qIds'], 'string'],
+            [['qIds','detail'], 'string'],
         ];
     }
 
@@ -53,6 +54,7 @@ class UserExam extends \yii\db\ActiveRecord
             'qIds' => 'Q Ids',
             'created_at' => 'Created At',
             'finish_at' => 'Finish At',
+            'detail' => 'Detail',
         ];
     }
 }

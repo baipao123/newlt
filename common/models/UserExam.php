@@ -8,14 +8,21 @@
 
 namespace common\models;
 
-
 use yii\helpers\ArrayHelper;
 
+
+/**
+ * @property QuestionType $type
+ */
 class UserExam extends \common\models\base\UserExam
 {
     const ExamIng = 0;
     const ExamFinish = 1;
     const ExamExpire = 2;
+
+    public function getType() {
+        return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
+    }
 
     /**
      * @param int $uid
@@ -44,13 +51,14 @@ class UserExam extends \common\models\base\UserExam
             $this->status = self::ExamExpire;
             $this->save();
         }
-        return [
+        $detail = empty($this->detail) ? json_decode($this->detail, true) : [];
+        return ArrayHelper::merge($detail, [
             "eid"       => $this->id,
             "status"    => $this->status,
             "score"     => $this->score,
             "expire_at" => $this->expire_at,
-            "finish_at" => $this->finish_at,
-        ];
+            "finish_at" => $this->finish_at > 0 ? date("Y-m-d H:i:s", $this->finish_at) : "",
+        ]);
     }
 
     public function finishQuestions() {
@@ -100,5 +108,11 @@ class UserExam extends \common\models\base\UserExam
     public function Score($type) {
         $qType = QuestionType::findOne($this->tid);
         return $qType->setting($qType->typeEnStr($type) . "Score");
+    }
+
+    public static function examInfo($uid, $tid) {
+        return \Yii::$app->db->cache(function () use ($uid, $tid) {
+            return self::find()->where(["uid" => $uid, "tid" => $tid, "status" => self::ExamFinish])->select("count(*) as num,AVG(score) as avg,Max(score) as max")->asArray()->one();
+        }, 30);
     }
 }

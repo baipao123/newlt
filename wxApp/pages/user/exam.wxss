@@ -1,0 +1,4 @@
+.bars{
+    margin: 40rpx 0;
+    padding: 20rpx 0;
+}

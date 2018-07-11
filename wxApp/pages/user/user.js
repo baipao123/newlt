@@ -70,7 +70,7 @@ Page({
         let that = this
         if (!that.common())
             return true
-        app.turnPage("question/examRecord")
+        app.turnPage("user/exam")
     },
     train: function (e) {
         let that = this,
