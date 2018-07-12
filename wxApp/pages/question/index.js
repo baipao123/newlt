@@ -139,18 +139,24 @@ Page({
     goTrain: function (e) {
         // app.turnPage("question/train")
         let that = this,
-            value = that.data.pickerValue,
-            type = that.data.types[value[0]],
-            tid = type.tid,
-            t = type.child[value[1]].type,
+            value = e.detail.value,
+            tid = value[0],
+            t = value[1],
             offset = 1
-        app.turnPage("question/train?tid=" + tid + "&type=" + t + "&offset=" + offset);
-    },
-    pickerSubmit: function (e) {
-        console.log(e)
-        let that = this,
-            value = e.detail.value
-        console.log(value)
+        app.get("question/train-last-offset", {type: t, tid: tid}, function (res) {
+            res.offset = !res.offset || res.offset == 0 ? 1 : res.offset
+            let url = "question/train?tid=" + res.tid + "&type=" + t
+            if (res.offset == 1) {
+                app.turnPage(url)
+                return true
+            } else {
+                app.confirm("您上次练习到第" + res.offset + "题，需要继续练习吗？", function () {
+                    app.turnPage(url + "&offset=" + res.offset)
+                }, function () {
+                    app.turnPage(url)
+                }, "提示", "继续上次", "重新开始")
+            }
+        })
     },
     onUnload: function () {
         this.data.countIndex = -10

@@ -44,5 +44,5 @@
     </view>
 
     <include src="/pages/common/footer.wxml"/>
-    <select range="{{typesData}}" rangeKey="{{['name','name']}}" childKey="{{['child']}}" value="{{pickerValue}}" valueKey="{{['tid','type']}}" show="{{picker}}" bindsubmit="pickerSubmit" />
+    <select range="{{typesData}}" rangeKey="{{['name','name']}}" childKey="{{['child']}}" value="{{pickerValue}}" valueKey="{{['tid','type']}}" show="{{picker}}" bindsubmit="goTrain" />
 </view>
