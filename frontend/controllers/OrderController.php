@@ -26,55 +26,55 @@ class OrderController extends BaseController
         $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
-            return Tool::reJson(null, "订单不存在", Tool::FAIL);
-        return Tool::reJson(["info" => $order->info()]);
+            return $this->sendError("订单不存在");
+        return $this->send(["info" => $order->info()]);
     }
 
     public function actionPay() {
         $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
-            return Tool::reJson(null, "订单不存在", Tool::FAIL);
+            return $this->sendError("订单不存在");
         if (in_array($order->status, [Status::IS_PAY, Status::IS_REFUND]))
-            return Tool::reJson(null, "订单已成功支付", Tool::FAIL);
+            return $this->sendError("订单已成功支付");
         if ($order->status == Status::CANCEL_PAY || $order->created_at + 900 <= time())
-            return Tool::reJson(null, "订单已超时，无法支付", Tool::FAIL);
+            return $this->sendError("订单已超时，无法支付");
 
         $redisKey = "DK-PAY-UID:" . $this->user_id();
         if (Yii::$app->redis->setnx($redisKey, 1) == 0)
-            return Tool::reJson(null, "3秒内只允许支付一次，请稍后重试", Tool::FAIL);
+            return $this->sendError("3秒内只允许支付一次，请稍后重试");
         Yii::$app->redis->expire($redisKey, 3);
 
         $order->formId = $this->getPost("formId");
         $order->save();
         $params = $order->wxPayParams();
         if ($params === false)
-            return Tool::reJson(null, WxPay::getInstance()->getError(), Tool::FAIL);
-        return Tool::reJson(["params" => $params]);
+            return $this->sendError(WxPay::getInstance()->getError());
+        return $this->send(["params" => $params]);
     }
 
     public function actionPaySuccess() {
         $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
-            return Tool::reJson(null, "订单不存在", Tool::FAIL);
+            return $this->sendError("订单不存在");
         if ($order->status == Status::IS_UNIFY_ORDER && Yii::$app->redis->setnx(Order::NotifyRedisKey . $order->id, 1)) {
             $order->status = Status::WAIT_NOTIFY;
             $order->save();
         }
-        return Tool::reJson(null);
+        return $this->send(["info" => $order->info()]);
     }
 
     public function actionQuery() {
         $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
-            return Tool::reJson(null, "订单不存在", Tool::FAIL);
+            return $this->sendError("订单不存在");
         if (in_array($order->status, [Status::IS_PAY, Status::IS_UNIFY_ORDER]))
-            return Tool::reJson(["info" => $order->info()]);
+            return $this->send(["info" => $order->info()]);
         $query = WxPay::getInstance()->Query($order->out_trade_no);
-        if($query === false)
-            return Tool::reJson(null,WxPay::getInstance()->getError(),Tool::FAIL);
+        if ($query === false)
+            return $this->sendError(WxPay::getInstance()->getError());
         if ($query['trade_state'] != "SUCCESS") {
             $arr = [
                 "SUCCESS"    => "支付成功",
@@ -85,7 +85,7 @@ class OrderController extends BaseController
                 "USERPAYING" => "用户支付中",
                 "PAYERROR"   => "支付失败"
             ];
-            return Tool::reJson(null, "订单" . ArrayHelper::getValue($arr, $query['trade_state'], "支付失败"), Tool::FAIL);
+            return $this->sendError("订单" . ArrayHelper::getValue($arr, $query['trade_state'], "支付失败"));
         }
         if ($query['total_fee'] == $order->price && $query['openid'] == $order->openId) {
             $order->status = Status::IS_PAY;
@@ -93,12 +93,18 @@ class OrderController extends BaseController
             $order->payat = $query['time_end'];
             $order->afterPay();
             $order->save();
-            return Tool::reJson(["info" => $order->info()]);
+            return $this->send(["info" => $order->info()]);
         }
-        return Tool::reJson(null, "订单支付异常", Tool::FAIL);
+        return $this->sendError("订单支付异常");
     }
 
-    public function actionRecord($type = 0) {
-
+    public function actionRecord($page = 1, $limit = 10) {
+        $orders = Order::find()->where(["uid" => $this->user_id()])->offset(($page - 1) * $limit)->limit($limit)->orderBy("id desc")->all();
+        /* @var $orders Order[] */
+        $data = [];
+        foreach ($orders as $order) {
+            $data[] = $order->info();
+        }
+        return $this->send(["list" => $data]);
     }
 }
