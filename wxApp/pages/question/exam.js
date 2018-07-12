@@ -276,7 +276,7 @@ Page({
             return true;
         that.data.exam.status = 1
         app.post("exam/finish", {eid: that.data.eid}, function (res) {
-            wx.reLaunch({
+            wx.redirectTo({
                 url: "/pages/question/exam?eid=" + that.data.eid + "&all=1"
             })
         })
