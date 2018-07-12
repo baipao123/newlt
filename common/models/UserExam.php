@@ -51,7 +51,7 @@ class UserExam extends \common\models\base\UserExam
             $this->status = self::ExamExpire;
             $this->save();
         }
-        $detail = empty($this->detail) ? json_decode($this->detail, true) : [];
+        $detail = empty($this->detail) ? [] : json_decode($this->detail, true);
         return ArrayHelper::merge($detail, [
             "eid"       => $this->id,
             "status"    => $this->status,
@@ -62,7 +62,9 @@ class UserExam extends \common\models\base\UserExam
     }
 
     public function finishQuestions() {
-        $data = UserExamQuestion::find()->where(["eid" => $this->id, "uid" => $this->uid])->select("qid,userAnswer,status")->asArray()->all();
+        $data = \Yii::$app->db->cache(function () {
+            return UserExamQuestion::find()->where(["eid" => $this->id, "uid" => $this->uid])->select("qid,userAnswer,status")->asArray()->all();
+        }, 5);
         return ArrayHelper::index($data, "qid");
     }
 
@@ -106,7 +108,7 @@ class UserExam extends \common\models\base\UserExam
     }
 
     public function Score($type) {
-        $qType = QuestionType::findOne($this->tid);
+        $qType = $this->type;
         return $qType->setting($qType->typeEnStr($type) . "Score");
     }
 

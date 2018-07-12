@@ -170,7 +170,8 @@ Page({
             offset = that.data.offset,
             question = that.data.question,
             uA = question.user.uA ? question.user.uA.split('') : []
-        console.log(uA)
+        if (that.data.exam.status != 0)
+            return true;
         if (type != 3) {
             let data = {
                 eid: that.data.eid,
@@ -195,12 +196,16 @@ Page({
                 qid: that.data.question.qid,
                 answer: that.data.question.user.uA
             }
+        if (that.data.exam.status != 0)
+            return true;
         if (that.data.type != 3)
             return true
         that.answer(data)
     },
     answer: function (data) {
         let that = this
+        if (that.data.exam.status != 0)
+            return true;
         app.post("exam/answer", data, function (res) {
             let qNum = that.data.qNum,
                 type = that.data.type,
@@ -210,11 +215,14 @@ Page({
                 "question.user": res.user,
                 qNum: qNum
             })
+            if (res.isNew)
+                that.data.exam.alNum++
         })
     },
     getInfo: function () {
         let that = this
         app.post("exam/info", {eid: that.data.eid}, function (res) {
+            res.exam.alNum = res.alNum
             that.setData({
                 exam: res.exam,
                 qNum: res.qNum
@@ -264,16 +272,19 @@ Page({
     },
     finishExam: function () {
         let that = this
-        console.log(123)
+        if (that.data.exam.status != 0)
+            return true;
         that.data.exam.status = 1
-        app.post("exam/finish",{eid:that.data.eid},function (res) {
-
+        app.post("exam/finish", {eid: that.data.eid}, function (res) {
+            wx.reLaunch({
+                url: "/pages/question/exam?eid=" + that.data.eid + "&all=1"
+            })
         })
     },
     finish: function () {
         let that = this,
-            total = 100,
-            num = 20
+            total = that.data.exam.total,
+            num = that.data.exam.alNum
         app.confirm("共有试题" + total + "题，已做" + num + "题，确定交卷吗？", function () {
             that.finishExam()
         }, function () {

@@ -30,7 +30,7 @@
                 </view>
                 <view class="options weui-flex" >
                     <wxs src="./../../wxs/in.wxs" module="tools"/>
-                    <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,question.user.uA) ? 'blue-block':''}} {{question.answer ? (tools.inString(item.option,question.answer) ? 'green-block': (tools.inString(question.user.uA) ? 'red-block' : '' )) : '' }} "
+                    <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,question.user.uA) ? 'blue-block':''}} {{question.answer.answer ? (tools.inString(item.option,question.answer.answer) ? 'green-block': (tools.inString(item.option,question.user.uA) ? 'red-block' : '' )) : '' }} "
                           wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
                         <view class="option-title">
                             <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
@@ -48,19 +48,19 @@
                         <view class="weui-form-preview__bd" style="line-height:.9em">
                             <view class="weui-form-preview__item">
                                 <view class="weui-form-preview__label">正确答案</view>
-                                <view class="weui-form-preview__value text-green">{{question.answerStr}}</view>
+                                <view class="weui-form-preview__value text-green">{{question.answer.answer}}</view>
                             </view>
-                            <view class="weui-form-preview__item" wx:if="{{question.knowledge}}">
+                            <view class="weui-form-preview__item" wx:if="{{question.answer.knowledge}}">
                                 <view class="weui-form-preview__label">知识点</view>
-                                <view class="weui-form-preview__value">{{question.knowledge}}</view>
+                                <view class="weui-form-preview__value">{{question.answer.knowledge}}</view>
                             </view>
-                            <view class="weui-form-preview__item" wx:if="{{question.difficulty}}">
+                            <view class="weui-form-preview__item" wx:if="{{question.answer.difficulty}}">
                                 <view class="weui-form-preview__label">难度</view>
-                                <view class="weui-form-preview__value">{{question.difficulty}}</view>
+                                <view class="weui-form-preview__value">{{question.answer.difficulty}}</view>
                             </view>
-                            <view class="weui-form-preview__item" wx:if="{{question.description}}">
+                            <view class="weui-form-preview__item" wx:if="{{question.answer.description}}">
                                 <view class="weui-form-preview__label">答案解析</view>
-                                <view class="weui-form-preview__value">{{question.description}}</view>
+                                <view class="weui-form-preview__value">{{question.answer.description}}</view>
                             </view>
                         </view>
                     </view>

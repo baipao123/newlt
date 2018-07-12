@@ -60,6 +60,9 @@ class ExamController extends BaseController
         $exam->expire_at = time() + ArrayHelper::getValue($setting, "time", 0) * 60;
         $exam->status = UserExam::ExamIng;
         $exam->qIds = json_encode($qIds);
+        $exam->detail = json_encode([
+            "total" => count($qIds, COUNT_RECURSIVE) - 4
+        ]);
         $exam->created_at = time();
         if (!$exam->save())
             Yii::warning($exam->errors, "保存UserExam错误");
@@ -104,8 +107,9 @@ class ExamController extends BaseController
         if (!$exam || $exam->uid != $this->user_id())
             return $this->sendError("未找到考卷");
         return $this->send([
-            "exam"    => $exam->info(),
-            "qNum" => $exam->qNum(),
+            "exam"  => $exam->info(),
+            "qNum"  => $exam->qNum(),
+            "alNum" => count($exam->finishQuestions())
         ]);
     }
 
@@ -126,7 +130,10 @@ class ExamController extends BaseController
                 $tmpType = $question->type;
                 $offset = 1;
             }
-            $data[ $tmpType ][ $offset ] = $question->info();
+            $info = $question->info();
+            if ($exam->status == UserExam::ExamFinish)
+                $info['answer'] = $question->answer();
+            $data[ $tmpType ][ $offset ] = $info;
             $question->addViewNum();
             $offset++;
         }
@@ -175,11 +182,12 @@ class ExamController extends BaseController
         else
             $question->addErrNum();
         return $this->send([
-            "user" => [
+            "user"  => [
                 "qid"    => $qid,
                 "uA"     => $answer,
                 "status" => Status::VERIFY
-            ]
+            ],
+            "isNew" => $u->updated_at == 0,
         ]);
     }
 
@@ -192,13 +200,12 @@ class ExamController extends BaseController
             return $this->sendError("已经交过卷了");
         Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,:pass,:forbid) WHERE `eid`=:eid;", [":eid" => $eid, ":pass" => Status::PASS, ":forbid" => Status::FORBID])->execute();
         $info = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("sum(score) as score,count(*) as passNum")->asArray()->one();
-        $setting = $exam->type->setting();
-        $info['total'] = ArrayHelper::getValue($setting,"totalNum");
-        $info['failNum'] = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("count(*)")->scalar();
+        $detail = json_decode($exam->detail, true);
+        $detail['failNum'] = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("count(*)")->scalar();
         $exam->score = $info['score'];
         $exam->status = UserExam::ExamFinish;
         $exam->finish_at = time();
-        $exam->detail = json_encode($info);
+        $exam->detail = json_encode(ArrayHelper::merge($info, $detail));
         $exam->save();
         return $this->send([
             "exam" => $exam->info(),
