@@ -28,8 +28,6 @@ Page({
     },
     countDown: function (index) {
         let that = this
-        console.log(index)
-        console.log(that.data.timeOutIndex)
         if (index && index != that.data.timeOutIndex)
             return true
         if (index && that.data.timeOutIndex <= 0)
@@ -52,7 +50,7 @@ Page({
         that.setData({
             loading: true
         })
-        app.get("order/records", {page: page}, function (res) {
+        app.get("order/record", {page: page}, function (res) {
             if (page == 1) {
                 that.setData({
                     list: res.list,
@@ -61,7 +59,7 @@ Page({
                 })
             } else {
                 let list = that.data.list
-                list.push().apply(res.list)
+                list.push.apply(res.list)
                 that.setData({
                     list: list,
                     loading: false,
@@ -71,6 +69,10 @@ Page({
             that.data.loading = false
             that.data.refresh = false
         })
+    },
+    order: function (e) {
+        let oid = e.currentTarget.dataset.oid
+        app.turnPage("order/info?id=" + oid)
     },
     onPullDownRefresh: function () {
         let that = this

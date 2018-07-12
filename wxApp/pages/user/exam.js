@@ -94,7 +94,7 @@ Page({
                 })
             } else {
                 let list = that.data.list
-                list.push().apply(res.list)
+                list.push.apply(res.list)
                 that.setData({
                     list: list,
                     loading: false

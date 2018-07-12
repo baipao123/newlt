@@ -1,0 +1,12 @@
+.weui-panel{
+    margin-bottom: 20rpx;
+}
+.weui-media-box__info{
+    margin-top: 0;
+}
+.weui-media-box__desc{
+    margin: 10rpx 0;
+}
+.status{
+    max-width:120rpx;
+}
