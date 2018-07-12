@@ -1,6 +1,6 @@
 <view class="page">
     <block wx:if="{{info}}">
-        <view class="weui-panel">
+        <view class="weui-panel" catchtap="picker">
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_appmsg">
                     <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" wx:if="{{info.icon}}">
@@ -32,7 +32,7 @@
                 <view class="text-m">平均分</view>
             </view>
             <view class="weui-flex__item">
-                <view class="text text-green">{{info.max}}</view>
+                <view class="text text-green">{{info.max ? info.max : 0}}</view>
                 <view class="text-m">最高分</view>
             </view>
         </view>

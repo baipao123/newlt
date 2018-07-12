@@ -52,8 +52,6 @@ Page({
     },
     picker: function () {
         let that = this
-        if (!that.common())
-            return true
         that.setData({
             picker: true
         })
@@ -83,7 +81,8 @@ Page({
                     empty: true,
                     loading: false
                 })
-            } else if (that.data.page == 1) {
+            }
+            if (that.data.page == 1) {
                 that.setData({
                     list: res.list,
                     info: res.info,
