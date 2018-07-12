@@ -47,7 +47,7 @@ Page({
             obj = that.data.prices[index]
         app.confirm("确定以" + (obj.price / 100) + "元的价格购买" + obj.hourStr + "的使用期？", function () {
             app.post("goods/order", {pid: pid}, function (res) {
-                app.turnPage("order/pay?id=" + res.oid)
+                app.turnPage("order/info?id=" + res.oid)
             })
         });
     },

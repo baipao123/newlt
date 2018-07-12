@@ -80,26 +80,35 @@ class WxPay extends WxPayBase
      */
     public function UnifiedOrder($data) {
         $notify_url = rtrim(Yii::$app->params['api_url'], "/") . $this->notify_end;
-        //跨时区大作战，不然就是X小时15分钟的支付时间
-        $timeZone = date_default_timezone_get();
-        date_default_timezone_set("PRC");
         $params = [
             'appid'            => $this->wxPay['appid'],
             'mch_id'           => $this->wxPay['mchid'],
-            'device_info'      => 'WEB',
             'spbill_create_ip' => $_SERVER['REMOTE_ADDR'],
             'notify_url'       => $notify_url,
             'trade_type'       => 'JSAPI',
             'nonce_str'        => $this->getNonceStr(),
         ];
-        date_default_timezone_set($timeZone);
         if (isset($data['body']))
             $data['body'] = StringHelper::formatTitleForPay($data['body'], 40, 128);
         $params = array_merge($params, $data);
         $response = $this->Post("pay/unifiedorder", $params);
         if ($response === false || isset($response['report']) || !empty($this->getError()))
             return false;
-        return $response;
+        return $response['prepay_id'];
+    }
+
+    // 获取支付需要的参数
+    public function getPayParams($prepay_id) {
+        $data = [
+            'appId'     => $this->wxPay['appid'],
+            'package'   => "prepay_id=" . $prepay_id,
+            'nonceStr'  => $this->getNonceStr(),
+            'timeStamp' => (string)time(),
+            'signType'  => 'MD5'// 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+        ];
+        $data['paySign'] = $this->MakeSign($data);
+        unset($data['appId']);
+        return $data;
     }
 
     /**

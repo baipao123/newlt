@@ -22,26 +22,16 @@ class OrderController extends BaseController
 {
     protected $order;
 
-    public function actionInfoForPay($oid) {
+    public function actionInfo() {
+        $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
             return Tool::reJson(null, "订单不存在", Tool::FAIL);
-        if (in_array($order->status, [Status::IS_PAY, Status::IS_REFUND]))
-            return Tool::reJson(null, "订单已成功支付", Tool::FAIL);
-        if ($order->status == Status::CANCEL_PAY || $order->created_at + 900 <= time())
-            return Tool::reJson(null, "订单已超时，无法支付", Tool::FAIL);
-        $info = [
-            "oid"        => $order->id,
-            "title"      => $order->title,
-            "cover"      => $order->cover,
-            "price"      => $order->price,
-            "created_at" => $order->created_at
-        ];
-
-        return Tool::reJson(["info" => $info]);
+        return Tool::reJson(["info" => $order->info()]);
     }
 
-    public function actionPay($oid) {
+    public function actionPay() {
+        $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
             return Tool::reJson(null, "订单不存在", Tool::FAIL);
@@ -53,11 +43,10 @@ class OrderController extends BaseController
         $redisKey = "DK-PAY-UID:" . $this->user_id();
         if (Yii::$app->redis->setnx($redisKey, 1) == 0)
             return Tool::reJson(null, "3秒内只允许支付一次，请稍后重试", Tool::FAIL);
+        Yii::$app->redis->expire($redisKey, 3);
 
         $order->formId = $this->getPost("formId");
         $order->save();
-
-        Yii::$app->redis->expire($redisKey, 3);
         $params = $order->wxPayParams();
         if ($params === false)
             return Tool::reJson(null, WxPay::getInstance()->getError(), Tool::FAIL);
@@ -76,7 +65,8 @@ class OrderController extends BaseController
         return Tool::reJson(null);
     }
 
-    public function actionPayQuery($oid) {
+    public function actionQuery() {
+        $oid = $this->getPost("oid", 0);
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
             return Tool::reJson(null, "订单不存在", Tool::FAIL);
@@ -109,10 +99,6 @@ class OrderController extends BaseController
     }
 
     public function actionRecord($type = 0) {
-
-    }
-
-    public function actionInfo($oid) {
 
     }
 }

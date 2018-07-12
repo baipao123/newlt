@@ -49,7 +49,12 @@ class GoodsController extends BaseController
         $type = $p->questionType;
         if (!$type || $type->status != Status::PASS)
             return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
+        $oid = Order::find()->where(["tid" => $p->tid, "pid" => $pid, "status" => [Status::WAIT_PAY, Status::IS_UNIFY_ORDER, Status::WAIT_NOTIFY]])->andWhere([">", "created_at", time() - 900])->orderBy("id desc")->select("id")->scalar();
+        if ($oid > 0)
+            return $this->send(["oid" => intval($oid)], "存在未支付订单");
         $order = new Order;
+        $order->tid = $p->tid;
+        $order->pid = $pid;
         $order->title = $p->title;
         $order->cover = empty($p->cover) ? $type->icon : $p->cover;
         $order->uid = $this->user_id();

@@ -6,7 +6,6 @@
     "pages/question/index",
     "pages/question/exam",
     "pages/question/train",
-    "pages/order/pay",
     "pages/order/info",
     "pages/common/webView"
   ],

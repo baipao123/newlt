@@ -13,6 +13,7 @@ use common\tools\StringHelper;
 use console\worker\SendTpl;
 use Yii;
 use common\tool\WxPay;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property User $user
@@ -25,34 +26,40 @@ class Order extends \common\models\base\Order
         return $this->hasOne(User::className(), ["id" => "uid"]);
     }
 
-
     public function info() {
-        return [
-            "oid"    => $this->id,
-            "openId" => $this->openId,
-            "title"  => $this->title,
-            "cover"  => $this->cover,
-            "price"  => $this->price,
+        $info = [
+            "oid"          => $this->id,
+            "title"        => $this->title,
+            "status"       => $this->status,
+            "cover"        => $this->cover,
+            "price"        => $this->price,
+            "out_trade_no" => $this->out_trade_no,
+            "created_at"   => date("Y-m-d H:i:s", $this->created_at)
         ];
+        if (in_array($this->status, [Status::IS_PAY, Status::IS_REFUND])) {
+            $info = ArrayHelper::merge($info, [
+                "trade_no" => $this->trade_no,
+                "pay_at"   => date("Y-m-d H:i:s", $this->paytime)
+            ]);
+        } else {
+            $info['expire_at'] = $this->created_at + 900;
+        }
+        return $info;
     }
 
     public function wxPayParams() {
         $prepayId = $this->getPrepayId();
         if ($prepayId === false)
             return false;
-        $data = [
-            'signType'  => "MD5",
-            'package'   => $this->getPrepayId(),
-            'nonceStr'  => StringHelper::nonce(8),
-            'timestamp' => (string)time(),
-        ];
-        $data['paySign'] = WxPay::getInstance()->MakeSign($data);
-        return $data;
+        return WxPay::getInstance()->getPayParams($prepayId);
     }
 
     public function getPrepayId() {
         if (!empty($this->prepay_id))
             return $this->prepay_id;
+        //跨时区大作战，不然就是X小时15分钟的支付时间
+        $timeZone = date_default_timezone_get();
+        date_default_timezone_set("PRC");
         $data = [
             "openId"       => $this->openId,
             "body"         => $this->title,
@@ -61,10 +68,11 @@ class Order extends \common\models\base\Order
             'time_start'   => date("YmdHis", $this->created_at),
             'time_expire'  => date("YmdHis", $this->created_at + 900),
         ];
+        date_default_timezone_set($timeZone);
         $response = WxPay::getInstance()->UnifiedOrder($data);
-        if (!$response || !isset($response['prepay_id']))
+        if (!$response)
             return false;
-        $prepayId = $response['prepay_id'];
+        $prepayId = $response;
         $this->prepay_id = $prepayId;
         $this->status = Status::IS_UNIFY_ORDER;
         $this->save();
