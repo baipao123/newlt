@@ -8,10 +8,10 @@ Page({
         prices: [],
         type: {},
         countIndex: 0,
-        pickerShow: false,
-        types: [],
-        typesChild: [],
+        picker: false,
+        typesData: [],
         pickerValue: [0, 0],
+        qTypes: [],
     },
     onLoad: function (options) {
         let tid = options && options.hasOwnProperty("id") ? options.id : 0
@@ -56,8 +56,7 @@ Page({
         app.get("question/info", {tid: that.data.tid}, function (res) {
             that.setData({
                 type: res.type,
-                types: res.types,
-                typesChild: res.types[0].child
+                typesData: res.types,
             })
             app.setTitle(res.type.name)
             if (!res.type.on)
@@ -74,6 +73,8 @@ Page({
             time = parseInt((new Date()).getTime() / 1000)
         if (index != that.data.countIndex)
             return false
+        if(index && that.data.countIndex <= 0)
+            return true
         if (time >= expire) {
             that.info()
             that.setData({
@@ -89,16 +90,39 @@ Page({
         }, 1000)
     },
     exam: function (e) {
-        let that = this
+        let that = this,
+            value = e.detail.value,
+            tid = that.data.typesData[value].tid
         if (!that.data.type.on) {
             app.toast("请先购买题库", "none")
             return false
         }
+        app.get("exam/last", {tid: tid}, function (re) {
+            if (re.exam.eid) {
+                let time = parseInt((new Date()).getTime() / 1000),
+                    timeStr = app.formatSecondStr(re.exam.expire_at - time)
+                app.confirm("您上次的模考还有 " + timeStr + " 结束，需要继续考试吗？", function () {
+                    app.turnPage("question/exam?eid=" + re.exam.eid + '&all=1')
+                }, function () {
+                    that.generateExam()
+                }, "提示", "继续考试", "重新开始")
+            } else {
+                that.generateExam()
+            }
+        })
+    },
+    generateExam: function () {
+        app.post("exam/exam", {}, function (res) {
+            if (res.eid && res.eid > 0)
+                app.turnPage("question/exam?eid=" + res.eid)
+            else
+                app.toast("生成考卷失败，请重试");
+        })
     },
     train: function (e) {
         let that = this,
             type = that.data.type,
-            list = that.data.types
+            list = that.data.typesData
         if (!type.on) {
             app.toast("请先购买题库", "none")
             return false
@@ -107,8 +131,9 @@ Page({
             app.toast("题库内暂无题目", "none")
             return false
         }
+        console.log("start")
         that.setData({
-            pickerShow: true
+            picker: true
         })
     },
     goTrain: function (e) {
@@ -121,30 +146,13 @@ Page({
             offset = 1
         app.turnPage("question/train?tid=" + tid + "&type=" + t + "&offset=" + offset);
     },
-    pickerChange: function (e) {
+    pickerSubmit: function (e) {
+        console.log(e)
         let that = this,
-            oldValue = that.data.pickerValue,
-            value = e.detail.value,
-            typeIndex = value[0],
-            childIndex = value[1],
-            type = that.data.types[typeIndex],
-            children = type.child
-        if (oldValue[0] != typeIndex) {
-            value[1] = 0
-            that.setData({
-                pickerValue: value,
-                typesChild: children
-            })
-        } else if (oldValue[1] != childIndex) {
-            that.setData({
-                pickerValue: value,
-            })
-        }
+            value = e.detail.value
+        console.log(value)
     },
-    cancel:function (e) {
-        this.setData({
-            pickerValue: [0,0],
-            pickerShow: false
-        })
-    }
+    onUnload: function () {
+        this.data.countIndex = -10
+    },
 })

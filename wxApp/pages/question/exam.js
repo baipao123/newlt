@@ -119,9 +119,6 @@ Page({
             offset = that.data.offset,
             questions = that.data.questions,
             question
-        console.log("setQuestion")
-        console.log(type)
-        console.log(offset)
         if (questions[type] && questions[type][offset]) {
             question = questions[type][offset]
             question.user = that.data.qNum[type] && that.data.qNum[type][offset] ? that.data.qNum[type][offset] : {}
@@ -149,7 +146,6 @@ Page({
                 app.toast("没有更多题目了")
             else {
                 let questions = that.data.questions
-                console.log(res.list)
                 for (let type in res.list) {
                     for (let offset in res.list[type]) {
                         if (!questions[type])
@@ -239,6 +235,8 @@ Page({
         let that = this
         if (index != that.data.timeStrIndex)
             return false
+        if(index && that.data.timeStrIndex <= 0)
+            return true
         if (that.data.exam) {
             if (that.data.exam.status == 0) {
                 let expire = that.data.exam.expire_at,
@@ -309,5 +307,8 @@ Page({
     },
     empty: function () {
 
+    },
+    onUnload: function () {
+        this.data.timeStrIndex = -10
     },
 })

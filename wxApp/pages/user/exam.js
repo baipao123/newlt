@@ -39,8 +39,12 @@ Page({
     },
     countDown:function (index) {
         let that = this
+        console.log(index)
+        console.log(that.data.timeOutIndex)
         if(index && index != that.data.timeOutIndex)
-            return true;
+            return true
+        if(index && that.data.timeOutIndex <= 0)
+            return true
         let time = parseInt((new Date()).getTime() / 1000)
         that.setData({
             nowTime: time
@@ -118,5 +122,8 @@ Page({
             return false
         that.data.page++
         that.getList()
-    }
+    },
+    onUnload: function () {
+        this.data.timeOutIndex = -10
+    },
 })

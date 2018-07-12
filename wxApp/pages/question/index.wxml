@@ -7,10 +7,10 @@
                 <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
                 <view class="text-m a-c">全真练习</view>
             </view>
-            <view class="weui-flex__item" bindtap="exam">
+            <picker class="weui-flex__item" bindchange="exam" range="{{typesData}}" range-key="name">
                 <image class="icon" src="{{domain}}wxApp/mokao.png"/>
                 <view class="text-m a-c">全真模考</view>
-            </view>
+            </picker>
         </view>
     </view>
     <view class="prices" wx:if="{{!type.on}}">
@@ -43,24 +43,6 @@
         </view>
     </view>
 
-
-    <view class="picker-bg" catchtouchmove="true" wx:if="{{pickerShow}}" bindtap="cancel">
-        <view class="picker-contain" catchtap='tap'>
-            <view class="picker-header weui-flex">
-                <view class="picker-cancel" bindtap="cancel">取消</view>
-                <view class="weui-flex__item"> </view>
-                <view class="picker-submit text-green" bindtap="goTrain">确定</view>
-            </view>
-            <view class="picker">
-                <picker-view class="picker-view" value="{{pickerValue}}" bindchange="pickerChange">
-                    <picker-view-column class="picker-column">
-                        <view wx:for="{{types}}" style="line-height:34px;">{{item.name}}</view>
-                    </picker-view-column>
-                    <picker-view-column class="picker-column">
-                        <view wx:for="{{typesChild}}" style="line-height:34px;">{{item.name}}</view>
-                    </picker-view-column>
-                </picker-view>
-            </view>
-        </view>
-    </view>
+    <include src="/pages/common/footer.wxml"/>
+    <select range="{{typesData}}" rangeKey="{{['name','name']}}" childKey="{{['child']}}" value="{{pickerValue}}" valueKey="{{['tid','type']}}" show="{{picker}}" bindsubmit="pickerSubmit" />
 </view>
