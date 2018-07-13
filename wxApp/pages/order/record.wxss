@@ -8,5 +8,5 @@
     margin: 10rpx 0;
 }
 .status{
-    max-width:120rpx;
+    max-width: 125rpx;
 }

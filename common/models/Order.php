@@ -9,10 +9,8 @@
 namespace common\models;
 
 use common\tools\Status;
-use common\tools\StringHelper;
-use console\worker\SendTpl;
-use Yii;
-use common\tool\WxPay;
+use yii;
+use common\tools\WxPay;
 use yii\helpers\ArrayHelper;
 
 /**

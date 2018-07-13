@@ -9,6 +9,7 @@ Page({
         pay: {},
         waiting: false,
         timeOutIndex: 1,
+        nowTime: 0,
     },
     onLoad: function (options) {
         let that = this,
@@ -36,6 +37,8 @@ Page({
             that.setData({
                 info: res.info
             })
+            that.data.countIndex = 1
+            that.countDown(1)
             if (res.info.status == 10 || res.info.status == 11) {
                 if (!index || index != that.data.timeOutIndex || that.data.timeOutIndex < 0)
                     return true
@@ -54,12 +57,13 @@ Page({
             }
         })
     },
-    goPay:function () {
+    goPay:function (e) {
         let that = this,
             oid = that.data.oid,
-            data = that.data.pay
-        if(!data){
-            app.post("order/pay",{oid:oid},function (res) {
+            data = that.data.pay,
+            formId = e.detail.formId
+        if(!data.timeStamp){
+            app.post("order/pay",{oid:oid,formId:formId},function (res) {
                 that.data.pay = res.params
             })
         }else
@@ -78,9 +82,11 @@ Page({
             paySign: data.paySign,
             success: function (res) {
                 that.setData({
-                    waiting:true
+                    "info.status": 11,
+                    waiting: true
                 })
-                that.query(1)
+                that.data.countIndex = 1
+                that.getInfo(1)
             }
         })
     },
@@ -92,6 +98,26 @@ Page({
                 info: res.info
             })
         })
+    },
+    countDown: function (index) {
+        let that = this
+        if ((index && index != that.data.timeOutIndex) || that.data.timeOutIndex <= 0)
+            return true
+        let time = parseInt((new Date()).getTime() / 1000)
+        console.log(time)
+        that.setData({
+            nowTime: time
+        })
+        if(that.data.info.status != 1 || time >= that.data.info.expire_at)
+            return true
+        that.data.timeOutIndex++
+        setTimeout(() => {
+            that.countDown(that.data.timeOutIndex)
+        }, 1000)
+    },
+    onHide:function () {
+        this.data.timeOutIndex = -10
+        wx.hideLoading()
     },
     onUnload: function () {
         this.data.timeOutIndex = -10

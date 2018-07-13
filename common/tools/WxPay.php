@@ -6,9 +6,8 @@
  * Time: 17:13
  */
 
-namespace common\tool;
+namespace common\tools;
 
-use common\tools\StringHelper;
 use yii;
 
 class WxPay extends WxPayBase

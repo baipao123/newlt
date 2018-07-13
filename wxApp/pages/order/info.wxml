@@ -1,4 +1,5 @@
 <view class="page">
+    <wxs src="./../../wxs/countDown.wxs" module="tools"/>
     <view class="weui-form-preview">
         <view class="weui-form-preview__hd">
             <view class="weui-form-preview__item">
@@ -28,8 +29,25 @@
                 <view class="weui-form-preview__value">{{info.pay_at}}</view>
             </view>
         </view>
-        <view class="weui-form-preview__ft">
-            <button class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">确认支付({{}})</button>
+        <view class="weui-form-preview__ft"
+              wx:if="{{ (info.status == 1 || info.status == 10 ) && info.expire_at > nowTime}}">
+            <form bindsubmit="goPay" report-submit="{{true}}">
+                <button classs="button text-white" type="primary" form-type="submit">确认支付({{tools.secToMinStr(info.expire_at,nowTime)}})</button>
+            </form>
+        </view>
+        <view class="weui-form-preview__ft" wx:elif="{{info.status == 11}}">
+            <form bindsubmit="query" report-submit="{{true}}">
+                <button classs="button" type="primary" plain="{{true}}" loading="{{true}}">查询支付结果中</button>
+            </form>
+        </view>
+        <view class="weui-form-preview__ft" wx:elif="{{info.status == 20}}">
+            订单已支付
+        </view>
+        <view class="weui-form-preview__ft" wx:elif="{{info.status == 30}}">
+            订单已退款
+        </view>
+        <view class="weui-form-preview__ft" wx:elif="{{info.status == 101}}">
+            订单已取消
         </view>
     </view>
 </view>

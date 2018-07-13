@@ -1,0 +1,6 @@
+form{
+    width:100%;
+}
+.button-hover,button{
+    margin:20rpx 30rpx;
+}

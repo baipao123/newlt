@@ -5,9 +5,8 @@
  * Date: 2016/7/1/001
  * Time: 16:22
  */
-namespace common\tool;
+namespace common\tools;
 
-use common\tools\Tool;
 use yii;
 
 class WxPayBase

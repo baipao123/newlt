@@ -28,9 +28,7 @@ Page({
     },
     countDown: function (index) {
         let that = this
-        if (index && index != that.data.timeOutIndex)
-            return true
-        if (index && that.data.timeOutIndex <= 0)
+        if ((index && index != that.data.timeOutIndex) || that.data.timeOutIndex <= 0)
             return true
         let time = parseInt((new Date()).getTime() / 1000)
         console.log(time)
@@ -87,6 +85,9 @@ Page({
             return false
         that.data.page++
         that.getList()
+    },
+    onHide: function () {
+        this.data.timeOutIndex = -10
     },
     onUnload: function () {
         this.data.timeOutIndex = -10
