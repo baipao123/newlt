@@ -65,6 +65,7 @@ Page({
         if(!data.timeStamp){
             app.post("order/pay",{oid:oid,formId:formId},function (res) {
                 that.data.pay = res.params
+                that.pay()
             })
         }else
             return that.pay()

@@ -55,11 +55,13 @@ App({
                 cookie: wx.getStorageSync('cookie')
             },
             success: function (res) {
+                wx.hideLoading()
                 if (res.data != undefined && res.data.code != undefined) {
                     if (res.header['Set-Cookie'])
                         wx.setStorageSync('cookie', res.header['Set-Cookie']);
-                    if (res.data.hasOwnProperty("msg") && res.data.msg != '' && (res.data.hasOwnProperty("code") && res.data.code != -1))
+                    if (res.data.hasOwnProperty("msg") && res.data.msg != '' && (res.data.hasOwnProperty("code") && res.data.code != -1)) {
                         that.toast(res.data.msg, res.data.code == 0 ? "success" : "none")
+                    }
                     if (res.data.code == 0) {
                         if (typeof success == 'function')
                             success(res.data.data, res.data);
@@ -74,9 +76,12 @@ App({
                 } else
                     that.toast("500,服务器解析异常")
             },
-            fail: fail,
-            complete: function (e) {
+            fail: (res) => {
                 wx.hideLoading()
+                if (typeof fail == 'function')
+                    fail(res)
+            },
+            complete: function (e) {
                 if (complete)
                     complete(e)
             }
