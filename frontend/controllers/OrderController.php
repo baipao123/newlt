@@ -8,7 +8,7 @@
 
 namespace frontend\controllers;
 
-use common\tool\WxPay;
+use common\tools\WxPay;
 use common\tools\Status;
 use common\tools\Tool;
 use Yii;
