@@ -59,7 +59,7 @@ class Order extends \common\models\base\Order
         $timeZone = date_default_timezone_get();
         date_default_timezone_set("PRC");
         $data = [
-            "openId"       => $this->openId,
+            "openid"       => $this->openId,
             "body"         => $this->title,
             "out_trade_no" => $this->out_trade_no,
             "total_fee"    => $this->price,
