@@ -10,27 +10,27 @@
         <view class="weui-cells__title">常用</view>
         <view class="weui-cells weui-cells_after-title">
             <view bindtap="picker" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />我的分类</view>
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-list" />我的分类</view>
                 <view class="weui-cell__ft weui-cell__ft_in-access">{{user.tName == '' ? "去选择" : user.tName}}</view>
             </view>
 
             <view bindtap="order" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />我的订单</view>
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-orders" />我的订单</view>
                 <view class="weui-cell__ft weui-cell__ft_in-access" />
             </view>
 
             <view bindtap="record" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />考试记录</view>
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-exam-record" />考试记录</view>
                 <view class="weui-cell__ft weui-cell__ft_in-access" />
             </view>
 
             <view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <picker class="weui-cell__bd" range="{{qTypes}}" range-key="name" bindchange="train"><span class="myIcon margin-r2 text-orange icon-link" />一键练习</picker>
+                <picker class="weui-cell__bd" range="{{qTypes}}" range-key="name" bindchange="train"><span class="myIcon margin-r2 text-orange icon-train" />一键练习</picker>
                 <view class="weui-cell__ft weui-cell__ft_in-access" />
             </view>
 
             <view bindtap="exam" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-link" />一键模考</view>
+                <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-exam" />一键模考</view>
                 <view class="weui-cell__ft weui-cell__ft_in-access" />
             </view>
         </view>
