@@ -31,9 +31,8 @@ class OrderNotify extends \yii\db\ActiveRecord
         return [
             [['params'], 'required'],
             [['params'], 'string'],
-            [['created_at'], 'integer'],
+            [['status', 'created_at'], 'integer'],
             [['out_trade_no'], 'string', 'max' => 255],
-            [['status'], 'string', 'max' => 3],
         ];
     }
 
