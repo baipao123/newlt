@@ -53,6 +53,9 @@ Page({
                 that.setData({
                     waiting: false
                 })
+                if (res.info.status == 20) {
+                    app.globalData.user = res.user
+                }
                 wx.hideLoading()
             }
         })
