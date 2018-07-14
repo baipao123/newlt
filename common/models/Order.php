@@ -37,7 +37,7 @@ class Order extends \common\models\base\Order
         if (in_array($this->status, [Status::IS_PAY, Status::IS_REFUND])) {
             $info = ArrayHelper::merge($info, [
                 "trade_no" => $this->trade_no,
-                "pay_at"   => date("Y-m-d H:i:s", $this->paytime)
+                "pay_at"   => $this->paytime
             ]);
         } else {
             $info['expire_at'] = $this->created_at + 900;

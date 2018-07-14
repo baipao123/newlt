@@ -44,7 +44,7 @@ class OrderController extends BaseController
         if (Yii::$app->redis->setnx($redisKey, 1) == 0)
             return $this->sendError("3秒内只允许支付一次，请稍后重试");
         Yii::$app->redis->expire($redisKey, 3);
-
+        $order->payat = time();
         $order->formId = $this->getPost("formId");
         $order->save();
         $params = $order->wxPayParams();
