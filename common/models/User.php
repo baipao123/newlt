@@ -28,7 +28,7 @@ class User extends \common\models\base\User
         if (!$questionType)
             return 0;
         $tid = $questionType->parentId > 0 ? $questionType->parentId : $tid;
-        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid])->andWhere([">", "expire_at", time()])->one();
+        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid])->andWhere([">", "expire_at", time()])->orderBy("expire_at desc")->one();
         /* @var $type UserQuestionType */
         return $type ? $type->expire_at : 0;
     }

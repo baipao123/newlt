@@ -47,7 +47,7 @@ class QuestionController extends BaseController
         $user = $this->getUser();
         if ($user->tid == $type->parentId && $user->tid2 == $tid)
             return Tool::reJson(null, "已在当前分类", Tool::FAIL);
-        $expireAt = UserQuestionType::find()->where(["uid" => $user->id, "tid" => $tid])->orderBy("expire_at desc")->select("expire_at")->scalar();
+        $expireAt = UserQuestionType::find()->where(["uid" => $user->id, "tid" => $type->parentId ?: $type->id])->orderBy("expire_at desc")->select("expire_at")->limit(1)->scalar();
         $user->tid = $type->parentId;
         $user->tid2 = $tid;
         $user->expire_at = intval($expireAt);

@@ -27,7 +27,7 @@ class OrderController extends BaseController
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
             return $this->sendError("订单不存在");
-        return $this->send(["info" => $order->info()]);
+        return $this->send(["info" => $order->info(), "user" => $order->status == Status::IS_PAY ? $this->getUser()->info() : null]);
     }
 
     public function actionPay() {
