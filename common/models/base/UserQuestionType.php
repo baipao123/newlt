@@ -31,7 +31,7 @@ class UserQuestionType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'tid', 'expire_at', 'oid', 'status', 'created_at'], 'integer'],
+            [['uid', 'tid', 'expire_at', 'oid', 'created_at'], 'integer'],
         ];
     }
 
