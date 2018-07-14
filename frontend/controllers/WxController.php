@@ -12,7 +12,7 @@ use common\models\OrderStatus;
 use Yii;
 use common\models\Order;
 use common\models\OrderNotify;
-use common\tool\WxPay;
+use common\tools\WxPay;
 use common\tools\Status;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
