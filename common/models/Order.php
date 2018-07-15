@@ -77,12 +77,22 @@ class Order extends \common\models\base\Order
         return $prepayId;
     }
 
-    public function wxRefund() {
+    public function refund($cash = 0){
+        $cash = $cash ?: $this->price;
+        $refundNo = self::generateOutTradeNo();
 
     }
 
-    public function wxQuery() {
-
+    private function wxRefund($refundNo, $cash) {
+        $cash = $cash ?: $this->price;
+        $response = WxPay::getInstance()->Refund("", $this->out_trade_no, $refundNo, $this->price, $cash);
+        if (!$response)
+            return false;
+        if (isset($response['return_code']) && $response['return_code'] == 'NOTENOUGH') {
+            $response = WxPay::getInstance()->Refund("", $this->out_trade_no, $refundNo, $this->price, $cash, 1);
+            return !$response || isset($response['report']) ? false : true;
+        }
+        return isset($response['report']) ? false : true;
     }
 
     public function afterPay() {

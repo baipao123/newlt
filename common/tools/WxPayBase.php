@@ -35,7 +35,7 @@ class WxPayBase
     const PAY_NOTIFY_END = '/wx/notify';
     /**
      * =======【上报信息配置】=========
-     * TODO：接口调用上报等级，默认紧错误上报（注意：上报超时间为【1s】，上报无论成败【永不抛出异常】，
+     * 接口调用上报等级，默认紧错误上报（注意：上报超时间为【1s】，上报无论成败【永不抛出异常】，
      * 不会影响接口调用流程），开启上报之后，方便微信监控请求调用的质量，建议至少
      * 开启错误上报。
      * 上报等级，0.关闭上报; 1.仅错误出错上报; 2.全量上报
@@ -147,7 +147,7 @@ class WxPayBase
     /**
      * 将xml转为array
      * @param string $xml
-     * @return array
+     * @return array|bool
      */
     public function FromXml($xml) {
         if (!$xml || is_array($xml))
@@ -166,7 +166,7 @@ class WxPayBase
      * @param string $url url
      * @param bool $useCert 是否需要证书，默认不需要
      * @param int $second url执行超时时间，默认30s
-     * @return mixed|void
+     * @return mixed
      */
     public function postXmlCurl($xml, $url, $useCert = false, $second = 6) {
         $this->resetCurlError();
@@ -205,8 +205,7 @@ class WxPayBase
         //返回结果
         if ($data) {
             curl_close($ch);
-            $data = self::FromXml($data);
-            return $data;
+            return self::FromXml($data);
         } else {
             $errno = curl_errno($ch);
             $error = curl_error($ch);

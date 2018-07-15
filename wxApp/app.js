@@ -14,7 +14,8 @@ App({
         user: null,
         apiDomain: "https://newlt.justyoujob.com/",
         qiNiuDomain: 'http://img.newlt.justyoujob.com/',
-        systemInfo: null
+        systemInfo: null,
+        logining: false,
     },
     checkTid: function (tid, success, fail, refresh) {
         let that = this,
@@ -126,6 +127,14 @@ App({
     },
     login: function (success) {
         let that = this;
+        if (that.globalData.logining) {
+            console.log(123)
+            setTimeout(() => {
+                that.checkSessionAndLogin(success)
+            }, 1000)
+            return true
+        }
+        that.globalData.logining = true
         wx.login({
             success: function (res) {
                 console.log(res)
@@ -134,13 +143,18 @@ App({
                         that.globalData.user = data.user;
                         if (success)
                             success();
+                    }, () => {
+                    }, () => {
+                        that.globalData.logining = false
                     })
                 } else {
                     console.log('登录失败：' + res.errMsg)
+                    that.globalData.logining = false
                 }
             },
             fail: function (res) {
                 console.log(res);
+                that.globalData.logining = false
             }
         })
     },
