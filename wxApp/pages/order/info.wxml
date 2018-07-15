@@ -30,7 +30,7 @@
             </view>
         </view>
         <view class="weui-form-preview__ft"
-              wx:if="{{ (info.status == 1 || info.status == 10 ) && info.expire_at > nowTime}}">
+              wx:if="{{ (info.status == 1 || info.status == 10 ) && info.expire_at >= nowTime}}">
             <form bindsubmit="goPay" report-submit="{{true}}">
                 <button classs="button text-white" type="primary" form-type="submit">确认支付({{tools.secToMinStr(info.expire_at,nowTime)}})</button>
             </form>

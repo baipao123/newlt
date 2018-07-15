@@ -111,7 +111,7 @@ Page({
         that.setData({
             nowTime: time
         })
-        if(that.data.info.status != 1 || time >= that.data.info.expire_at)
+        if (that.data.info.status && (that.data.info.status != 1 || time >= that.data.info.expire_at))
             return true
         that.data.timeOutIndex++
         setTimeout(() => {
