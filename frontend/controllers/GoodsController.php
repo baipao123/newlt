@@ -14,6 +14,7 @@ use common\models\QuestionPrice;
 use common\models\QuestionType;
 use common\tools\Status;
 use common\tools\Tool;
+use yii\base\BaseObject;
 
 class GoodsController extends BaseController
 {
@@ -64,9 +65,13 @@ class GoodsController extends BaseController
         $order->hour = $p->hour;
         $order->status = Status::WAIT_PAY;
         $order->created_at = time();
-        if ($order->save())
+        if ($order->save()) {
+            Yii::$app->queue->delay(905)->push(new BaseObject([
+                "class" => '\console\worker\CloseOrder',
+                "id"    => $order->attributes['id']
+            ]));
             return Tool::reJson(["oid" => $order->attributes['id']]);
-        else {
+        } else {
             Yii::warning($order->errors, "新建Order失败");
             return Tool::reJson(null, "下单失败,请重试", Tool::FAIL);
         }

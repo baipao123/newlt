@@ -18,18 +18,15 @@ class CloseOrder extends BaseJob
 
     public function execute($queue) {
         $order = Order::findOne($this->id);
-        if (!$order || in_array($order->status, [Status::IS_PAY, Status::IS_REFUND, Status::CANCEL_PAY]))
+        if (!$order)
             return 0;
-        $query = $order->wxQuery();
-        if ($query) {
-            $order->status = Status::IS_PAY;
-            $order->save();
-            $order->afterPay();
+        $res = $order->wxQuery();
+        if (!$res) {
+            $queue->delay(150)->push(new CloseOrder([
+                "id" => $this->id
+            ]));
+            return 1;
+        } else
             return 0;
-        } else {
-            $order->status = Status::CANCEL_PAY;
-            $order->save();
-            return 0;
-        }
     }
 }

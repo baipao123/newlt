@@ -86,8 +86,6 @@ class Order extends \common\models\base\Order
             }
             return true;
         }
-        if ($this->created_at + 900 > time())
-            return false;
         $query = WxPay::getInstance()->Query($this->out_trade_no);
         if ($query === false)
             return false;
@@ -102,7 +100,9 @@ class Order extends \common\models\base\Order
         //        ];
         if (!isset($query['trade_state']))
             return false;
-        if ($query['trade_state'] == "USERPAYING")
+        if ($query['trade_state'] == "NOTPAY" && $this->created_at + 900 > time())
+            return false;
+        else if ($query['trade_state'] == "USERPAYING")
             return false;
         else if ($query['trade_state'] == "REFUND") {
             $this->status = Status::IS_REFUND;
