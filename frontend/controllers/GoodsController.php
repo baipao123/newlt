@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use console\worker\CloseOrder;
 use Yii;
 use common\models\Order;
 use common\models\QuestionPrice;
@@ -66,9 +67,8 @@ class GoodsController extends BaseController
         $order->status = Status::WAIT_PAY;
         $order->created_at = time();
         if ($order->save()) {
-            Yii::$app->queue->delay(905)->push(new BaseObject([
-                "class" => '\console\worker\CloseOrder',
-                "id"    => $order->attributes['id']
+            Yii::$app->queue->delay(905)->push(new CloseOrder([
+                "id" => $order->attributes['id']
             ]));
             return Tool::reJson(["oid" => $order->attributes['id']]);
         } else {
