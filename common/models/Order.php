@@ -77,6 +77,48 @@ class Order extends \common\models\base\Order
         return $prepayId;
     }
 
+    // false 需要下次再查询，true 则处理成功
+    public function wxQuery() {
+        if (!in_array($this->status, [Status::WAIT_PAY, Status::WAIT_NOTIFY, Status::IS_UNIFY_ORDER]))
+            return true;
+        $query = WxPay::getInstance()->Query($this->out_trade_no);
+        if ($query === false)
+            return false;
+        //        $arr = [
+        //            "SUCCESS"    => "支付成功",
+        //            "REFUND"     => "转入退款",
+        //            "NOTPAY"     => "未支付",
+        //            "CLOSED"     => "已关闭",
+        //            "REVOKED"    => "已撤销",
+        //            "USERPAYING" => "用户支付中",
+        //            "PAYERROR"   => "支付失败"
+        //        ];
+        if (!isset($query['trade_state']))
+            return false;
+        if ($query['trade_state'] == "USERPAYING")
+            return false;
+        else if ($query['trade_state'] == "REFUND") {
+            $this->status = Status::IS_REFUND;
+            $this->trade_no = $query['transaction_id'];
+            $this->payat = $query['time_end'];
+            $this->afterPay();
+            $this->save();
+            return true;
+        } else if ($query['trade_state'] == "SUCCESS") {
+            $this->status = Status::IS_PAY;
+            $this->trade_no = $query['transaction_id'];
+            $this->payat = $query['time_end'];
+            $this->afterPay();
+            $this->save();
+            return true;
+        } else {
+            $this->status = Status::CANCEL_PAY;
+            $this->save();
+            return true;
+        }
+    }
+
+
     public function refund($cash = 0){
         $cash = $cash ?: $this->price;
         $refundNo = self::generateOutTradeNo();

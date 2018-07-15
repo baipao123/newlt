@@ -70,32 +70,11 @@ class OrderController extends BaseController
         $order = Order::findOne($oid);
         if (!$order || $order->uid != $this->user_id())
             return $this->sendError("订单不存在");
-        if (in_array($order->status, [Status::IS_PAY, Status::IS_UNIFY_ORDER]))
-            return $this->send(["info" => $order->info()]);
-        $query = WxPay::getInstance()->Query($order->out_trade_no);
-        if ($query === false)
-            return $this->sendError(WxPay::getInstance()->getError());
-        if ($query['trade_state'] != "SUCCESS") {
-            $arr = [
-                "SUCCESS"    => "支付成功",
-                "REFUND"     => "转入退款",
-                "NOTPAY"     => "未支付",
-                "CLOSED"     => "已关闭",
-                "REVOKED"    => "已撤销",
-                "USERPAYING" => "用户支付中",
-                "PAYERROR"   => "支付失败"
-            ];
-            return $this->sendError("订单" . ArrayHelper::getValue($arr, $query['trade_state'], "支付失败"));
-        }
-        if ($query['total_fee'] == $order->price && $query['openid'] == $order->openId) {
-            $order->status = Status::IS_PAY;
-            $order->trade_no = $query['transaction_id'];
-            $order->payat = $query['time_end'];
-            $order->afterPay();
-            $order->save();
-            return $this->send(["info" => $order->info()]);
-        }
-        return $this->sendError("订单支付异常");
+        $res = $order->wxQuery();
+        return $this->send([
+            "info" => $order->info(),
+            "user" => $order->status == Status::IS_PAY ? $this->getUser()->info() : null
+        ], !$res ? WxPay::getInstance()->getError() : "");
     }
 
     public function actionRecord($page = 1, $limit = 10) {

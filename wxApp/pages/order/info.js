@@ -20,6 +20,7 @@ Page({
             })
         that.data.oid = oid
         that.getInfo()
+        that.countDown()
     },
     onShow: function () {
         let that = this
@@ -92,7 +93,7 @@ Page({
             }
         })
     },
-    query: function (index) {
+    query: function () {
         let that = this,
             oid = that.data.oid
         app.post("order/query", {oid: oid}, function (res) {
