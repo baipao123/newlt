@@ -37,8 +37,7 @@ Page({
             that.setData({
                 info: res.info
             })
-            that.data.countIndex = 1
-            that.countDown(1)
+            console.log(res)
             if (res.info.status == 10 || res.info.status == 11) {
                 if (!index || index != that.data.timeOutIndex || that.data.timeOutIndex < 0)
                     return true
@@ -53,9 +52,8 @@ Page({
                 that.setData({
                     waiting: false
                 })
-                if (res.info.status == 20) {
+                if (res.info.status == 20 && res.user)
                     app.globalData.user = res.user
-                }
                 wx.hideLoading()
             }
         })

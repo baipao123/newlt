@@ -45,6 +45,7 @@ class WxPay extends WxPayBase
      * params  string  post请求的xml
      */
     public function Post($method, $params = [], $useCert = false, $timeOut = 6) {
+        $params['sign_type'] = 'MD5';
         $params['sign'] = $this->MakeSign($params);
         $xml = $this->ToXml($params);
         $startTimeStamp = $this->getMillisecond();
