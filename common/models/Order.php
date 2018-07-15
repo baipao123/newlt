@@ -79,8 +79,15 @@ class Order extends \common\models\base\Order
 
     // false 需要下次再查询，true 则处理成功
     public function wxQuery() {
-        if (!in_array($this->status, [Status::WAIT_PAY, Status::WAIT_NOTIFY, Status::IS_UNIFY_ORDER]))
+        if (!in_array($this->status, [Status::WAIT_NOTIFY, Status::IS_UNIFY_ORDER])) {
+            if ($this->status == Status::WAIT_PAY) {
+                $this->status = Status::CANCEL_PAY;
+                $this->save();
+            }
             return true;
+        }
+        if ($this->created_at + 900 > time())
+            return false;
         $query = WxPay::getInstance()->Query($this->out_trade_no);
         if ($query === false)
             return false;
