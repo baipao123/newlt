@@ -55,21 +55,22 @@ Component({
         next: function () {
             if(this.data.loading)
                 return true
-            if (!this.data.questions[this.data.offset + 1] && this.data.offset <= this.data.maxOffset) {
+            if (!this.data.questions[this.data.offset + 1] && this.data.offset >= this.data.maxOffset) {
                 app.toast("已到最后一题")
                 return true
             }
             this.data.offset++
             this.setOffset()
         },
-        getMore: function (offset) {
+        getMore: function (offset,needOffset) {
             this.data.loading = true
-            this.triggerEvent('MoreList', {offset: offset})
+            this.triggerEvent('MoreList', {offset: offset, needOffset: needOffset})
         },
         setOffset: function (prev) {
             let that = this,
                 offset = that.data.offset,
                 questions = that.data.questions
+            console.log(offset)
             if (offset <= 0) {
                 app.toast("已经是第一题了", "none")
                 return false
@@ -89,7 +90,7 @@ Component({
                     result: {},
                     answer: [],
                 })
-                that.getMore(prev ? offset - 9 : offset)
+                that.getMore(prev ? Math.max(offset - 9, 1) : offset,prev ? offset : 0)
             }
         },
         chose: function (e) {

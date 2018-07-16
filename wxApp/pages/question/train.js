@@ -9,6 +9,7 @@ Page({
         type: 0,
         offset: 1,
         maxOffset: 100,
+        needOffset : 0,
     },
     onLoad: function (options) {
         let that = this,
@@ -37,6 +38,7 @@ Page({
     moreList: function (e) {
         let that = this
         that.data.offset = e.detail.offset
+        that.data.needOffset = e.detail.needOffset
         that.getList()
     },
     getList: function () {
@@ -52,7 +54,8 @@ Page({
             else
                 that.setData({
                     questions: res.list,
-                    offset: that.data.offset
+                    offset: that.data.needOffset > 0 ? that.data.needOffset :  that.data.offset,
+                    maxOffset: res.num
                 })
         })
     }
