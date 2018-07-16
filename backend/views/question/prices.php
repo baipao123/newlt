@@ -59,7 +59,7 @@ use layuiAdm\tools\Url;
         <th>时间</th>
         <th>排序值</th>
         <th style="width: 100px">商品描述</th>
-        <th style="width: 100px">上架时间</th>
+        <th style="width: 124px">上架时间</th>
         <th style="min-width:50px; width: 80px;">状态</th>
         <th style="width: 100px">最后修改时间</th>
         <th>操作</th>
