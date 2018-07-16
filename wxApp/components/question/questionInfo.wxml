@@ -50,6 +50,8 @@
             </view>
         </view>
 
+        <view class="a-c" wx:if="{{question.type == 3 && !result.answer}}"><button type="primary" size="mini" plain="{{true}}" bindtap="goAnswer">提交答案</button></view>
+
         <view class="actions weui-flex">
             <view class="weui-flex__item-auto prev" bindtap="prev">
                 <span class="myIcon icon-left" wx:if="{{offset > 1}}">上一题</span>

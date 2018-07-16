@@ -106,6 +106,18 @@ Component({
                 })
             }
         },
+        goAnswer: function (e) {
+            let that = this,
+                data = {
+                    qid: that.data.question.qid,
+                    offset: that.data.offset,
+                    answer: that.data.answer
+                }
+            if (data.answer.length == 0)
+                app.toast("请先选择答案")
+            else
+                that.answer(data)
+        },
         answer: function (data) {
             let that = this
             app.post("question/answer", data, function (res) {
