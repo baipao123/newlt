@@ -46,31 +46,31 @@ class Question extends \common\models\base\Question
         if (!empty($this->a) || !empty($this->aImg))
             $data[] = [
                 "option" => "A",
-                "text"   => $this->a,
+                "text"   => ltrim($this->a, "A."),
                 "img"    => $this->aImg,
             ];
         if (!empty($this->b) || !empty($this->bImg))
             $data[] = [
                 "option" => "B",
-                "text"   => $this->b,
+                "text"   => ltrim($this->b, "B."),
                 "img"    => $this->bImg,
             ];
         if (!empty($this->c) || !empty($this->cImg))
             $data[] = [
                 "option" => "C",
-                "text"   => $this->c,
+                "text"   => ltrim($this->c, "C."),
                 "img"    => $this->cImg,
             ];
         if (!empty($this->d) || !empty($this->dImg))
             $data[] = [
                 "option" => "D",
-                "text"   => $this->d,
+                "text"   => ltrim($this->d, "D."),
                 "img"    => $this->dImg,
             ];
         if (!empty($this->e) || !empty($this->eImg))
             $data[] = [
                 "option" => "E",
-                "text"   => $this->e,
+                "text"   => ltrim($this->e, "E."),
                 "img"    => $this->eImg,
             ];
         return $data;

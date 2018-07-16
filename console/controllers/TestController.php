@@ -8,14 +8,25 @@
 
 namespace console\controllers;
 
+use common\models\Question;
+use common\models\QuestionType;
 use common\models\UserExam;
 use Yii;
 use yii\console\Controller;
 
 class TestController extends Controller
 {
-    public function actionIndex(){
-        echo var_export(UserExam::examInfo(1,20),true);
+    public function actionIndex() {
+        $total = 0;
+        for ($i = 6; $i <= 20; $i++) {
+            $type = QuestionType::findOne($i);
+            for ($j = 1; $j <= 3; $j++) {
+                $num = intval( Question::find()->where(["tid" => $i, "type" => $j])->count());
+                $type->updateSetting([$type->typeEnStr($j) . "Num" => $num]);
+                $total += $num;
+            }
+        }
+        echo $total;
     }
 
 }
