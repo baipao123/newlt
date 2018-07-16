@@ -145,7 +145,7 @@ class QuestionController extends BaseController
                 $price->end_at = 0;
             } else {
                 $timeArr = explode(" - ", $time);
-                $price->start_at = strtotime($timeArr[0]);
+                $price->start_at = !empty($timeArr[0]) ? strtotime($timeArr[0]) : 0;
                 $price->end_at = isset($timeArr[1]) && !empty($timeArr[1]) ? strtotime($timeArr[1]) : 0;
             }
 

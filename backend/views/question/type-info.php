@@ -118,18 +118,6 @@ use layuiAdm\tools\Url;
                 </div>
                 <div class="layui-form-mid">分</div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">填空题</label>
-                <div class="layui-form-mid">数量:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[blankNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("blankNum") ?>">
-                </div>
-                <div class="layui-form-mid"> 每道:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="text" name="setting[blankScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("blankScore") ?>">
-                </div>
-                <div class="layui-form-mid">分</div>
-            </div>
         </div>
     </fieldset>
     <?php endif; ?>

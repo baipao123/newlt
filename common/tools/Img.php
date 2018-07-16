@@ -59,7 +59,7 @@ class Img
         if (empty($json))
             return [];
         $attaches = json_decode($json, true);
-        $attaches = is_array($attaches) ? $attaches : [$attaches];
+        $attaches = is_array($attaches) ? $attaches : [$json];
         if (empty($ext))
             return $attaches;
         $data = [];
