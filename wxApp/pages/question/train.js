@@ -7,7 +7,8 @@ Page({
         questions: [],
         tid: 0,
         type: 0,
-        offset: 1
+        offset: 1,
+        maxOffset: 100,
     },
     onLoad: function (options) {
         let that = this,

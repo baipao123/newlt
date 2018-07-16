@@ -23,7 +23,16 @@ Component({
                     offset: newData
                 })
             }
-        }
+        },
+        maxOffset: {
+            type: Number,
+            value: 100,
+            observer: function (newData, oldData) {
+                this.setData({
+                    offset: newData
+                })
+            }
+        },
     },
     data: {
         domain: app.globalData.qiNiuDomain,
@@ -32,7 +41,7 @@ Component({
         result: {},
         answer: [],
         loading: false,
-        maxOffset: 0,
+
     },
     ready: function () {
     },
@@ -46,6 +55,10 @@ Component({
         next: function () {
             if(this.data.loading)
                 return true
+            if (!this.data.questions[this.data.offset + 1] && this.data.offset <= this.data.maxOffset) {
+                app.toast("已到最后一题")
+                return true
+            }
             this.data.offset++
             this.setOffset()
         },

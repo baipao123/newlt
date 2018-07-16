@@ -123,7 +123,7 @@ class QuestionController extends BaseController
             $question->addViewNum();
         }
 
-        return Tool::reJson(["list" => $data]);
+        return Tool::reJson(["list" => $data, "num" => $qType->setting($qType->typeEnStr($type) . "Num")]);
     }
 
     public function actionAnswer() {
