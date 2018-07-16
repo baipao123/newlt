@@ -39,11 +39,16 @@ class QuestionPrice extends \common\models\base\QuestionPrice
         return $prices;
     }
 
+    public function title() {
+        $type = $this->questionType;
+        return $type->name . "-" . $this->hourStr();
+    }
+
     public function info() {
         return [
             "pid"      => $this->id,
             "tid"      => $this->tid,
-            "title"    => $this->title,
+            "title"    => $this->title(),
             "cover"    => $this->cover(),
             "note"     => $this->note,
             "start_at" => $this->start_at,

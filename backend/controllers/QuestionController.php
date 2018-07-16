@@ -127,7 +127,8 @@ class QuestionController extends BaseController
 
         if (Yii::$app->request->isPost) {
             $price->tid = (int)Yii::$app->request->post("tid");
-            $price->title = Yii::$app->request->post("title");
+            $price->title = '';
+//            $price->title = Yii::$app->request->post("title");
             $price->cover = Yii::$app->request->post("cover","");
             $price->price = (int)strval(strval(Yii::$app->request->post("price")) * 100);
             $price->oldPrice = (int)strval(strval(Yii::$app->request->post("oldPrice")) * 100);
@@ -154,8 +155,8 @@ class QuestionController extends BaseController
 
             if (empty($price->tid))
                 Yii::$app->session->setFlash("warning", "请选择分类");
-            elseif (empty($price->title))
-                Yii::$app->session->setFlash("warning", "请输入标题");
+//            elseif (empty($price->title))
+//                Yii::$app->session->setFlash("warning", "请输入标题");
             elseif (empty($price->price))
                 Yii::$app->session->setFlash("warning", "请输入价格");
             elseif (!in_array($price->type, [QuestionPrice::Type_Day, QuestionPrice::Type_Hour]))

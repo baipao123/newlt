@@ -54,7 +54,6 @@ use layuiAdm\tools\Url;
     <thead>
     <tr>
         <th>分类ID</th>
-        <th>标题</th>
         <th>图标</th>
         <th>价格</th>
         <th>时间</th>
@@ -70,7 +69,6 @@ use layuiAdm\tools\Url;
     <?php foreach ($prices as $price): ?>
         <tr>
             <td><?= $price->id ?></td>
-            <td><?= $price->title ?></td>
             <td class="icon-<?= $price->id ?>"><img class="img" src="<?= $price->cover(true) ?>" style="width: 50px;"/></td>
             <td><?= $price->price / 100 ?> 元<?= $price->oldPrice > 0 ? "<Br><s>原价：" . ($price->oldPrice / 100) . " 元</s>" : "" ?></td>
             <td><?= $price->hourStr() ?></td>

@@ -57,7 +57,7 @@ class GoodsController extends BaseController
         $order = new Order;
         $order->tid = $p->tid;
         $order->pid = $pid;
-        $order->title = $p->title;
+        $order->title = $p->title();
         $order->cover = empty($p->cover) ? $type->icon : $p->cover;
         $order->uid = $this->user_id();
         $order->openId = $this->getUser()->openId;

@@ -40,14 +40,6 @@ use layuiAdm\tools\Url;
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
-        <div class="layui-input-block">
-            <input type="text" name="title" placeholder="标题" autocomplete="off" class="layui-input" lay-filter="title"
-                   lay-verify="required" value="<?= $price->title ?>">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
         <label class="layui-form-label">图标</label>
         <div class="layui-input-block">
             <input type="hidden" name="cover" lay-filter="cover" lay-verify="cover" class="price-cover" value="<?= $price->cover ?>">
