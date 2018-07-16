@@ -67,6 +67,12 @@ class Question extends \common\models\base\Question
                 "text"   => $this->d,
                 "img"    => $this->dImg,
             ];
+        if (!empty($this->e) || !empty($this->eImg))
+            $data[] = [
+                "option" => "E",
+                "text"   => $this->e,
+                "img"    => $this->eImg,
+            ];
         return $data;
     }
 

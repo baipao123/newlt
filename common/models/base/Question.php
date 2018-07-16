@@ -20,6 +20,8 @@ use Yii;
  * @property string $cImg
  * @property string $d
  * @property string $dImg
+ * @property string $e
+ * @property string $eImg
  * @property string $answer
  * @property string $description
  * @property string $knowledge
@@ -45,7 +47,7 @@ class Question extends \yii\db\ActiveRecord
         return [
             [['tid', 'type', 'difficulty', 'created_at', 'updated_at'], 'integer'],
             //            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'description', 'knowledge'], 'required'],
-            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'description', 'knowledge'], 'string'],
+            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'string'],
             [['answer'], 'string', 'max' => 255],
         ];
     }
@@ -69,6 +71,8 @@ class Question extends \yii\db\ActiveRecord
             'cImg' => 'C Img',
             'd' => 'D',
             'dImg' => 'D Img',
+            'e' => 'E',
+            'eImg' => 'E Img',
             'answer' => 'Answer',
             'description' => 'Description',
             'knowledge' => 'Knowledge',

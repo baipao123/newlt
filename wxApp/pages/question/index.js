@@ -94,7 +94,7 @@ Page({
             value = e.detail.value,
             tid = that.data.typesData[value].tid
         if (!that.data.type.on) {
-            app.toast("请先购买题库", "none")
+            app.toast("您尚未开通此科目，请在下方支付并开通", "none")
             return false
         }
         app.get("exam/last", {tid: tid}, function (re) {
@@ -124,7 +124,7 @@ Page({
             type = that.data.type,
             list = that.data.typesData
         if (!type.on) {
-            app.toast("请先购买题库", "none")
+            app.toast("您尚未开通此科目，请在下方支付并开通", "none")
             return false
         }
         if (list.length <= 0) {
