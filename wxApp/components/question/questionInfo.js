@@ -29,7 +29,7 @@ Component({
             value: 100,
             observer: function (newData, oldData) {
                 this.setData({
-                    offset: newData
+                    maxOffset: newData
                 })
             }
         },

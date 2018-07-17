@@ -22,7 +22,7 @@ class TestController extends Controller
             $type = QuestionType::findOne($i);
             for ($j = 1; $j <= 3; $j++) {
                 $num = intval( Question::find()->where(["tid" => $i, "type" => $j])->count());
-                $type->updateSetting([$type->typeEnStr($j) . "Num" => $num]);
+                $type->updateSetting([$type->typeEnStr($j) . "Total" => $num]);
                 $total += $num;
             }
         }
