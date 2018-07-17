@@ -34,13 +34,13 @@ class TableWidget extends Widget
     public static function begin($config = []) {
         $html = self::table($config);
         $html .= self::header($config);
-        $html .= '<tbody>';
+        $html .= '<tbody class="layui-table-body">';
         echo $html;
     }
 
     public static function end() {
         echo '</tbody></table>';
-        echo "<script>layui.use('table', function(){ var table=layui.table; table.render()});</script>";
+        echo "<script>layui.use('table', function(){ var table=layui.table; table.init('table-" . self::$counter . "')});</script>";
     }
 
     protected static function table($config) {
@@ -53,6 +53,7 @@ class TableWidget extends Widget
         if (!empty($style))
             $html .= 'style="' . (is_string($style) ? $style : implode(";", $style)) . '" ';
         $html .= "lay-data=\"{skin:'line', even:true, size:'sm'}\" ";
+        $html .= 'lay-filter="table-' . self::$counter . '"';
         $html .= '>';
         return $html;
     }
