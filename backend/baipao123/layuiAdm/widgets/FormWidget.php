@@ -20,7 +20,7 @@ class FormWidget extends Widget
     public $method;
 
     /**
-     * @return string
+     * @return void
      **/
     public static function begin($config = []) {
         $className = ArrayHelper::getValue($config, "className", "");
@@ -31,17 +31,17 @@ class FormWidget extends Widget
         $html .= '<legend>' . $title . '</legend>';
         $html .= '<div class="layui-field-box">';
         $html .= '<form class="layui-form" method="' . $method . '" action="' . $action . '">';
-        return $html;
+        echo $html;
     }
 
     /**
-     * @return string
+     * @return void
      **/
     public static function end() {
         $html = '<div class="layui-inline"><button class="layui-btn layui-btn-normal login-btn" lay-submit>搜索</button></div>';
         $html .= "</form></div></fieldset>";
         \Yii::warning($html);
-        return $html;
+        echo $html;
     }
 
 }
