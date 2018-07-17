@@ -36,10 +36,18 @@ Page({
             })
         })
     },
-    play:function (e) {
+    play: function (e) {
         let that = this,
             video = wx.createVideoContext("video")
+        video.play()
         console.log(1)
         video.requestFullScreen()
+    },
+    exitPlay: function (e) {
+        let that = this
+        console.log(e)
+        if(!e.detail.fullScreen) {
+            wx.createVideoContext("video").pause()
+        }
     }
 })

@@ -33,6 +33,9 @@
                     <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,question.user.uA) ? 'blue-block':''}} {{question.answer.answer ? (tools.inString(item.option,question.answer.answer) ? 'green-block': (tools.inString(item.option,question.user.uA) ? 'red-block' : '' )) : '' }} "
                           wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
                         <view class="option-title">
+                            <view class="weui-agree__checkbox-icon" style="top:1rpx">
+                                <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{tools.inString(item.option,question.user.uA)}}"/>
+                            </view>
                             <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
                         </view>
                         <view class="option-img" wx:if="{{item.img}}">

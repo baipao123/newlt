@@ -19,6 +19,9 @@
             <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inArray(item.option,answer)  ? 'blue-block':''}} {{result.answer ? (tools.inString(item.option,result.answer) ? 'green-block': (tools.inArray(item.option,answer) ? 'red-block' : '' )) : '' }} "
                   wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
                 <view class="option-title">
+                    <view class="weui-agree__checkbox-icon" style="top:1rpx">
+                        <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{tools.inArray(item.option,answer)}}"/>
+                    </view>
                     <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
                 </view>
                 <view class="option-img" wx:if="{{item.img}}">
