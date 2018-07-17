@@ -22,7 +22,7 @@ use layuiAdm\tools\Url;
 
             <div class="layui-input-inline">
                 <select name="tid" title="">
-                    <option value="0">请选择分类</option>
+                    <option value="0">请选择科目</option>
                     <?php foreach ($types as $type): ?>
                     <option value="<?= $type->id ?>" <?= $type->id == $tid ? "selected" : ""?>><?= $type->name ?></option>
                     <?php endforeach; ?>

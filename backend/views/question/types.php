@@ -11,14 +11,14 @@ use layuiAdm\tools\Url;
 
 ?>
 <button class="layui-btn layui-btn-danger"
-        onclick="layerOpenIFrame('<?= Url::createLink('/question/type-info', ["pid" => $tid]) ?>','添加分类')"><i class="layui-icon">&#xe654;</i>添加<?= $tid>0 ? '题库':''?>分类
+        onclick="layerOpenIFrame('<?= Url::createLink('/question/type-info', ["pid" => $tid]) ?>','添加科目')"><i class="layui-icon">&#xe654;</i>添加<?= $tid>0 ? '二级':''?>科目
 </button>
 
 <table class="layui-table">
     <thead>
     <tr>
-        <th>分类ID</th>
-        <th>名称</th>
+        <th>科目ID</th>
+        <th>科目名称</th>
         <?php if ($tid <= 0): ?>
         <th>图标</th>
         <?php endif; ?>
@@ -48,9 +48,9 @@ use layuiAdm\tools\Url;
             </td>
             <td><?= date("Y-m-d H:i:s", $type->updated_at) ?> </td>
             <td>
-                <span class="layui-btn layui-btn-sm layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink("question/type-info",["tid"=>$type->id])?>','编辑分类')"><i class="layui-icon">&#xe642;</i>编辑</span>
+                <span class="layui-btn layui-btn-sm layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink("question/type-info",["tid"=>$type->id])?>','编辑科目')"><i class="layui-icon">&#xe642;</i>编辑</span>
                 <?php if ($tid <= 0): ?>
-                <span class="layui-btn layui-btn-sm layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink("question/types",["tid"=>$type->id])?>','题库分类','100%')"><i class="my-icon my-icon-list-light"></i>题库分类</span>
+                <span class="layui-btn layui-btn-sm layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink("question/types",["tid"=>$type->id])?>','二级科目','100%')"><i class="my-icon my-icon-list-light"></i>二级科目</span>
                 <?php endif; ?>
                 <?php if($type->status == Status::FORBID): ?>
                     <span class="layui-btn layui-btn-sm" onclick="layerConfirmUrl('<?= Url::createLink("question/type-toggle",["tid"=>$type->id,"status"=>Status::PASS])?>')">通过</span>

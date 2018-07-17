@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use common\models\Question;
 use Yii;
 use common\models\QuestionPrice;
 use common\models\QuestionType;
@@ -196,6 +197,25 @@ class QuestionController extends BaseController
             Yii::$app->session->setFlash("success", "操作成功");
         }
         return $this->alert();
+    }
+
+    public function actionList($tid = 0, $type = 0, $title = "") {
+        $query = Question::find();
+        if ($tid > 0)
+            $query->andWhere(["tid" => $tid]);
+        if ($type > 0)
+            $query->andWhere(["type" => $type]);
+        if (!empty($title))
+            $query->andWhere(["LIKE", "title", $title]);
+        $count = $query->count();
+        $pagination = new Pagination(["totalCount" => $count]);
+        $list = $query->offset($pagination->getOffset())->limit($pagination->getLimit())->all();
+        return $this->render("list", [
+            "list"  => $list,
+            "tid"   => $tid,
+            "type"  => $type,
+            "title" => $title
+        ]);
     }
 
 }

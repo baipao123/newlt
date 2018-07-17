@@ -44,7 +44,7 @@ class MenuAction extends ApiAction
                 "spread"   => true,
                 "children" => [
                     [
-                        "title"  => "分类列表",
+                        "title"  => "科目列表",
                         "icon"   => "my-icon-list-light",
                         "href"   => "/question/types",
                         "spread" => false
