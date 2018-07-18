@@ -22,6 +22,12 @@ class Question extends \common\models\base\Question
     const TypeMulti = 3;
     const TypeBlank = 4;
 
+    const TypeAll = [
+        Question::TypeJudge  => "判断题",
+        Question::TypeSelect => "单选题",
+        Question::TypeMulti  => "多选题"
+    ];
+
     public function afterSave($insert, $changedAttributes) {
         if ($insert || isset($changedAttributes['status'])) {
             $type = $this->questionType;

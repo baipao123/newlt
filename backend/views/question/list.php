@@ -35,7 +35,7 @@ echo SelectWidget::widget([
 echo SelectWidget::widget([
     "title"       => "题目类型",
     "name"        => "type",
-    "options"     => [Question::TypeJudge => "判断题", Question::TypeSelect => "单选题", Question::TypeMulti => "多选题"],
+    "options"     => Question::TypeAll,
     "value"       => $type,
     "placeHolder" => "全部题型",
 ]);

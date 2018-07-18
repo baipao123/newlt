@@ -24,13 +24,21 @@ class Widget extends \yii\base\Widget
     const FORM_ROW = 1;
     const FORM_COLUMN = 2;
 
-    public $formType = self::FORM_ROW;
+    public static $form_default = self::FORM_ROW;
+
+    public $formType;
 
     public $defaultClasses = [];
 
     public $classes;
 
     public $assetFiles;
+
+    public function beforeRun() {
+        if (empty($this->formType))
+            $this->formType = self::$form_default;
+        return parent::beforeRun();
+    }
 
     /**
      * Initializes the widget.
@@ -79,5 +87,9 @@ class Widget extends \yii\base\Widget
         if (empty($classes))
             return [];
         return is_array($classes) ? $classes : [$classes];
+    }
+
+    public static function setDefaultFormType($type){
+        self::$form_default = $type;
     }
 }

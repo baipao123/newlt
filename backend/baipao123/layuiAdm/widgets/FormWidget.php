@@ -20,7 +20,7 @@ class FormWidget extends Widget
     public $method;
 
     public static function begin($config = []) {
-        $formType = ArrayHelper::getValue($config, "formType", self::FORM_ROW);
+        $formType = ArrayHelper::getValue($config, "formType", self::$form_default);
         if ($formType == self::FORM_ROW) {
             self::rowBegin($config);
             return;
@@ -46,7 +46,7 @@ class FormWidget extends Widget
     }
 
     public static function end($config = []) {
-        $formType = ArrayHelper::getValue($config, "formType", self::FORM_ROW);
+        $formType = ArrayHelper::getValue($config, "formType", self::$form_default);
         if ($formType == self::FORM_ROW) {
             self::rowEnd();
             return;

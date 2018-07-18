@@ -9,6 +9,7 @@
 use layuiAdm\tools\Url;
 use common\models\Question;
 use common\models\QuestionType;
+use layuiAdm\widgets\Widget;
 use layuiAdm\widgets\FormWidget;
 use layuiAdm\widgets\FormInputWidget;
 use layuiAdm\widgets\SelectWidget;
@@ -19,18 +20,36 @@ use common\tools\Status;
 
 /* @var $question Question */
 
-FormWidget::begin([
-    "formType" => FormWidget::FORM_COLUMN
+Widget::setDefaultFormType(Widget::FORM_COLUMN);
+
+FormWidget::begin();
+
+echo SelectWidget::widget([
+    "title"       => "所属科目",
+    "name"        => "tid",
+    "options"     => QuestionType::typesForSelect(),
+    "group"       => true,
+    "value"       => $question->tid,
+    "valueKey"    => "tid",
+    "textKey"     => "name",
+    "placeHolder" => "请选择科目",
+    "search"      => true
 ]);
 
+echo SelectWidget::widget([
+    "title"       => "题目类型",
+    "name"        => "type",
+    "options"     => Question::TypeAll,
+    "value"       => $question->type,
+    "placeHolder" => "全部题型",
+]);
+
+
 echo FormInputWidget::widget([
-    "formType" => FormWidget::FORM_COLUMN,
     "type"     => "textarea",
     "label"    => "题干",
     "name"     => "title",
     "value"    => $question->title
 ]);
 
-FormWidget::end([
-    "formType" => FormWidget::FORM_COLUMN
-]);
+FormWidget::end();
