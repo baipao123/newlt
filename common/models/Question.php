@@ -100,4 +100,8 @@ class Question extends \common\models\base\Question
     public static function getIds($tid, $type, $limit) {
         return Question::find()->where(["tid" => $tid, "type" => $type])->orderBy("RAND()")->limit($limit)->select("id")->column();
     }
+
+    public function attaches(){
+        return Img::formatFromJson($this->attaches);
+    }
 }

@@ -20,6 +20,7 @@ class FormWidget extends Widget
     public $method;
 
     /**
+     * @param array $config
      * @return void
      **/
     public static function begin($config = []) {
@@ -40,7 +41,6 @@ class FormWidget extends Widget
     public static function end() {
         $html = '<div class="layui-inline"><button class="layui-btn layui-btn-normal login-btn" lay-submit>搜索</button></div>';
         $html .= "</form></div></fieldset>";
-        \Yii::warning($html);
         echo $html;
     }
 

@@ -129,15 +129,15 @@ class QuestionController extends BaseController
         if (Yii::$app->request->isPost) {
             $price->tid = (int)Yii::$app->request->post("tid");
             $price->title = '';
-//            $price->title = Yii::$app->request->post("title");
-            $price->cover = Yii::$app->request->post("cover","");
+            //            $price->title = Yii::$app->request->post("title");
+            $price->cover = Yii::$app->request->post("cover", "");
             $price->price = (int)strval(strval(Yii::$app->request->post("price")) * 100);
             $price->oldPrice = (int)strval(strval(Yii::$app->request->post("oldPrice")) * 100);
             $price->type = Yii::$app->request->post("type");
             $hour = (int)Yii::$app->request->post("hour");
             $price->hour = $price->type == QuestionPrice::Type_Day ? $hour * 24 : $hour;
             $price->status = (int)Yii::$app->request->post("status");
-            $price->note = Yii::$app->request->post("note","");
+            $price->note = Yii::$app->request->post("note", "");
             $price->sort = (int)Yii::$app->request->post("sort");
 
             $time = Yii::$app->request->post("datetime");
@@ -156,8 +156,8 @@ class QuestionController extends BaseController
 
             if (empty($price->tid))
                 Yii::$app->session->setFlash("warning", "请选择分类");
-//            elseif (empty($price->title))
-//                Yii::$app->session->setFlash("warning", "请输入标题");
+            //            elseif (empty($price->title))
+            //                Yii::$app->session->setFlash("warning", "请输入标题");
             elseif (empty($price->price))
                 Yii::$app->session->setFlash("warning", "请输入价格");
             elseif (!in_array($price->type, [QuestionPrice::Type_Day, QuestionPrice::Type_Hour]))
@@ -176,7 +176,7 @@ class QuestionController extends BaseController
         }
         return $this->render("price-info", [
             "price" => $price,
-            "types"      => QuestionType::getList(0, 0),
+            "types" => QuestionType::getList(0, 0),
         ]);
     }
 
@@ -211,10 +211,11 @@ class QuestionController extends BaseController
         $pagination = new Pagination(["totalCount" => $count]);
         $list = $query->offset($pagination->getOffset())->limit($pagination->getLimit())->all();
         return $this->render("list", [
-            "list"  => $list,
-            "tid"   => $tid,
-            "type"  => $type,
-            "title" => $title
+            "list"       => $list,
+            "pagination" => $pagination,
+            "tid"        => $tid,
+            "type"       => $type,
+            "title"      => $title
         ]);
     }
 
