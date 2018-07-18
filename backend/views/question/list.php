@@ -8,13 +8,16 @@
 use layuiAdm\tools\Url;
 use common\models\Question;
 use common\models\QuestionType;
-use layuiAdm\widgets\FormWidget;
+use layuiAdm\widgets\RowFormWidget;
 use layuiAdm\widgets\SelectWidget;
 use layuiAdm\widgets\TableWidget;
 use layuiAdm\widgets\PagesWidget;
 use common\tools\Img;
+use common\tools\Status;
 
-FormWidget::begin([
+/* @var $pagination \yii\data\Pagination */
+
+RowFormWidget::begin([
 
 ]);
 echo SelectWidget::widget([
@@ -37,16 +40,26 @@ echo SelectWidget::widget([
     "placeHolder" => "全部题型",
 ]);
 
-FormWidget::end();
+RowFormWidget::end();
 
 TableWidget::begin([
-    "header" => [
+    "header"       => [
         "题目ID" => ["fixed" => "left", "width" => 80, "unresize" => true],
-        "所属科目", "题型", "标题", "选项", "答案", "解析", "知识点", "难度系数",
-        "操作"   => ["fixed" => "right", "width" => 280, "unresize" => true]
+        "所属科目" => ['minWidth' => 110],
+        "题型"   => ['width' => 75],
+        "标题"   => ["minWidth" => 400],
+        "选项"   => ["minWidth" => 400],
+        "答案",
+        "解析"   => ["minWidth" => 100],
+        "知识点"  => ["minWidth" => 100], "难度系数",
+        "浏览量"  => ["fixed" => "right"],
+        "正确量"  => ["fixed" => "right"],
+        "错误量"  => ["fixed" => "right"],
+        "操作"   => ["fixed" => "right", "width" => 150, "unresize" => true]
     ],
+    "height"       => 500,
     "cellMinWidth" => 60,
-    "limit" => 20,
+    "limit"        => $pagination->pageSize,
 ]);
 
 /* @var $list Question[] */
@@ -54,20 +67,38 @@ foreach ($list as $question) {
     ?>
     <tr>
         <td><?= $question->id ?></td>
-        <td><?= $question->tid ?></td>
-        <td><?= $question->type ?></td>
-        <td>
-            <?= $question->title ?>
-            <?php foreach ($question->attaches() as $attach): ?>
-                <img src="<?= Img::format($attach,100,0,true) ?>">
+        <td><?= $question->questionType->name ?></td>
+        <td><?= $question->questionType->typeCNStr($question->type) ?></td>
+        <td><?php
+            echo $question->title;
+            foreach ($question->attaches() as $attach): ?>
+                <img src="<?= Img::format($attach, 0, 0, true) ?>">
             <?php endforeach; ?>
         </td>
-        <td><?php ?></td>
+        <td><?php
+            foreach ($question->options() as $o) {
+                echo $o['option'] . ".";
+                echo $o['text'];
+                if (!empty($o['img']))
+                    echo "<img src='" . Img::format($o['img'], 0, 0, true) . "'>";
+                echo "&emsp;&emsp;";
+            } ?></td>
         <td><?= $question->answer ?></td>
         <td><?= $question->description ?></td>
         <td><?= $question->knowledge ?></td>
         <td><?= $question->difficulty ?></td>
-        <td></td>
+        <td><?= $question->view_num ?></td>
+        <td><?= $question->success_num ?></td>
+        <td><?= $question->fail_num ?></td>
+        <td>
+            <span class="layui-btn layui-btn-xs layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink('question/info', ['qid' => $question->id]) ?>','编辑题目')">编辑</span>
+            <?php if($question->status == Status::FORBID): ?>
+                <span class="layui-btn layui-btn-xs" onclick="layerConfirmUrl('<?= Url::createLink("question/toggle",["qid"=>$question->id,"status"=>Status::PASS])?>')">开启</span>
+                <span class="layui-btn layui-btn-xs layui-btn-primary" onclick="layerConfirmUrl('<?= Url::createLink("question/toggle",["qid"=>$question->id,"status"=>Status::DELETE])?>','确定删除？删除后无法恢复')">删除</span>
+            <?php elseif($question->status == Status::PASS):?>
+                <span class="layui-btn layui-btn-xs layui-btn-warm" onclick="layerConfirmUrl('<?= Url::createLink("question/toggle",["qid"=>$question->id,"status"=>Status::FORBID])?>')">关闭</span>
+            <?php endif;?>
+        </td>
     </tr>
 
     <?php
@@ -77,15 +108,4 @@ echo PagesWidget::widget([
     "pagination" => $pagination
 ])
 ?>
-
-<script>
-    $("td>img").click(function (e) {
-        let classTxt = $(this).parent().eq(0).attr("class");
-        if (!classTxt)
-            return true;
-        globalLayer.photos({
-            photos: "." + classTxt
-        })
-    })
-</script>
 

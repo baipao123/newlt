@@ -11,7 +11,7 @@ namespace layuiAdm\widgets;
 
 use yii\helpers\ArrayHelper;
 
-class FormWidget extends Widget
+class RowFormWidget extends Widget
 {
     public $className;
 

@@ -34,7 +34,8 @@ class TableWidget extends Widget
     public $noneText = "暂无相关数据";
 
     public static function begin($config = []) {
-        $html = self::table($config);
+        $html = self::style();
+        $html .= self::table($config);
         $html .= self::header($config);
         $html .= '<tbody class="layui-table-body">';
         echo $html;
@@ -50,20 +51,21 @@ class TableWidget extends Widget
         $height = ArrayHelper::getValue($config, "height", 0);
         $cellMinWidth = ArrayHelper::getValue($config, "cellMinWidth", 0);
         $tableId = ArrayHelper::getValue($config, "tableId", "");
-        $skin = ArrayHelper::getValue($config, "skin", "line");
+        $skin = ArrayHelper::getValue($config, "skin", "");
         $even = ArrayHelper::getValue($config, "even", true);
         $size = ArrayHelper::getValue($config, "size", "");
         $noneText = ArrayHelper::getValue($config, "noneText", "暂无相关数据");
         $limit = ArrayHelper::getValue($config, "limit", 10);
 
         $layData = [
-            "skin"  => $skin,
             "even"  => $even,
             "limit" => $limit,
             "text"  => [
                 "none" => $noneText
             ]
         ];
+        if (!empty($skin))
+            $layData['skin'] = $skin;
         if (!empty($width))
             $layData['width'] = $width;
         if (!empty($height))
@@ -122,5 +124,9 @@ class TableWidget extends Widget
             $str .= ',';
         }
         return rtrim($str, ',') . '}';
+    }
+
+    protected static function style() {
+        return '<style>td>.layui-table-cell img{position:absolute;}</style>';
     }
 }

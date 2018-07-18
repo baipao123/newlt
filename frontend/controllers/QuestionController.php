@@ -115,7 +115,7 @@ class QuestionController extends BaseController
 
         $offset = $offset <= 1 ? 1 : $offset;
 
-        $questions = Question::find()->where(["tid" => $tid, "type" => $type])->offset($offset - 1)->limit(10)->all();
+        $questions = Question::find()->where(["tid" => $tid, "type" => $type, "status" => Status::PASS])->offset($offset - 1)->limit(10)->all();
         /* @var $questions Question[] */
         $data = [];
         foreach ($questions as $index => $question) {

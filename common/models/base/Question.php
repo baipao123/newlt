@@ -26,6 +26,10 @@ use Yii;
  * @property string $description
  * @property string $knowledge
  * @property int $difficulty
+ * @property int $view_num
+ * @property int $success_num
+ * @property int $fail_num
+ * @property int $status
  * @property int $created_at
  * @property int $updated_at
  */
@@ -45,7 +49,7 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'type', 'difficulty', 'created_at', 'updated_at'], 'integer'],
+            [['tid', 'type', 'difficulty','view_num', 'success_num', 'fail_num', 'status', 'created_at', 'updated_at'], 'integer'],
             //            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'description', 'knowledge'], 'required'],
             [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'string'],
             [['answer'], 'string', 'max' => 255],
@@ -77,6 +81,10 @@ class Question extends \yii\db\ActiveRecord
             'description' => 'Description',
             'knowledge' => 'Knowledge',
             'difficulty' => 'Difficulty',
+            'view_num' => 'View Num',
+            'success_num' => 'Success Num',
+            'fail_num' => 'Fail Num',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

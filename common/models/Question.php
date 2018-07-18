@@ -10,13 +10,29 @@ namespace common\models;
 
 
 use common\tools\Img;
+use common\tools\Status;
 
+/**
+ * @property QuestionType questionType
+ */
 class Question extends \common\models\base\Question
 {
     const TypeJudge = 1;
     const TypeSelect = 2;
     const TypeMulti = 3;
     const TypeBlank = 4;
+
+    public function afterSave($insert, $changedAttributes) {
+        if ($insert || isset($changedAttributes['status'])) {
+            $type = $this->questionType;
+            if ($type && !empty($type->typeEnStr($this->type)))
+                $type->updateSetting([$type->typeEnStr($this->type) . "Total" => Question::find()->where(["tid" => $this->tid, "type" => $this->type, "status" => Status::PASS])->count()]);
+        }
+    }
+
+    public function getQuestionType() {
+        return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
+    }
 
     public function info() {
         return [
@@ -34,12 +50,12 @@ class Question extends \common\models\base\Question
                 [
                     "option" => "A",
                     "text"   => "对",
-                    "img"    => [],
+                    "img"    => "",
                 ],
                 [
                     "option" => "B",
                     "text"   => "错",
-                    "img"    => []
+                    "img"    => ""
                 ]
             ];
         $data = [];
@@ -98,10 +114,10 @@ class Question extends \common\models\base\Question
     }
 
     public static function getIds($tid, $type, $limit) {
-        return Question::find()->where(["tid" => $tid, "type" => $type])->orderBy("RAND()")->limit($limit)->select("id")->column();
+        return Question::find()->where(["tid" => $tid, "type" => $type, "status" => Status::PASS])->orderBy("RAND()")->limit($limit)->select("id")->column();
     }
 
-    public function attaches(){
+    public function attaches() {
         return Img::formatFromJson($this->attaches);
     }
 }

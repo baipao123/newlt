@@ -19,7 +19,7 @@ use yii\data\Pagination;
 
 class QuestionController extends BaseController
 {
-    public $basicActions = ["type-children", "type-info", "type-toggle", "price-info", "price-toggle"];
+    public $basicActions = ["type-children", "type-info", "type-toggle", "price-info", "price-toggle", "info", "toggle"];
 
     public function actionTypes($tid = 0, $status = 0) {
         if ($tid > 0)
@@ -200,7 +200,7 @@ class QuestionController extends BaseController
     }
 
     public function actionList($tid = 0, $type = 0, $title = "") {
-        $query = Question::find();
+        $query = Question::find()->where(["<>", "status", Status::DELETE]);
         if ($tid > 0)
             $query->andWhere(["tid" => $tid]);
         if ($type > 0)
@@ -219,4 +219,42 @@ class QuestionController extends BaseController
         ]);
     }
 
+    public function actionToggle($qid, $status = 0) {
+        $question = Question::findOne($qid);
+        if (!$question || $question->status == Status::DELETE)
+            Yii::$app->session->setFlash("danger", "题目不存在或已删除");
+        else if (!in_array($status, [Status::PASS, Status::FORBID, Status::DELETE]))
+            Yii::$app->session->setFlash("danger", "未知操作");
+        else if ($status == $question->status)
+            Yii::$app->session->setFlash("danger", "请勿重复操作");
+        else if ($status == Status::DELETE && $question->status == Status::PASS)
+            Yii::$app->session->setFlash("danger", "只有关闭的题目才能删除");
+        else {
+            $question->status = $status;
+            $question->updated_at = time();
+            $question->save();
+            Yii::warning(123);
+            Yii::$app->session->setFlash("success", "操作成功");
+        }
+        return $this->alert();
+    }
+
+
+    public function actionInfo($qid = 0) {
+        if ($qid > 0) {
+            $question = Question::findOne($qid);
+            if (!$question || $question->status == Status::DELETE) {
+                Yii::$app->session->setFlash("danger", "题目不存在或已删除");
+                return $this->alert();
+            }
+        } else {
+            $question = new Question;
+        }
+        if (Yii::$app->request->isPost) {
+
+        }
+        return $this->render("info", [
+            "question" => $question
+        ]);
+    }
 }

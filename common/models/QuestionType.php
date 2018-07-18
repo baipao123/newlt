@@ -142,4 +142,14 @@ class QuestionType extends \common\models\base\QuestionType
         ];
         return ArrayHelper::getValue($arr, $type, "");
     }
+
+    public function typeCNStr($type) {
+        $arr = [
+            Question::TypeJudge  => "判断题",
+            Question::TypeSelect => "单选题",
+            Question::TypeMulti  => "多选题",
+            Question::TypeBlank  => "填空题",
+        ];
+        return ArrayHelper::getValue($arr, $type, "");
+    }
 }

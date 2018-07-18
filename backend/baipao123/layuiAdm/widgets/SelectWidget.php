@@ -11,6 +11,11 @@ namespace layuiAdm\widgets;
 
 class SelectWidget extends Widget
 {
+    const TYPE_ROW = 1;
+    const TYPE_COLUMN = 2;
+
+    public $type = self::TYPE_ROW;
+
     public $title = "";
 
     public $name = "";
@@ -35,6 +40,8 @@ class SelectWidget extends Widget
 
     public $verify = "";
 
+    public $tips = "";
+
     public function run() {
         $html = $this->start();
         $html .= $this->select();
@@ -54,15 +61,26 @@ class SelectWidget extends Widget
     }
 
     protected function start() {
-        $html = '<div class="layui-inline">' . "\n";
-        if (!empty($this->title))
-            $html .= '<label class="layui-form-label">' . $this->title . '</label>' . "\n";
-        $html .= '<div class="layui-input-inline">' . "\n";
-        return $html;
+        if ($this->type == self::TYPE_ROW) {
+            $html = '<div class="layui-inline">' . "\n";
+            if (!empty($this->title))
+                $html .= '<label class="layui-form-label">' . $this->title . '</label>' . "\n";
+            $html .= '<div class="layui-input-inline">' . "\n";
+            return $html;
+        } else {
+            $html = '<div class="layui-form-item">' . "\n";
+            if (!empty($this->title))
+                $html .= '<label class="layui-form-label">' . $this->title . '</label>' . "\n";
+            $html .= '<div class="layui-input-block">' . "\n";
+            return $html;
+        }
     }
 
     protected function finish() {
-        return "</div>\n</div>\n";
+        $html = '';
+        if ($this->type != self::TYPE_ROW && !empty($this->tips))
+            $html = '<div class="layui-form-mid layui-word-aux">' . $this->tips . '</div>' . "\n";
+        return $html . "</div>\n</div>\n";
     }
 
     protected function select() {
