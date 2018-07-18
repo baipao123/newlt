@@ -11,10 +11,6 @@ namespace layuiAdm\widgets;
 
 class SelectWidget extends Widget
 {
-    const TYPE_ROW = 1;
-    const TYPE_COLUMN = 2;
-
-    public $type = self::TYPE_ROW;
 
     public $title = "";
 
@@ -42,6 +38,8 @@ class SelectWidget extends Widget
 
     public $tips = "";
 
+    public $multi = false;
+
     public function run() {
         $html = $this->start();
         $html .= $this->select();
@@ -61,7 +59,7 @@ class SelectWidget extends Widget
     }
 
     protected function start() {
-        if ($this->type == self::TYPE_ROW) {
+        if ($this->formType == self::FORM_ROW) {
             $html = '<div class="layui-inline">' . "\n";
             if (!empty($this->title))
                 $html .= '<label class="layui-form-label">' . $this->title . '</label>' . "\n";
@@ -78,21 +76,23 @@ class SelectWidget extends Widget
 
     protected function finish() {
         $html = '';
-        if ($this->type != self::TYPE_ROW && !empty($this->tips))
+        if ($this->formType != self::FORM_ROW && !empty($this->tips))
             $html = '<div class="layui-form-mid layui-word-aux">' . $this->tips . '</div>' . "\n";
         return $html . "</div>\n</div>\n";
     }
 
     protected function select() {
         $str = '<select ';
+        $data = [];
         if (!empty($this->name))
-            $str .= 'name="' . $this->name . '" ';
+            $data['name'] = $this->name;
         if (!empty($this->filter))
-            $str .= 'lay-verify="' . $this->verify . '" ';
+            $data['lay-verify'] = $this->verify;
         if (!empty($this->filter))
-            $str .= 'lay-filter="' . $this->filter . '" ';
+            $data['lay-filter'] = $this->filter;
         if ($this->search)
-            $str .= 'lay-search="" ';
+            $data['lay-search'] = "";
+        $str .= self::generateOptions($data);
         return trim($str) . '>';
     }
 

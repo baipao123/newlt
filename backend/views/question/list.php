@@ -8,7 +8,7 @@
 use layuiAdm\tools\Url;
 use common\models\Question;
 use common\models\QuestionType;
-use layuiAdm\widgets\RowFormWidget;
+use layuiAdm\widgets\FormWidget;
 use layuiAdm\widgets\SelectWidget;
 use layuiAdm\widgets\TableWidget;
 use layuiAdm\widgets\PagesWidget;
@@ -17,7 +17,7 @@ use common\tools\Status;
 
 /* @var $pagination \yii\data\Pagination */
 
-RowFormWidget::begin([
+FormWidget::begin([
 
 ]);
 echo SelectWidget::widget([
@@ -40,7 +40,7 @@ echo SelectWidget::widget([
     "placeHolder" => "全部题型",
 ]);
 
-RowFormWidget::end();
+FormWidget::end();
 
 TableWidget::begin([
     "header"       => [

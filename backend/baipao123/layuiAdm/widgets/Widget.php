@@ -8,6 +8,7 @@
 namespace layuiAdm\widgets;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\View;
 
@@ -20,6 +21,15 @@ use yii\web\View;
  */
 class Widget extends \yii\base\Widget
 {
+    const FORM_ROW = 1;
+    const FORM_COLUMN = 2;
+
+    public $formType = self::FORM_ROW;
+
+    public $defaultClasses = [];
+
+    public $classes;
+
     public $assetFiles;
 
     /**
@@ -39,5 +49,35 @@ class Widget extends \yii\base\Widget
                     $this->getView()->registerCssFile($assetUrl . $file, ['position' => View::POS_HEAD]);
             }
         }
+    }
+
+    public static function generateOptions($data) {
+        $str = '';
+        foreach ($data as $key => $val) {
+            if ($val === "") {
+                $str .= $key . ' ';
+                continue;
+            }
+            if (is_string($val))
+                $val = is_int(strpos($val, "\"")) ? str_replace('"', '\"', $val) : $val;
+            else
+                $val = json_encode($val);
+            $str .= $key . '="' . $val . '" ';
+        }
+        return ' ' . trim($str);
+    }
+
+    public function getClassStr() {
+        return self::generateClassStr($this->defaultClasses, $this->classes);
+    }
+
+    public static function generateClassStr($defaultClasses, $classes) {
+        return implode(" ", ArrayHelper::merge(self::getClassArr($defaultClasses), self::getClassArr($classes)));
+    }
+
+    public static function getClassArr($classes) {
+        if (empty($classes))
+            return [];
+        return is_array($classes) ? $classes : [$classes];
     }
 }
