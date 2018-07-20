@@ -7,12 +7,21 @@
  */
 ?>
 <?= $uploader ?>
-<div class="imgList-<?= $id ?>" style="padding: 10px 0;">
+<style>
+    .imgList .single-img{
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .imgList .single-img a{
+        display: block;
+    }
+</style>
+<div class="imgList imgList-<?= $id ?>" style="padding: 10px 0;">
     <?php foreach ($img as $key): ?>
-        <div class="single-img-<?= $id ?>">
+        <div class="single-img single-img-<?= $id ?>">
             <img src="<?= Yii::$app->params['qiniu']['domain'] . '/' . $key ?>">
             <?php if ($multi): ?>
-                <a href="javascript:void(0)" class="layui-btn" onclick="imgListDelete<?=$id?>($(this))">删除</a>
+                <a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-xs" onclick="imgListDelete<?=$id?>($(this))">删除</a>
             <?php endif; ?>
             <input type="hidden" name="<?= $name ?>[]" value="<?= $key ?>">
         </div>
@@ -22,7 +31,7 @@
     function imgListDelete<?=$id?>(obj) {
         globalLayer.confirm("确定删除此图片?", {}, function () {
             obj.parent().remove();
-            globalLayer.msg('的确很重要', {icon: 1});
+            globalLayer.msg('已删除图片');
         })
     }
 
@@ -48,10 +57,10 @@
     function addImg<?=$id?>(info) {
         var classText = "imgList-<?=$id?>",
             html = '';
-        html += '<div class="single-img-<?= $id ?>">';
+        html += '<div class="single-img single-img-<?= $id ?>">';
         html += '<img src="<?= Yii::$app->params['qiniu']['domain']  ?>/'+info.key+'">';
         <?php if ($multi): ?>
-        html += '<a href="javascript:void(0)" class="layui-btn" onclick="imgListDelete<?=$id?>($(this))">删除</a>';
+        html += '<a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-xs" onclick="imgListDelete<?=$id?>($(this))">删除</a>';
         <?php endif;?>
         html += '<input type="hidden" name="<?= $name ?>[]" value="'+info.key+'">';
         $("."+classText).append(html)

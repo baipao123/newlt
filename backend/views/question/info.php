@@ -63,14 +63,117 @@ echo FormItemWidget::widget([
     "type"    => "img",
     "label"   => "题干配图",
     "options" => [
-        "isMulti" => false,
+        "isMulti" => true,
         "hint"    => "推荐尺寸:200*200",
         "name"    => 'attaches',
         "value"   => $question->attaches
     ]
 ]);
 
-// 题干配图
+if($question->type != Question::TypeJudge) {
+
+    echo FormItemWidget::widget([
+        "type"    => "text",
+        "label"   => "选项A",
+        "options" => [
+            "name"  => "a",
+            "value" => $question->a
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "img",
+        "label"   => "选项A配图",
+        "options" => [
+            "isMulti" => false,
+            "hint"    => "推荐尺寸:200*200",
+            "name"    => 'aImg',
+            "value"   => $question->aImg
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "text",
+        "label"   => "选项B",
+        "options" => [
+            "name"  => "b",
+            "value" => $question->b
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "img",
+        "label"   => "选项B配图",
+        "options" => [
+            "isMulti" => false,
+            "hint"    => "推荐尺寸:200*200",
+            "name"    => 'bImg',
+            "value"   => $question->bImg
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "text",
+        "label"   => "选项C",
+        "options" => [
+            "name"  => "c",
+            "value" => $question->c
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "img",
+        "label"   => "选项C配图",
+        "options" => [
+            "isMulti" => false,
+            "hint"    => "推荐尺寸:200*200",
+            "name"    => 'cImg',
+            "value"   => $question->cImg
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "text",
+        "label"   => "选项D",
+        "options" => [
+            "name"  => "d",
+            "value" => $question->d
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "img",
+        "label"   => "选项D配图",
+        "options" => [
+            "isMulti" => false,
+            "hint"    => "推荐尺寸:200*200",
+            "name"    => 'dImg',
+            "value"   => $question->dImg
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "text",
+        "label"   => "选项E",
+        "options" => [
+            "name"  => "e",
+            "value" => $question->e
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "img",
+        "label"   => "选项E配图",
+        "options" => [
+            "isMulti" => true,
+            "hint"    => "推荐尺寸:200*200",
+            "name"    => 'eImg',
+            "value"   => $question->eImg
+        ]
+    ]);
+}
+
+
 
 if (in_array($question->type, [Question::TypeSelect, Question::TypeMulti])) {
 

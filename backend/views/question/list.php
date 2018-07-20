@@ -99,7 +99,7 @@ foreach ($list as $question) {
         <td><?= $question->fail_num ?></td>
         <td>
             <span class="layui-btn layui-btn-xs layui-btn-normal"
-                  onclick="layerOpenIFrame('<?= Url::createLink('question/info', ['qid' => $question->id]) ?>','编辑题目')">编辑</span>
+                  onclick="layerOpenIFrame('<?= Url::createLink('question/info', ['qid' => $question->id]) ?>','编辑题目',['100%','100%'])">编辑</span>
             <?php if ($question->status == Status::FORBID): ?>
                 <span class="layui-btn layui-btn-xs"
                       onclick="layerConfirmUrl('<?= Url::createLink("question/toggle", ["qid" => $question->id, "status" => Status::PASS]) ?>')">开启</span>

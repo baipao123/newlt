@@ -42,6 +42,7 @@
                             $.each(files, function (i, file) {
                                 var observable = qiniu.upload(file, null, token, putExtra, config);
                                 observable.subscribe(observer);
+                                delete files[i]
                             });
                         }
                     })
