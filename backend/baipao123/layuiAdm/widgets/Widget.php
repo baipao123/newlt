@@ -89,6 +89,22 @@ class Widget extends \yii\base\Widget
         return is_array($classes) ? $classes : [$classes];
     }
 
+    protected static function optionsToStr($a) {
+        $args = func_get_args();
+        $arr = [];
+        foreach ($args as $arg) {
+            $arr = array_merge($arr, self::toArray($arg));
+        }
+        return implode(" ", $arr);
+    }
+
+    // 适合拼接多个ID、class
+    protected static function toArray($input) {
+        if (empty($input))
+            return [];
+        return is_array($input) ? $input : [$input];
+    }
+
     public static function setDefaultFormType($type){
         self::$form_default = $type;
     }

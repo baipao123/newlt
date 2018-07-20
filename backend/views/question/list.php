@@ -9,6 +9,7 @@ use layuiAdm\tools\Url;
 use common\models\Question;
 use common\models\QuestionType;
 use layuiAdm\widgets\FormWidget;
+use layuiAdm\widgets\FormItemWidget;
 use layuiAdm\widgets\SelectWidget;
 use layuiAdm\widgets\TableWidget;
 use layuiAdm\widgets\PagesWidget;
@@ -20,24 +21,30 @@ use common\tools\Status;
 FormWidget::begin([
 
 ]);
-echo SelectWidget::widget([
-    "title"       => "所属科目",
-    "name"        => "tid",
-    "options"     => QuestionType::typesForSelect(),
-    "group"       => true,
-    "value"       => $tid,
-    "valueKey"    => "tid",
-    "textKey"     => "name",
-    "placeHolder" => "请选择科目",
-    "search"      => true
+echo FormItemWidget::widget([
+    "label"   => "所属科目",
+    "type"    => "select",
+    "options" => [
+        "name"        => "tid",
+        "options"     => QuestionType::typesForSelect(),
+        "group"       => true,
+        "value"       => $tid,
+        "valueKey"    => "tid",
+        "textKey"     => "name",
+        "placeholder" => "请选择科目",
+        "search"      => true
+    ]
 ]);
 
-echo SelectWidget::widget([
-    "title"       => "题目类型",
-    "name"        => "type",
-    "options"     => Question::TypeAll,
-    "value"       => $type,
-    "placeHolder" => "全部题型",
+echo FormItemWidget::widget([
+    "label"   => "题目类型",
+    "type"    => "select",
+    "options" => [
+        "name"        => "type",
+        "options"     => Question::TypeAll,
+        "value"       => $type,
+        "placeholder" => "全部题型",
+    ]
 ]);
 
 FormWidget::end();
@@ -91,13 +98,17 @@ foreach ($list as $question) {
         <td><?= $question->success_num ?></td>
         <td><?= $question->fail_num ?></td>
         <td>
-            <span class="layui-btn layui-btn-xs layui-btn-normal" onclick="layerOpenIFrame('<?= Url::createLink('question/info', ['qid' => $question->id]) ?>','编辑题目')">编辑</span>
-            <?php if($question->status == Status::FORBID): ?>
-                <span class="layui-btn layui-btn-xs" onclick="layerConfirmUrl('<?= Url::createLink("question/toggle",["qid"=>$question->id,"status"=>Status::PASS])?>')">开启</span>
-                <span class="layui-btn layui-btn-xs layui-btn-primary" onclick="layerConfirmUrl('<?= Url::createLink("question/toggle",["qid"=>$question->id,"status"=>Status::DELETE])?>','确定删除？删除后无法恢复')">删除</span>
-            <?php elseif($question->status == Status::PASS):?>
-                <span class="layui-btn layui-btn-xs layui-btn-warm" onclick="layerConfirmUrl('<?= Url::createLink("question/toggle",["qid"=>$question->id,"status"=>Status::FORBID])?>')">关闭</span>
-            <?php endif;?>
+            <span class="layui-btn layui-btn-xs layui-btn-normal"
+                  onclick="layerOpenIFrame('<?= Url::createLink('question/info', ['qid' => $question->id]) ?>','编辑题目')">编辑</span>
+            <?php if ($question->status == Status::FORBID): ?>
+                <span class="layui-btn layui-btn-xs"
+                      onclick="layerConfirmUrl('<?= Url::createLink("question/toggle", ["qid" => $question->id, "status" => Status::PASS]) ?>')">开启</span>
+                <span class="layui-btn layui-btn-xs layui-btn-primary"
+                      onclick="layerConfirmUrl('<?= Url::createLink("question/toggle", ["qid" => $question->id, "status" => Status::DELETE]) ?>','确定删除？删除后无法恢复')">删除</span>
+            <?php elseif ($question->status == Status::PASS): ?>
+                <span class="layui-btn layui-btn-xs layui-btn-warm"
+                      onclick="layerConfirmUrl('<?= Url::createLink("question/toggle", ["qid" => $question->id, "status" => Status::FORBID]) ?>')">关闭</span>
+            <?php endif; ?>
         </td>
     </tr>
 

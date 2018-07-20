@@ -9,7 +9,7 @@
 namespace layuiAdm\widgets;
 
 
-class FormImgWidget extends FormBaseWidget
+class FormImgWidget extends FormItemWidget
 {
     public $callBack = "uploadFile";
 
