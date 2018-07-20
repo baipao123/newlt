@@ -75,7 +75,7 @@ class Widget extends \yii\base\Widget
         return ' ' . trim($str);
     }
 
-    public function getClassStr() {
+    protected function getClassStr() {
         return self::generateClassStr($this->defaultClasses, $this->classes);
     }
 

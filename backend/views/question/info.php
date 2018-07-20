@@ -52,4 +52,10 @@ echo FormInputWidget::widget([
     "value"    => $question->title
 ]);
 
+// 题干配图
+
+if (in_array($question->type, [Question::TypeSelect, Question::TypeMulti])) {
+
+}
+
 FormWidget::end();

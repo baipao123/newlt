@@ -46,7 +46,6 @@ class TextAreaWidget extends Widget
             $data['layer-filter'] = $this->filter;
         if (!empty($this->placeholder))
             $data['placeholder'] = $this->placeholder;
-        \Yii::warning($data);
         return '<textarea' . self::generateOptions($data) . '>' . $this->value . '</textarea>';
     }
 }
