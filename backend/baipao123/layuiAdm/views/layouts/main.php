@@ -27,7 +27,7 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
     </div>
 </div>
 <script>
-    var globalLayer,layerIFrameName = '';
+    var globalLayer,layerIFrameName = '',thisLayer;
     $(document).ready(function(){
         //有无parent  是不是在iFrame中
         if (window.frames.length === parent.frames.length) {
@@ -43,6 +43,7 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
             var form = layui.form,
                 element = layui.element;
             globalLayer = layui.layer;
+            thisLayer = layui.layer;
             element.init();
             form.render();
         });

@@ -28,7 +28,10 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
             </div>
         </div>
         <script>
-            var layerIndex = parent.globalLayer.getFrameIndex(window.name); //获取窗口索引
+            var globalLayer = parent.globalLayer;
+            var layerIndex = globalLayer.getFrameIndex(window.name); //获取窗口索引
+            var thisLayer;
+
 
             function layerConfirmUrl(url, text, _target) {
                 parent.layerConfirmUrl(url, text, _target, window.name);
@@ -44,7 +47,7 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
 
             function layerMsg(text){
                 if (text != undefined && text != "")
-                    parent.globalLayer.msg(text);
+                    globalLayer.msg(text);
             }
             /**
              * 使用layer的alert弹窗
@@ -77,7 +80,7 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
                     title = "提示";
                 else if (title == "")
                     title = false;
-                parent.globalLayer.alert(text, {
+                globalLayer.alert(text, {
                     title: title,
                     icon: icon,
                     end: function (index) {
@@ -90,13 +93,13 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
                                 parent.frames[parent.layerIFrameName].location.reload()
                         }
                         if(close)
-                            parent.globalLayer.close(layerIndex);
+                            globalLayer.close(layerIndex);
                     }
                 });
             }
 
             function layer_award(){
-                parent.globalLayer.close(layerIndex);
+                globalLayer.close(layerIndex);
             }
             $(document).ready(function (e) {
                 //danger、success会关闭本页面
@@ -124,10 +127,11 @@ $assetUrl = \Yii::$app->assetManager->publish(dirname(__FILE__) . '/../../assets
                         element = layui.element;
                     element.init();
                     form.render();
+                    thisLayer = layui.layer;
                 });
 
                 //高度自适应
-                parent.globalLayer.iframeAuto(layerIndex);
+                globalLayer.iframeAuto(layerIndex);
             });
         </script>
 

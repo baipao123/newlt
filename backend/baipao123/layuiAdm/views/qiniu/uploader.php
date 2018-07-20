@@ -31,6 +31,8 @@
                                     console.log(res);
                                 },
                                 complete:function(info){
+                                    if(typeof uploadFile<?=$id?> === "function")
+                                        uploadFile<?=$id?>(info);
                                     if(typeof <?=$callBack?> === "function"){
                                         <?=$callBack?>(info);
                                     }else

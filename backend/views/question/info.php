@@ -59,6 +59,16 @@ echo FormItemWidget::widget([
     ]
 ]);
 
+echo FormItemWidget::widget([
+    "type"    => "img",
+    "label"   => "题干配图",
+    "options" => [
+        "isMulti" => false,
+        "hint"    => "推荐尺寸:200*200",
+        "name"    => 'attaches',
+        "value"   => $question->attaches
+    ]
+]);
 
 // 题干配图
 

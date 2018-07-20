@@ -8,6 +8,7 @@
 
 namespace layuiAdm\widgets;
 
+use layuiAdm\widgets\formWidgets\Input;
 use yii;
 use yii\helpers\ArrayHelper;
 
@@ -36,7 +37,7 @@ class FormWidget extends Widget
         if (!empty($action))
             $data['action'] = $action;
         $html = '<form' . self::generateOptions($data) . '>';
-        $html .= InputWidget::widget([
+        $html .= Input::widget([
             "type"  => "hidden",
             "name"  => Yii::$app->request->csrfParam,
             "value" => Yii::$app->request->getCsrfToken()

@@ -9,6 +9,7 @@
 namespace layuiAdm\widgets;
 
 
+use layuiAdm\widgets\formWidgets\ImgList;
 use layuiAdm\widgets\formWidgets\Input;
 use layuiAdm\widgets\formWidgets\Select;
 use layuiAdm\widgets\formWidgets\TextArea;
@@ -36,6 +37,8 @@ class FormItemWidget extends Widget
                 return "";
             case "switch":
                 return "";
+            case "img":
+                return ImgList::widget($this->options);
             case "textarea":
                 return TextArea::widget($this->options);
             case "select":
