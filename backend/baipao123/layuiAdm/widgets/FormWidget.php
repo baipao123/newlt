@@ -31,7 +31,7 @@ class FormWidget extends Widget
         $method = ArrayHelper::getValue($config, "method", "post");
         $action = ArrayHelper::getValue($config, "action", "");
         $data = [
-            "class"  => self::generateClassStr("layui-form", $classes),
+            "class"  => self::optionsToStr("layui-form", $classes),
             "method" => $method,
         ];
         if (!empty($action))

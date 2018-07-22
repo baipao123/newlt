@@ -39,9 +39,10 @@ class InputOptions extends Widget
             "class"       => self::optionsToStr($this->defaultClasses, $this->classes),
             "type"        => $this->type,
             "name"        => $this->name,
-            "placeholder" => $this->placeholder,
         ];
-        if ($this->needValue)
+        if (!empty($this->placeholder))
+            $config['placeholder'] = $this->placeholder;
+        if ($this->needValue && !is_null($this->value))
             $config['value'] = $this->value;
         if ($this->autoComplete)
             $config['autocomplete'] = 'on';

@@ -9,9 +9,12 @@
 namespace layuiAdm\widgets;
 
 
+use layuiAdm\widgets\formWidgets\CheckBox;
 use layuiAdm\widgets\formWidgets\ImgList;
 use layuiAdm\widgets\formWidgets\Input;
+use layuiAdm\widgets\formWidgets\RadioList;
 use layuiAdm\widgets\formWidgets\Select;
+use layuiAdm\widgets\formWidgets\SwitchBar;
 use layuiAdm\widgets\formWidgets\TextArea;
 use yii\helpers\ArrayHelper;
 
@@ -32,11 +35,11 @@ class FormItemWidget extends Widget
     public function component() {
         switch ($this->type) {
             case "radio":
-                return "";
+                return RadioList::widget($this->options);
             case "checkbox":
-                return "";
+                return CheckBox::widget($this->options);
             case "switch":
-                return "";
+                return SwitchBar::widget($this->options);
             case "img":
                 return ImgList::widget($this->options);
             case "textarea":
@@ -49,7 +52,8 @@ class FormItemWidget extends Widget
     }
 
     public function itemHead() {
-        $html = '<div class="layui-' . (self::$form_default == self::FORM_ROW ? "inline" : "form-item") . '">' . "\n";
+        $this->defaultClasses = self::$form_default == self::FORM_ROW ? "layui-inline" : "layui-form-item";
+        $html = '<div class="' . $this->getClassStr() . '">' . "\n";
         if (!empty($this->label))
             $html .= '<label class="layui-form-label">' . $this->label . '</label>' . "\n";
         $html .= '<div class="layui-input-' . (self::$form_default == self::FORM_ROW ? 'inline' : 'block') . '">' . "\n";
@@ -57,10 +61,10 @@ class FormItemWidget extends Widget
     }
 
     public function itemEnd() {
-        $html = '';
+        $html = '</div>' . "\n";
         if (!empty($this->tips))
             $html .= '<div class="layui-form-mid layui-word-aux">' . $this->tips . '</div>' . "\n";
-        $html .= '</div></div>' . "\n";
+        $html .= '</div>' . "\n";
         return $html;
     }
 

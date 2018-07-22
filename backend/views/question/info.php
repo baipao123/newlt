@@ -26,6 +26,7 @@ FormWidget::begin();
 echo FormItemWidget::widget([
     "label"   => "所属科目",
     "type"    => "select",
+    "tips"    => "科目提交后无法修改，如欲修改，请删除后重新添加",
     "options" => [
         "name"        => "tid",
         "options"     => QuestionType::typesForSelect(),
@@ -34,18 +35,20 @@ echo FormItemWidget::widget([
         "valueKey"    => "tid",
         "textKey"     => "name",
         "placeholder" => "请选择科目",
-        "search"      => true
+        "search"      => true,
+        "disabled"    => !$question->isNewRecord
     ]
 ]);
 
 echo FormItemWidget::widget([
     "label"   => "题目类型",
-    "type"    => "select",
+    "type"    => "radio",
+    "tips"    => "题型提交后无法修改，如欲修改，请删除后重新添加",
     "options" => [
-        "name"        => "type",
-        "options"     => Question::TypeAll,
-        "value"       => $question->type,
-        "placeholder" => "全部题型",
+        "name"    => "type",
+        "options" => $question->typesForAdm(),
+        "value"   => $question->type,
+        "filter"  => "type"
     ]
 ]);
 
@@ -70,11 +73,12 @@ echo FormItemWidget::widget([
     ]
 ]);
 
-if($question->type != Question::TypeJudge) {
+if ($question->type != Question::TypeJudge || $question->isNewRecord) {
 
     echo FormItemWidget::widget([
         "type"    => "text",
         "label"   => "选项A",
+        "classes" => "noJudge",
         "options" => [
             "name"  => "a",
             "value" => $question->a
@@ -84,6 +88,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "img",
         "label"   => "选项A配图",
+        "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
             "hint"    => "推荐尺寸:200*200",
@@ -95,6 +100,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "text",
         "label"   => "选项B",
+        "classes" => "noJudge",
         "options" => [
             "name"  => "b",
             "value" => $question->b
@@ -104,6 +110,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "img",
         "label"   => "选项B配图",
+        "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
             "hint"    => "推荐尺寸:200*200",
@@ -115,6 +122,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "text",
         "label"   => "选项C",
+        "classes" => "noJudge",
         "options" => [
             "name"  => "c",
             "value" => $question->c
@@ -124,6 +132,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "img",
         "label"   => "选项C配图",
+        "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
             "hint"    => "推荐尺寸:200*200",
@@ -135,6 +144,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "text",
         "label"   => "选项D",
+        "classes" => "noJudge",
         "options" => [
             "name"  => "d",
             "value" => $question->d
@@ -144,6 +154,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "img",
         "label"   => "选项D配图",
+        "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
             "hint"    => "推荐尺寸:200*200",
@@ -155,6 +166,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "text",
         "label"   => "选项E",
+        "classes" => "noJudge",
         "options" => [
             "name"  => "e",
             "value" => $question->e
@@ -164,6 +176,7 @@ if($question->type != Question::TypeJudge) {
     echo FormItemWidget::widget([
         "type"    => "img",
         "label"   => "选项E配图",
+        "classes" => "noJudge",
         "options" => [
             "isMulti" => true,
             "hint"    => "推荐尺寸:200*200",
@@ -173,10 +186,85 @@ if($question->type != Question::TypeJudge) {
     ]);
 }
 
+echo FormItemWidget::widget([
+    "type"    => "checkbox",
+    "label"   => "答案",
+    "options" => [
+        "name"    => "answer[]",
+        "value"   => str_split($question->answer),
+        "options" => [
+            "A", "B",
+            [
+                "value" => "C",
+                "class" => "noJudge"
+            ],
+            [
+                "value" => "D",
+                "class" => "noJudge"
+            ],
+            [
+                "value" => "E",
+                "class" => "noJudge"
+            ]
+        ],
+    ]
+]);
 
+echo FormItemWidget::widget([
+    "type"    => "textarea",
+    "label"   => "答案解析",
+    "options" => [
+        "name"  => "description",
+        "value" => $question->description,
+    ]
+]);
 
-if (in_array($question->type, [Question::TypeSelect, Question::TypeMulti])) {
+echo FormItemWidget::widget([
+    "type"    => "textarea",
+    "label"   => "知识点",
+    "options" => [
+        "name"  => "knowledge",
+        "value" => $question->knowledge,
+    ]
+]);
 
-}
+echo FormItemWidget::widget([
+    "type"    => "number",
+    "label"   => "难度系数",
+    "options" => [
+        "name"  => "difficulty",
+        "value" => $question->difficulty,
+    ]
+]);
+
+echo FormItemWidget::widget([
+    "type"    => "switch",
+    "label"   => "是否开启",
+    "options" => [
+        "name"      => "status",
+        "value"     => $question->status == Status::PASS || $question->isNewRecord,
+        "falseText" => "关闭",
+        "trueText"  => "开启"
+    ]
+]);
 
 FormWidget::end();
+
+?>
+<script>
+    layui.use("form", function () {
+        var form = layui.form;
+        form.on("radio(type)", function (data) {
+            console.log(data)
+            var value = data.value,
+                isJudge = value == <?=Question::TypeJudge?>
+
+                    console.log(isJudge)
+            if (isJudge)
+                $(".noJudge").hide()
+            else
+                $(".noJudge").show()
+            form.render()
+        })
+    })
+</script>

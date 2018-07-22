@@ -126,4 +126,16 @@ class Question extends \common\models\base\Question
     public function attaches() {
         return Img::formatFromJson($this->attaches);
     }
+
+    public function typesForAdm() {
+        $data = [];
+        foreach (self::TypeAll as $key => $value) {
+            $data[] = [
+                "value"    => $key,
+                "title"    => $value,
+                "disabled" => !$this->isNewRecord
+            ];
+        }
+        return $data;
+    }
 }

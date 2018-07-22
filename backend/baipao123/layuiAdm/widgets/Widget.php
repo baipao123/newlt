@@ -76,17 +76,7 @@ class Widget extends \yii\base\Widget
     }
 
     protected function getClassStr() {
-        return self::generateClassStr($this->defaultClasses, $this->classes);
-    }
-
-    public static function generateClassStr($defaultClasses, $classes) {
-        return implode(" ", ArrayHelper::merge(self::getClassArr($defaultClasses), self::getClassArr($classes)));
-    }
-
-    public static function getClassArr($classes) {
-        if (empty($classes))
-            return [];
-        return is_array($classes) ? $classes : [$classes];
+        return self::optionsToStr($this->defaultClasses, $this->classes);
     }
 
     protected static function optionsToStr($a) {

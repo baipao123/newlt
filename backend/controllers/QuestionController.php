@@ -251,7 +251,7 @@ class QuestionController extends BaseController
             $question = new Question;
         }
         if (Yii::$app->request->isPost) {
-
+            Yii::warning($_POST);
         }
         return $this->render("info", [
             "question" => $question
