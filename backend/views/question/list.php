@@ -48,6 +48,12 @@ echo FormItemWidget::widget([
 ]);
 
 FormWidget::end();
+?>
+<button class="layui-btn layui-btn-danger"
+        onclick="layerOpenIFrame('<?= Url::createLink('/question/info', ["id" => 0]) ?>','添加题目',['100%','100%'])"><i class="layui-icon">&#xe654;</i>添加题目
+</button>
+
+<?php
 
 TableWidget::begin([
     "header"       => [

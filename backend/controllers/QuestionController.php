@@ -16,6 +16,7 @@ use common\models\QuestionType;
 use common\tools\Status;
 use layuiAdm\tools\Url;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 class QuestionController extends BaseController
 {
@@ -251,7 +252,48 @@ class QuestionController extends BaseController
             $question = new Question;
         }
         if (Yii::$app->request->isPost) {
-            Yii::warning($_POST);
+            if ($question->isNewRecord) {
+                $question->tid = Yii::$app->request->post("tid", 0);
+                $question->type = Yii::$app->request->post("type", 0);
+            }
+            $question->title = Yii::$app->request->post("title", "");
+            $attaches = Yii::$app->request->post("attaches", []);
+            $question->attaches = empty($attaches) ? "" : json_encode($attaches);
+            if ($question->type != Question::TypeJudge) {
+                $question->a = Yii::$app->request->post("a", "");
+                $question->aImg = Yii::$app->request->post("aImg", "");
+                $question->b = Yii::$app->request->post("b", "");
+                $question->bImg = Yii::$app->request->post("bImg", "");
+                $question->c = Yii::$app->request->post("c", "");
+                $question->cImg = Yii::$app->request->post("cImg", "");
+                $question->d = Yii::$app->request->post("d", "");
+                $question->dImg = Yii::$app->request->post("dImg", "");
+                $question->e = Yii::$app->request->post("e", "");
+                $question->eImg = Yii::$app->request->post("eImg", "");
+            }
+            $question->answer = join("", Yii::$app->request->post("answer", []));
+            $question->description = Yii::$app->request->post("description", "");
+            $question->knowledge = Yii::$app->request->post("knowledge", "");
+            $question->difficulty = Yii::$app->request->post("difficulty", "");
+            $question->status = Yii::$app->request->post("status", false) ? Status::PASS : Status::FORBID;
+
+            if (empty($question->tid))
+                Yii::$app->session->setFlash("info", "科目必须选择");
+            elseif (empty($question->type))
+                Yii::$app->session->setFlash("info", "题型必须选择");
+            elseif (empty($question->answer))
+                Yii::$app->session->setFlash("info", "答案必须选择");
+            elseif ($question->type != Question::TypeMulti && strlen($question->answer) > 0)
+                Yii::$app->session->setFlash("info", "非多选题，答案不能多选");
+            elseif(empty($question->title) && empty($question->attaches))
+                Yii::$app->session->setFlash("info", "题干不能为空");
+            elseif($question->type != Question::TypeJudge && empty($question->a) && empty($question->aImg))
+                Yii::$app->session->setFlash("info", "选项A不能为空");
+            elseif (!$question->save()) {
+                Yii::warning($question->errors, "保存Question失败");
+                Yii::$app->session->setFlash("info", "保存失败");
+            }
+
         }
         return $this->render("info", [
             "question" => $question

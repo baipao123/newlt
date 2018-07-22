@@ -36,6 +36,7 @@ echo FormItemWidget::widget([
         "textKey"     => "name",
         "placeholder" => "请选择科目",
         "search"      => true,
+        "verify"      => "required",
         "disabled"    => !$question->isNewRecord
     ]
 ]);
@@ -48,6 +49,7 @@ echo FormItemWidget::widget([
         "name"    => "type",
         "options" => $question->typesForAdm(),
         "value"   => $question->type,
+        "verify"      => "required",
         "filter"  => "type"
     ]
 ]);
@@ -191,6 +193,7 @@ echo FormItemWidget::widget([
     "label"   => "答案",
     "options" => [
         "name"    => "answer[]",
+        "verify"      => "required",
         "value"   => str_split($question->answer),
         "options" => [
             "A", "B",
