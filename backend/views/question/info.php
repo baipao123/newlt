@@ -49,7 +49,7 @@ echo FormItemWidget::widget([
         "name"    => "type",
         "options" => $question->typesForAdm(),
         "value"   => $question->type,
-        "verify"      => "required",
+        "verify"  => "required",
         "filter"  => "type"
     ]
 ]);
@@ -191,9 +191,10 @@ if ($question->type != Question::TypeJudge || $question->isNewRecord) {
 echo FormItemWidget::widget([
     "type"    => "checkbox",
     "label"   => "答案",
+    "tips"    => "判断题A表示正确、B表示错误",
     "options" => [
         "name"    => "answer[]",
-        "verify"      => "required",
+        "verify"  => "required",
         "value"   => str_split($question->answer),
         "options" => [
             "A", "B",
@@ -235,6 +236,7 @@ echo FormItemWidget::widget([
     "type"    => "number",
     "label"   => "难度系数",
     "options" => [
+        "type"  => "number",
         "name"  => "difficulty",
         "value" => $question->difficulty,
     ]

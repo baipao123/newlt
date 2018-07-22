@@ -252,6 +252,7 @@ class QuestionController extends BaseController
             $question = new Question;
         }
         if (Yii::$app->request->isPost) {
+            Yii::warning($_POST);
             if ($question->isNewRecord) {
                 $question->tid = Yii::$app->request->post("tid", 0);
                 $question->type = Yii::$app->request->post("type", 0);
@@ -274,7 +275,7 @@ class QuestionController extends BaseController
             $question->answer = join("", Yii::$app->request->post("answer", []));
             $question->description = Yii::$app->request->post("description", "");
             $question->knowledge = Yii::$app->request->post("knowledge", "");
-            $question->difficulty = Yii::$app->request->post("difficulty", "");
+            $question->difficulty = (int)Yii::$app->request->post("difficulty", 0);
             $question->status = Yii::$app->request->post("status", false) ? Status::PASS : Status::FORBID;
 
             if (empty($question->tid))
@@ -283,8 +284,10 @@ class QuestionController extends BaseController
                 Yii::$app->session->setFlash("info", "题型必须选择");
             elseif (empty($question->answer))
                 Yii::$app->session->setFlash("info", "答案必须选择");
-            elseif ($question->type != Question::TypeMulti && strlen($question->answer) > 0)
+            elseif ($question->type != Question::TypeMulti && strlen($question->answer) > 1)
                 Yii::$app->session->setFlash("info", "非多选题，答案不能多选");
+            elseif($question->type == Question::TypeJudge && !in_array($question->answer,["A","B"]))
+                Yii::$app->session->setFlash("info", "判断题的答案只能是A、B");
             elseif(empty($question->title) && empty($question->attaches))
                 Yii::$app->session->setFlash("info", "题干不能为空");
             elseif($question->type != Question::TypeJudge && empty($question->a) && empty($question->aImg))
@@ -292,7 +295,8 @@ class QuestionController extends BaseController
             elseif (!$question->save()) {
                 Yii::warning($question->errors, "保存Question失败");
                 Yii::$app->session->setFlash("info", "保存失败");
-            }
+            }else
+                Yii::$app->session->setFlash("success", "保存成功");
 
         }
         return $this->render("info", [

@@ -46,8 +46,10 @@ class FormItemWidget extends Widget
                 return TextArea::widget($this->options);
             case "select":
                 return Select::widget($this->options);
-            default:
+            default: {
+                $this->options['type'] = isset($this->options['type']) ? $this->options['type'] : $this->type;
                 return Input::widget($this->options);
+            }
         }
     }
 
