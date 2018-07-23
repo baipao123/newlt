@@ -22,12 +22,10 @@ FormWidget::begin([
 
 ]);
 echo FormItemWidget::widget([
-    "label"   => "科目",
     "type"    => "select",
     "options" => [
         "name"        => "tid",
         "options"     => QuestionType::typesForSelect(false),
-        "group"       => true,
         "value"       => $tid,
         "valueKey"    => "tid",
         "textKey"     => "name",
@@ -37,18 +35,20 @@ echo FormItemWidget::widget([
 ]);
 
 echo FormItemWidget::widget([
-    "label"   => "用户ID",
+    "type"    => "number",
     "options" => [
-        "name"  => "uid",
-        "value" => $uid,
+        "name"        => "uid",
+        "value"       => $uid ?: false,
+        "placeholder" => "用户ID",
     ]
 ]);
 
 echo FormItemWidget::widget([
-    "label"   => "价格ID",
+    "type"    => "number",
     "options" => [
-        "name"  => "pid",
-        "value" => $pid,
+        "name"        => "pid",
+        "value"       => $pid ?: false,
+        "placeholder" => "价格ID",
     ]
 ]);
 
@@ -58,10 +58,7 @@ echo FormItemWidget::widget([
     "options" => [
         "name"        => "status",
         "options"     => Status::order(),
-        "group"       => true,
         "value"       => $status,
-        "valueKey"    => "tid",
-        "textKey"     => "name",
         "placeholder" => "请选择订单状态",
         "search"      => true
     ]
@@ -73,11 +70,13 @@ FormWidget::end();
 TableWidget::begin([
     "header"       => [
         "订单ID" => ["fixed" => "left", "width" => 80, "unresize" => true],
-        "科目"   => ['minWidth' => 110],
-        "微信昵称" => ['width' => 200],
+        "科目",
+        "微信昵称",
         "时长",
         "价格",
         "状态",
+        "商户订单号",
+        "微信流水号",
         "付款时间" => ["minWidth" => 200],
         "下单时间" => ["minWidth" => 200],
         "操作"   => ["fixed" => "right", "width" => 150, "unresize" => true]
@@ -109,6 +108,8 @@ foreach ($list as $order) {
                 <span class="layui-btn layui-btn-xs layui-btn-warm"><?= Status::order($order->status) ?></span>
             <?php endif; ?>
         </td>
+        <td><?= $order->out_trade_no ?></td>
+        <td><?= $order->trade_no ?></td>
         <td><?= $order->paytime ?></td>
         <td><?= date("Y-m-d H:i:s", $order->created_at) ?></td>
         <td>

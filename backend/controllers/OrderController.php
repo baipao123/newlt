@@ -28,12 +28,13 @@ class OrderController extends BaseController
             $query->andWhere(["status" => $status]);
         $count = $query->count();
         $pagination = new Pagination(["totalCount" => $count]);
-        $list = $query->offset($pagination->getOffset())->limit($pagination->getLimit())->with(["user", "qType", "qPrice"])->all();
+        $list = $query->offset($pagination->getOffset())->limit($pagination->getLimit())->with(["user", "qType", "qPrice"])->orderBy("id desc")->all();
         return $this->render("list", [
             "list"       => $list,
             "pagination" => $pagination,
             "uid"        => $uid,
             "tid"        => $tid,
+            "pid"        => $pid,
             "status"     => $status,
         ]);
     }
