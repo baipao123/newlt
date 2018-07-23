@@ -43,7 +43,19 @@ class QuestionType extends \common\models\base\QuestionType
         return $data;
     }
 
-    public static function typesForSelect() {
+    public static function typesForSelect($is_sub = true) {
+        if (!$is_sub) {
+            $types = QuestionType::find()->where(["status" => Status::PASS, "parentId" => 0])->orderBy("sort DESC,id ASC")->all();
+            /* @var $types self[] */
+            $data = [];
+            foreach ($types as $type) {
+                $data[] = [
+                    "tid"  => $type->id,
+                    "name" => $type->name
+                ];
+            }
+            return $data;
+        }
         $types = QuestionType::find()->where(["status" => Status::PASS])->orderBy("parentId ASC,sort DESC,id ASC")->all();
         /* @var $types self[] */
         $data = [];

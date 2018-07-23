@@ -10,7 +10,6 @@ use common\models\Question;
 use common\models\QuestionType;
 use layuiAdm\widgets\FormWidget;
 use layuiAdm\widgets\FormItemWidget;
-use layuiAdm\widgets\SelectWidget;
 use layuiAdm\widgets\TableWidget;
 use layuiAdm\widgets\PagesWidget;
 use common\tools\Img;

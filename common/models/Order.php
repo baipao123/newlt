@@ -15,6 +15,8 @@ use yii\helpers\ArrayHelper;
 
 /**
  * @property User $user
+ * @property QuestionPrice $qPrice
+ * @property QuestionType $qType
  */
 class Order extends \common\models\base\Order
 {
@@ -22,6 +24,14 @@ class Order extends \common\models\base\Order
 
     public function getUser() {
         return $this->hasOne(User::className(), ["id" => "uid"]);
+    }
+
+    public function getQType() {
+        return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
+    }
+
+    public function getQPrice() {
+        return $this->hasOne(QuestionPrice::className(), ["id" => "pid"]);
     }
 
     public function info() {
@@ -126,7 +136,7 @@ class Order extends \common\models\base\Order
     }
 
 
-    public function refund($cash = 0){
+    public function refund($cash = 0) {
         $cash = $cash ?: $this->price;
         $refundNo = self::generateOutTradeNo();
 

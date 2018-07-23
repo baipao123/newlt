@@ -252,7 +252,7 @@ class QuestionController extends BaseController
             $question = new Question;
         }
         if (Yii::$app->request->isPost) {
-            Yii::warning($_POST);
+//            Yii::warning($_POST);
             if ($question->isNewRecord) {
                 $question->tid = Yii::$app->request->post("tid", 0);
                 $question->type = Yii::$app->request->post("type", 0);

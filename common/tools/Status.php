@@ -27,4 +27,18 @@ class Status
     const IS_REFUND = 30;
     const CANCEL_PAY = 101;
 
+    public static function order($status = 0) {
+        $arr = [
+            self::WAIT_PAY       => "待支付",
+            self::IS_UNIFY_ORDER => "支付中",
+            self::WAIT_NOTIFY    => "支付确认中",
+            self::IS_PAY         => "已支付",
+            self::IS_REFUND      => "已退款",
+            self::CANCEL_PAY     => "已取消",
+        ];
+        if ($status == 0)
+            return $arr;
+        return isset($arr[ $status ]) ? $arr[ $status ] : "未知状态";
+    }
+
 }
