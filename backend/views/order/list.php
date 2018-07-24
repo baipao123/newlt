@@ -112,7 +112,7 @@ foreach ($list as $order) {
         <td><?= date("Y-m-d H:i:s", $order->created_at) ?></td>
         <td>
             <a class="layui-btn layui-btn-xs layui-btn-normal"
-               onclick="layerConfirmUrl('<?= Url::createLink("order/info", ["oid" => $order->id]) ?>')">订单详情</a>
+               onclick="layerOpenIFrame('<?= Url::createLink("order/info", ["oid" => $order->id]) ?>','订单详情')">订单详情</a>
             <?php if ($order->status == Status::IS_PAY): ?>
                 <a class="layui-btn layui-btn-xs layui-btn-warm"
                    onclick="refund(<?= $order->id ?>,<?= $order->price / 100 ?>)">退款</a>

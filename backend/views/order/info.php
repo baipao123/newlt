@@ -75,13 +75,39 @@ use common\tools\Status;
     <tr>
         <?php if ($order->status == Status::IS_PAY): ?>
         <td>
-            <button class="layui-btn layui-btn-warm">退款</button>
+            <button class="layui-btn layui-btn-warm" onclick="refund(<?= $order->id ?>,<?= $order->price / 100 ?>)">退款
+            </button>
         </td>
         <td>
-        <?php else: ?>
+            <?php else: ?>
         <td colspan="2">
-        <?php endif; ?>
-            <button class="layui-btn layui-btn-primary">去微信查询订单支付情况</button>
+            <?php endif; ?>
+            <button class="layui-btn layui-btn-normal" onclick="jump(<?= $order->id ?>)">去微信查询订单支付情况</button>
         </td>
     </tr>
 </table>
+
+<script>
+    function refund(oid, price) {
+        globalLayer.confirm("请选择退款类型", {
+            btn: ["退全款", "部分退款"]
+        }, function () {
+            layerConfirmUrl("/order/refund?oid=" + oid, "确定吗?");
+        }, function () {
+            globalLayer.prompt({
+                title: "请输入退款金额（元）"
+            }, function (p, index) {
+                if (!p.match(/(^\d{1,10}$)|(^\d{1,10}\.\d{1,2}$)/) || p > price || p <= 0)
+                    globalLayer.msg("退款金额必须是2位小数,且为小于" + price + "的正数");
+                else {
+                    globalLayer.close(index);
+                    layerConfirmUrl("/order/refund?oid=" + oid + "&price=" + p, "确定退款" + p + "元吗?");
+                }
+            })
+        })
+    }
+
+    function jump(oid) {
+        parent.globalOpenIFrame("/order/query?id=" + oid, "查询订单", "my-icon-search")
+    }
+</script>
