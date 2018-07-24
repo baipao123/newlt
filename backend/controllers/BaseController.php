@@ -14,7 +14,8 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-class BaseController extends Controller {
+class BaseController extends Controller
+{
 
     public $enableCsrfValidation = false;
 
@@ -34,7 +35,9 @@ class BaseController extends Controller {
     }
 
 
-    public function alert(){
+    public function alert($msg = "", $type = "danger") {
+        if (!empty($msg))
+            Yii::$app->session->setFlash($type, $msg);
         return $this->render("/layouts/none");
     }
 }

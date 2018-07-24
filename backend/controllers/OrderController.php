@@ -40,7 +40,13 @@ class OrderController extends BaseController
     }
 
     public function actionInfo($oid) {
+        $order = Order::findOne($oid);
+        if (!$order)
+            return $this->alert("未找到订单");
 
+        return $this->render("info", [
+            "order" => $order
+        ]);
     }
 
     public function actionQuery($oid, $out_trade_no, $trade_no) {
