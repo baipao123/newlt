@@ -111,22 +111,16 @@ FormWidget::end();
                         <?php endif; ?>
                     </td>
                 </tr>
+                <?php if ($order->status == Status::IS_PAY): ?>
                 <tr>
-                    <?php if ($order->status == Status::IS_PAY): ?>
-                    <td>
+                    <td colspan="2">
                         <button class="layui-btn layui-btn-warm"
                                 onclick="refund(<?= $order->id ?>,<?= $order->price / 100 ?>)">
                             退款
                         </button>
                     </td>
-                    <td>
-                        <?php else: ?>
-                    <td colspan="2">
-                        <?php endif; ?>
-                        <button class="layui-btn layui-btn-normal" onclick="jump(<?= $order->id ?>)">去微信查询订单支付情况
-                        </button>
-                    </td>
                 </tr>
+                <?php endif; ?>
             </table>
 
             <script>
