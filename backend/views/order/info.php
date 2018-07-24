@@ -5,14 +5,7 @@
  * Date: 2018/7/24
  * Time: 下午7:56
  */
-use layuiAdm\tools\Url;
 use common\models\Order;
-use common\models\QuestionType;
-use layuiAdm\widgets\FormWidget;
-use layuiAdm\widgets\FormItemWidget;
-use layuiAdm\widgets\TableWidget;
-use layuiAdm\widgets\PagesWidget;
-use common\tools\Img;
 use common\tools\Status;
 
 /* @var $order Order */
@@ -35,6 +28,10 @@ use common\tools\Status;
     <tr>
         <td>时长</td>
         <td><?= $order->hour ?>小时</td>
+    </tr>
+    <tr>
+        <td>用户</td>
+        <td><?= $order->user->nickname ?></td>
     </tr>
     <tr>
         <td>价格</td>
@@ -108,6 +105,6 @@ use common\tools\Status;
     }
 
     function jump(oid) {
-        parent.globalOpenIFrame("/order/query?id=" + oid, "查询订单", "my-icon-search")
+        parent.globalOpenIFrame("/order/query?oid=" + oid, "查询订单", "my-icon-search")
     }
 </script>

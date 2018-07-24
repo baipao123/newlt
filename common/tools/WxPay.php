@@ -15,6 +15,16 @@ class WxPay extends WxPayBase
     const URL_HEAD = 'https://api.mch.weixin.qq.com/';//正式环境
     //    const URL_HEAD='https://api.mch.weixin.qq.com/sandbox/';//测试沙箱，不发生财务变化
 
+    const PayStatus = [
+        "SUCCESS"    => "支付成功",
+        "REFUND"     => "转入退款",
+        "NOTPAY"     => "未支付",
+        "CLOSED"     => "已关闭",
+        "REVOKED"    => "已撤销",
+        "USERPAYING" => "用户支付中",
+        "PAYERROR"   => "支付失败"
+    ];
+
     protected $notify_end = "/wx/notify";
 
     public static $_instance;

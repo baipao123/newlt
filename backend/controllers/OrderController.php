@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use common\tools\WxPay;
 use yii;
 use common\models\Order;
 use yii\data\Pagination;
@@ -49,11 +50,33 @@ class OrderController extends BaseController
         ]);
     }
 
-    public function actionQuery($oid, $out_trade_no, $trade_no) {
-
+    public function actionQuery($oid = 0, $out_trade_no = "", $trade_no = "") {
+        $params = [];
+        if (!empty($oid))
+            $params['oid'] = $oid;
+        if (!empty($out_trade_no))
+            $params['out_trade_no'] = $out_trade_no;
+        if (!empty($trade_no))
+            $params['trade_no'] = $trade_no;
+        if (empty($params))
+            throw new yii\base\Exception("请提供订单ID、商户订单号、微信流水号之中的一个");
+        $order = Order::findOne($params);
+        if (empty($out_trade_no) && empty($trade_no)) {
+            if (!$order)
+                throw new yii\base\Exception("订单ID不正确，请提供商户订单号、微信流水号之中的一个");
+            $out_trade_no = $order->out_trade_no;
+        }
+        $query = WxPay::getInstance()->Query($out_trade_no, $trade_no);
+        return $this->render("query", [
+            "oid"          => $oid,
+            "out_trade_no" => $out_trade_no,
+            "trade_no"     => $trade_no,
+            "order"        => $order,
+            "data"         => $query
+        ]);
     }
 
-    public function actionRefund() {
+    public function actionRefund($oid, $price) {
 
     }
 }
