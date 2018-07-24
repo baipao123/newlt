@@ -93,7 +93,7 @@ FormWidget::end();
                 </tr>
                 <tr>
                     <td>支付时间</td>
-                    <td><?= date("Y-m-d H:i:s", strtotime($order->paytime)) ?></td>
+                    <td><?= $order->paytime > 0 ? date("Y-m-d H:i:s", strtotime($order->paytime)) : '' ?></td>
                 </tr>
                 <tr>
                     <td>订单当前状态</td>
