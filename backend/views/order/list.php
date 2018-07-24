@@ -70,9 +70,8 @@ FormWidget::end();
 TableWidget::begin([
     "header"       => [
         "订单ID" => ["fixed" => "left", "width" => 80, "unresize" => true],
-        "科目",
+        "科目-时长",
         "微信昵称",
-        "时长",
         "价格",
         "状态",
         "商户订单号"=> ["minWidth" => 180],
@@ -91,9 +90,8 @@ foreach ($list as $order) {
     ?>
     <tr>
         <td><?= $order->id ?></td>
-        <td><?= $order->qType->name ?></td>
+        <td><?= $order->title ?></td>
         <td><?= $order->user->nickname ?></td>
-        <td><?= $order->hour ?>小时</td>
         <td><?= $order->price / 100 ?>元</td>
         <td>
             <?php if (in_array($order->status, [Status::WAIT_PAY, Status::WAIT_NOTIFY, Status::IS_UNIFY_ORDER])): ?>
