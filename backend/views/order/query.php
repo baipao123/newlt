@@ -29,7 +29,7 @@ echo FormItemWidget::widget([
     "type"    => "text",
     "options" => [
         "name"        => "out_trade_no",
-        "value"       => $out_trade_no ?: false,
+        "value"       => $out_trade_no,
         "placeholder" => "商户订单号",
     ]
 ]);
@@ -38,7 +38,7 @@ echo FormItemWidget::widget([
     "type"    => "number",
     "options" => [
         "name"        => "trade_no",
-        "value"       => $trade_no ?: false,
+        "value"       => $trade_no,
         "placeholder" => "微信流水号",
     ]
 ]);
@@ -47,7 +47,7 @@ FormWidget::end();
 
 ?>
 
-<?php if (empty($oid) && empty($out_trade_no) && empty($trade_no)) : ?>
+<?php if (!empty($oid) && !empty($out_trade_no) && !empty($trade_no)) : ?>
 
     <div class="layui-col-xs12 layui-col-sm5">
         <?php if ($order): ?>
