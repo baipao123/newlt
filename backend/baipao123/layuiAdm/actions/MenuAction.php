@@ -76,6 +76,12 @@ class MenuAction extends ApiAction
                         "spread" => false
                     ],
                     [
+                        "title"  => "订单查询",
+                        "icon"   => "my-icon-search",
+                        "href"   => "/order/query",
+                        "spread" => false
+                    ],
+                    [
                         "title"  => "收入统计",
                         "icon"   => "my-icon-chart-2",
                         "href"   => "/order/count",

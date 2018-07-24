@@ -59,11 +59,23 @@ class OrderController extends BaseController
         if (!empty($trade_no))
             $params['trade_no'] = $trade_no;
         if (empty($params))
-            throw new yii\base\Exception("请提供订单ID、商户订单号、微信流水号之中的一个");
+            return $this->render("query", [
+                "oid"          => $oid,
+                "out_trade_no" => $out_trade_no,
+                "trade_no"     => $trade_no,
+                "order"        => null,
+                "data"         => false
+            ]);
         $order = Order::findOne($params);
         if (empty($out_trade_no) && empty($trade_no)) {
             if (!$order)
-                throw new yii\base\Exception("订单ID不正确，请提供商户订单号、微信流水号之中的一个");
+                return $this->render("query", [
+                    "oid"          => $oid,
+                    "out_trade_no" => $out_trade_no,
+                    "trade_no"     => $trade_no,
+                    "order"        => null,
+                    "data"         => false
+                ]);
             $out_trade_no = $order->out_trade_no;
         }
         $query = WxPay::getInstance()->Query($out_trade_no, $trade_no);
