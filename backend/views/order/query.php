@@ -47,7 +47,7 @@ FormWidget::end();
 
 ?>
 
-<?php if (!empty($oid) && !empty($out_trade_no) && !empty($trade_no)) : ?>
+<?php if (!empty($oid) || !empty($out_trade_no) || !empty($trade_no)) : ?>
 
     <div class="layui-col-xs12 layui-col-sm5">
         <?php if ($order): ?>
