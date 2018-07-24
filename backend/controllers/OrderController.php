@@ -53,7 +53,7 @@ class OrderController extends BaseController
     public function actionQuery($oid = 0, $out_trade_no = "", $trade_no = "") {
         $params = [];
         if (!empty($oid))
-            $params['oid'] = $oid;
+            $params['id'] = $oid;
         if (!empty($out_trade_no))
             $params['out_trade_no'] = $out_trade_no;
         if (!empty($trade_no))

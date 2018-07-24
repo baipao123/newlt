@@ -48,7 +48,7 @@ FormWidget::end();
 ?>
 
 
-<div class="layui-col-xs12 layui-col-sm6">
+<div class="layui-col-xs12 layui-col-sm5">
     <?php if ($order): ?>
         <blockquote class="layui-elem-quote" style="text-align: center;">
             系统查询结果
@@ -158,7 +158,7 @@ FormWidget::end();
     <?php endif; ?>
 </div>
 
-<div class="layui-col-xs12 layui-col-sm6">
+<div class="layui-col-xs12 layui-col-sm5 layui-col-sm-offset2">
     <?php if ($data): ?>
         <blockquote class="layui-elem-quote" style="text-align: center;">
             微信查询结果
@@ -168,7 +168,7 @@ FormWidget::end();
                 <td>用户标识</td>
                 <td><?= $data['openid'] ?></td>
                 <td>
-                    <a class="layui-btn layui-btn-md clear" href="javascript:void(0)"
+                    <a class="clear" href="javascript:void(0)"
                        onclick="globalOpenIFrame('/user/list?openid=<?= $data['openid'] ?>','用户列表','&#xe612;')">
                         查询用户
                     </a>
