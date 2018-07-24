@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use common\tools\Status;
 use common\tools\WxPay;
 use yii;
 use common\models\Order;
@@ -88,7 +89,25 @@ class OrderController extends BaseController
         ]);
     }
 
-    public function actionRefund($oid, $price) {
+    public function actionRefund($oid, $price = "") {
+        $order = Order::findOne($oid);
+        if (!$order)
+            return $this->alert("未找到订单");
+        if ($order->status == Status::IS_REFUND)
+            return $this->alert("订单为成功退款，不能再次退款");
+        if ($order->status != Status::IS_PAY)
+            return $this->alert("订单为成功支付，不能退款");
+        if (!empty($price) && $price * 100 > $order->price)
+            return $this->alert("退款金额不能超出订单金额");
+
+        $price = empty($price) ? $order->price : (int)strval((string)number_format($price, 2, '.', '') * 100);
+        $res = $order->refund($price);
+        if ($res === false)
+            return $this->alert(WxPay::getInstance()->getError("微信退款失败"));
+        return $this->alert("微信退款成功", "success");
+    }
+
+    public function actionWxRefund($trade_no, $price) {
 
     }
 }

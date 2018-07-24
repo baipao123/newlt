@@ -8,6 +8,7 @@
 
 namespace common\tools;
 
+use common\models\OrderRefundRecord;
 use yii;
 
 class WxPay extends WxPayBase
@@ -150,7 +151,26 @@ class WxPay extends WxPayBase
             $params['out_trade_no'] = $out_trade_no;
         else
             return false;
-        return $this->Post("secapi/pay/refund", $params, true);
+        $response = $this->Post("secapi/pay/refund", $params, true);
+        $record = new OrderRefundRecord();
+        $record->out_trade_no = $out_trade_no;
+        $record->trade_no = $trade_no;
+        $record->refund_no = $refund_no;
+        $record->cash = $refund_fee;
+        if ($response !== false) {
+            $record->params = json_encode(yii\helpers\ArrayHelper::getValue($response, "params", $params));
+            if (isset($response['params']))
+                unset($response['params']);
+            $record->return = json_encode($response);
+        } else {
+            $record->params = json_encode($params);
+            $record->return = $this->getError();
+        }
+        $record->result = $response && isset($response['report']) ? Status::FAIL : Status::SUCCESS;
+        $record->admin_id = Yii::$app->user->id;
+        $record->created_at = time();
+        $record->save();
+        return $response;
     }
 
     /**

@@ -138,8 +138,9 @@ class Order extends \common\models\base\Order
 
     public function refund($cash = 0) {
         $cash = $cash ?: $this->price;
-        $refundNo = self::generateOutTradeNo();
-
+        $record = OrderRefundRecord::findOne(["out_trade_no" => $this->out_trade_no]);
+        $refundNo = $record ? $record->refund_no : self::generateOutTradeNo();
+        return $this->wxRefund($refundNo, $cash);
     }
 
     private function wxRefund($refundNo, $cash) {

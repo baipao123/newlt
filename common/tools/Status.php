@@ -11,6 +11,10 @@ namespace common\tools;
 
 class Status
 {
+    // 结果相关
+    const SUCCESS = 1;
+    const FAIL = 2;
+
     // 审核、列表相关
     const VERIFY = 1;
     const PASS = 2;
