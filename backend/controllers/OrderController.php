@@ -16,7 +16,7 @@ use yii\data\Pagination;
 
 class OrderController extends BaseController
 {
-    public $basicActions = ["info", "refund"];
+    public $basicActions = ["info", "refund", "wx-refund"];
 
     public function actionList($uid = 0, $tid = 0, $pid = 0, $status = 0) {
         $query = Order::find();
@@ -107,7 +107,7 @@ class OrderController extends BaseController
         return $this->alert("微信退款成功", "success");
     }
 
-    public function actionWxRefund($trade_no, $price) {
+    public function actionWxRefund($out_trade_no, $trade_no, $price) {
 
     }
 }
