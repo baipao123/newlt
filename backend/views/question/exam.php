@@ -58,9 +58,9 @@ TableWidget::begin([
         "错误数量",
         "耗时",
         "开始时间",
-        "科目平均分"  => ["fixed" => "right", "unresize" => true],
-        "科目模考次数" => ["fixed" => "right", "unresize" => true],
-        "科目最高分"  => ["fixed" => "right", "unresize" => true]
+        "科目平均分"  => ["fixed" => "right", "width" => 80, "unresize" => true],
+        "科目模考次数" => ["fixed" => "right", "width" => 80, "unresize" => true],
+        "科目最高分"  => ["fixed" => "right", "width" => 80, "unresize" => true]
     ],
     "height"       => 500,
     "cellMinWidth" => 60,
@@ -86,7 +86,7 @@ foreach ($list as $exam) {
         <td><?= ArrayHelper::getValue($info, "failNum") ?></td>
         <td><?= $exam->useTime() ?></td>
         <td><?= date("Y-m-d H:i:s", $exam->created_at) ?></td>
-        <td><?= ArrayHelper::getValue($examInfo, "avg") ?></td>
+        <td><?= number_format(ArrayHelper::getValue($examInfo, "avg"), 1) ?></td>
         <td><?= ArrayHelper::getValue($examInfo, "num") ?></td>
         <td><?= ArrayHelper::getValue($examInfo, "max") ?></td>
     </tr>
