@@ -59,7 +59,7 @@ TableWidget::begin([
         "耗时",
         "开始时间",
         "平均分"  => ["fixed" => "right", "width" => 80, "unresize" => true],
-        "模考次数" => ["fixed" => "right", "width" => 80, "unresize" => true],
+        "模考次数" => ["fixed" => "right", "width" => 100, "unresize" => true],
         "最高分"  => ["fixed" => "right", "width" => 80, "unresize" => true]
     ],
     "height"       => 500,
