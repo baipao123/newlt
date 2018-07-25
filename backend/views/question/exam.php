@@ -49,7 +49,7 @@ FormWidget::end();
 TableWidget::begin([
     "header"       => [
         "模考ID"   => ["fixed" => "left", "width" => 80, "unresize" => true],
-        "科目",
+        "科目"     => ["minWidth" => 140],
         "微信昵称",
         "总分",
         "得分",
