@@ -32,9 +32,8 @@ TableWidget::begin([
     "header"       => [
         "ID"   => ["fixed" => "left", "width" => 80, "unresize" => true],
         "微信昵称" => ['minWidth' => 110],
-        "头像"   => ['width' => 75],
-        "模考次数" => ["minWidth" => 400],
-        "操作"   => ["fixed" => "right", "width" => 150, "unresize" => true]
+        "头像"   => ['minWidth' => 150],
+        "操作"   => ["fixed" => "right", "minWidth" => 250, "unresize" => true]
     ],
     "height"       => 500,
     "cellMinWidth" => 60,
@@ -48,10 +47,8 @@ foreach ($records as $user) {
         <td><?= $user->id ?></td>
         <td><?= $user->nickname ?></td>
         <td><img class="img" src="<?= $user->avatar ?>"/></td>
-        <td><?= $user->id ?></td>
         <td>
-            <span class="layui-btn layui-btn-primary layui-btn-xs"
-                  onclick="layerOpenIFrame('/user/info?id=<?= $user->id ?>','用户信息')">用户信息</span>
+           
             <span class="layui-btn layui-btn-warm layui-btn-xs"
                   onclick="globalOpenIFrame('/order/list?uid=<?= $user->id ?>','用户信息','my-icon-long-arrow-right')">订单记录</span>
             <span class="layui-btn layui-btn-xs"
