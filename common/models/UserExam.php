@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 
 
 /**
+ * @property User $user
  * @property QuestionType $type
  */
 class UserExam extends \common\models\base\UserExam
@@ -22,6 +23,10 @@ class UserExam extends \common\models\base\UserExam
 
     public function getType() {
         return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
+    }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ["id" => "uid"]);
     }
 
     /**
@@ -98,8 +103,8 @@ class UserExam extends \common\models\base\UserExam
         foreach ($Ids as $type => $ids) {
             foreach ($ids as $index => $qid) {
                 $data[ $type ][ $index + 1 ] = [
-                    "qid" => $qid,
-                    "uA"  => isset($answers[ $qid ]) ? $answers[ $qid ]['userAnswer'] : '',
+                    "qid"    => $qid,
+                    "uA"     => isset($answers[ $qid ]) ? $answers[ $qid ]['userAnswer'] : '',
                     "status" => isset($answers[ $qid ]) ? $answers[ $qid ]['status'] : 0,
                 ];
             }
@@ -116,5 +121,13 @@ class UserExam extends \common\models\base\UserExam
         return \Yii::$app->db->cache(function () use ($uid, $tid) {
             return self::find()->where(["uid" => $uid, "tid" => $tid, "status" => self::ExamFinish])->select("count(*) as num,AVG(score) as avg,Max(score) as max")->asArray()->one();
         }, 30);
+    }
+
+    public function useTime() {
+        if ($this->status == self::ExamFinish)
+            $sec = $this->finish_at - $this->created_at;
+        else
+            $sec = $this->expire_at - $this->created_at;
+        return floor($sec / 60) . ":" . $sec % 60;
     }
 }

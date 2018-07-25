@@ -104,7 +104,7 @@ class MenuAction extends ApiAction
                     [
                         "title"  => "模考记录",
                         "icon"   => "my-icon-exam",
-                        "href"   => "/user/job-list",
+                        "href"   => "/question/exam",
                         "spread" => false
                     ]
                 ]

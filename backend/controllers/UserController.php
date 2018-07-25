@@ -19,18 +19,12 @@ class UserController extends BaseController
 {
     public $basicActions = ["info"];
 
-    public function actionList($name = "", $phone = "", $gender = -1, $cid = 0, $aid = 0) {
-        $query = User::find()->where(["type" => User::TYPE_USER]);
-        if ($cid > 0)
-            $query->andWhere(["city_id" => $cid]);
-        if ($aid > 0)
-            $query->andWhere(["area_id" => $aid]);
-        if ($gender >= 0)
-            $query->andWhere(["gender" => $gender]);
+    public function actionList($name = "", $openid = "") {
+        $query = User::find();
+        if (!empty($openid))
+            $query->andWhere(["openId" => $openid]);
         if (!empty($name))
-            $query->andWhere(["LIKE", "realname", $name]);
-        if (!empty($phone))
-            $query->andWhere(["LIKE", "phone", $phone]);
+            $query->andWhere(["LIKE", "nickname", $name]);
         $count = $query->count();
         $pagination = new Pagination(["totalCount" => $count]);
         $pagination->setPageSize(20);
@@ -43,13 +37,8 @@ class UserController extends BaseController
         return $this->render("list", [
             "records"    => $records,
             "pagination" => $pagination,
-            "cid"        => $cid,
-            "aid"        => $aid,
-            "gender"     => $gender,
+            "openid"     => $openid,
             "name"       => $name,
-            "phone"      => $phone,
-            "cities"     => District::cities(),
-            "areas"      => empty($cid) ? [] : District::areas($cid),
         ]);
     }
 }

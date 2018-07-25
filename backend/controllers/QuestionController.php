@@ -10,6 +10,7 @@ namespace backend\controllers;
 
 
 use common\models\Question;
+use common\models\UserExam;
 use Yii;
 use common\models\QuestionPrice;
 use common\models\QuestionType;
@@ -252,7 +253,7 @@ class QuestionController extends BaseController
             $question = new Question;
         }
         if (Yii::$app->request->isPost) {
-//            Yii::warning($_POST);
+            //            Yii::warning($_POST);
             if ($question->isNewRecord) {
                 $question->tid = Yii::$app->request->post("tid", 0);
                 $question->type = Yii::$app->request->post("type", 0);
@@ -286,21 +287,38 @@ class QuestionController extends BaseController
                 Yii::$app->session->setFlash("info", "答案必须选择");
             elseif ($question->type != Question::TypeMulti && strlen($question->answer) > 1)
                 Yii::$app->session->setFlash("info", "非多选题，答案不能多选");
-            elseif($question->type == Question::TypeJudge && !in_array($question->answer,["A","B"]))
+            elseif ($question->type == Question::TypeJudge && !in_array($question->answer, ["A", "B"]))
                 Yii::$app->session->setFlash("info", "判断题的答案只能是A、B");
-            elseif(empty($question->title) && empty($question->attaches))
+            elseif (empty($question->title) && empty($question->attaches))
                 Yii::$app->session->setFlash("info", "题干不能为空");
-            elseif($question->type != Question::TypeJudge && empty($question->a) && empty($question->aImg))
+            elseif ($question->type != Question::TypeJudge && empty($question->a) && empty($question->aImg))
                 Yii::$app->session->setFlash("info", "选项A不能为空");
             elseif (!$question->save()) {
                 Yii::warning($question->errors, "保存Question失败");
                 Yii::$app->session->setFlash("info", "保存失败");
-            }else
+            } else
                 Yii::$app->session->setFlash("success", "保存成功");
 
         }
         return $this->render("info", [
             "question" => $question
+        ]);
+    }
+
+    public function actionExam($uid = 0, $tid = 0) {
+        $query = UserExam::find()->andWhere(["status" => [UserExam::ExamIng, UserExam::ExamFinish]]);
+        if ($uid > 0)
+            $query->andWhere(["uid" => $uid]);
+        if ($tid > 0)
+            $query->andWhere(["tid" => $tid]);
+        $count = $query->count();
+        $pagination = new Pagination(["totalCount" => $count]);
+        $list = $query->offset($pagination->getOffset())->limit($pagination->getLimit())->with(["type", "user"])->all();
+        return $this->render("exam", [
+            "list"       => $list,
+            "pagination" => $pagination,
+            "tid"        => $tid,
+            "uid"        => $uid,
         ]);
     }
 }

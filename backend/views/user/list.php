@@ -1,79 +1,65 @@
-<style>
-    img.img{
-        max-width:60px;
-    }
-</style>
+<?php
+/**
+ * Created by PhpStorm.
+ * User: huangchen
+ * Date: 2018/7/17
+ * Time: 下午8:40
+ */
+use layuiAdm\tools\Url;
+use common\models\User;
+use layuiAdm\widgets\FormWidget;
+use layuiAdm\widgets\FormItemWidget;
+use layuiAdm\widgets\TableWidget;
+use layuiAdm\widgets\PagesWidget;
+use common\tools\Img;
+use common\tools\Status;
 
-<fieldset class="layui-elem-field">
-    <legend>检索</legend>
-    <div class="layui-field-box">
-        <form class="layui-form" method="get">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" placeholder="用户姓名" autocomplete="off" class="layui-input" value="<?= $name ?>">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <div class="layui-input-inline">
-                        <input type="text" name="phone" placeholder="手机号" autocomplete="off" class="layui-input" value="<?= $phone ?>">
-                    </div>
-                </div>
+/* @var $pagination \yii\data\Pagination */
 
-                <div class="layui-inline" style="width: 100px;">
-                    <select name="gender" lay-verify="gender">
-                        <option value="-1">选择性别</option>
-                        <option value="1" <?= $gender == 1 ? "selected" : ""?>>男</option>
-                        <option value="2" <?= $gender == 2 ? "selected" : ""?>>女</option>
-                        <option value="0" <?= $gender == 0 ? "selected" : ""?>>未知</option>
-                    </select>
-                </div>
+FormWidget::begin([
 
-                <div class="layui-inline">
-                    <button class="layui-btn layui-btn-normal login-btn" lay-submit>搜索</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</fieldset>
+]);
+echo FormItemWidget::widget([
+    "options" => [
+        "name"        => "name",
+        "value"       => $name,
+        "placeholder" => "微信昵称"
+    ]
+]);
+FormWidget::end();
 
-<table class="layui-table">
-    <thead>
+TableWidget::begin([
+    "header"       => [
+        "ID"   => ["fixed" => "left", "width" => 80, "unresize" => true],
+        "微信昵称" => ['minWidth' => 110],
+        "头像"   => ['width' => 75],
+        "模考次数" => ["minWidth" => 400],
+        "操作"   => ["fixed" => "right", "width" => 150, "unresize" => true]
+    ],
+    "height"       => 500,
+    "cellMinWidth" => 60,
+    "limit"        => $pagination->pageSize,
+]);
+
+/* @var $records User[] */
+foreach ($records as $user) {
+    ?>
     <tr>
-        <th>ID</th>
-        <th>姓名</th>
-        <th>头像</th>
-        <th>手机号</th>
-        <th>首选城市</th>
-        <th>操作</th>
+        <td><?= $user->id ?></td>
+        <td><?= $user->nickname ?></td>
+        <td><img class="img" src="<?= $user->avatar ?>"/></td>
+        <td><?= $user->id ?></td>
+        <td>
+            <span class="layui-btn layui-btn-primary layui-btn-xs"
+                  onclick="layerOpenIFrame('/user/info?id=<?= $user->id ?>','用户信息')">用户信息</span>
+            <span class="layui-btn layui-btn-warm layui-btn-xs"
+                  onclick="globalOpenIFrame('/order/list?uid=<?= $user->id ?>','用户信息','my-icon-long-arrow-right')">订单记录</span>
+            <span class="layui-btn layui-btn-xs"
+                  onclick="globalOpenIFrame('/question/exam?uid=<?= $user->id ?>','用户信息')">模考记录</span>
+        </td>
     </tr>
-    </thead>
-    <tbody>
-    <?php /* @var $records \common\models\User[] */ ?>
-    <?php foreach ($records as $user): ?>
-        <tr>
-            <td><?= $user->id ?></td>
-            <td><?= $user->realname ?></td>
-            <td class="icon-<?= $user->id ?>">
-                <img class="img" src="<?= $user->avatar ?>"/>
-            </td>
-            <td><?= $user->phone ?></td>
-            <td><?= $user->cityStr() ?></td>
-            <td>
-
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
-
-<?php echo \layuiAdm\widgets\PagesWidget::widget(["pagination" => $pagination]); ?>
-
-<script>
-    $(".img").click(function (e) {
-        var classTxt = $(this).parent().eq(0).attr("class");
-        globalLayer.photos({
-            photos: "." + classTxt
-        })
-    })
-</script>
+    <?php
+}
+TableWidget::end();
+echo PagesWidget::widget(["pagination" => $pagination]);
+?>
