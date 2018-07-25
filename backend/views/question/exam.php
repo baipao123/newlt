@@ -48,8 +48,8 @@ FormWidget::end();
 
 TableWidget::begin([
     "header"       => [
-        "模考ID"   => ["fixed" => "left", "width" => 80, "unresize" => true],
-        "科目"     => ["minWidth" => 140],
+        "模考ID" => ["fixed" => "left", "width" => 80, "unresize" => true],
+        "科目"   => ["minWidth" => 140],
         "微信昵称",
         "总分",
         "得分",
@@ -72,8 +72,12 @@ foreach ($list as $exam) {
     ?>
     <tr>
         <td><?= $exam->id ?></td>
-        <td><?= $exam->type->name ?></td>
-        <td><?= $exam->user->nickname ?></td>
+        <td><a class="clear"
+               href="<?= Url::createLink('/question/exam', ['tid' => $exam->tid, 'uid' => $uid]) ?>"><?= $exam->type->name ?></a>
+        </td>
+        <td><a class="clear"
+               href="<?= Url::createLink('/question/exam', ['tid' => $tid, 'uid' => $exam->uid]) ?>"><?= $exam->user->nickname ?></a>
+        </td>
         <?php
         $info = json_decode($exam->detail, true);
         $typeInfo = $exam->type->setting();
