@@ -39,7 +39,7 @@ echo FormItemWidget::widget([
     "type"    => "number",
     "options" => [
         "name"        => "uid",
-        "value"       => $uid,
+        "value"       => $uid ?: null,
         "placeholder" => "用户ID",
     ]
 ]);
@@ -58,9 +58,9 @@ TableWidget::begin([
         "错误数量",
         "耗时",
         "开始时间",
-        "科目平均分"  => ["fixed" => "right", "width" => 80, "unresize" => true],
-        "科目模考次数" => ["fixed" => "right", "width" => 80, "unresize" => true],
-        "科目最高分"  => ["fixed" => "right", "width" => 80, "unresize" => true]
+        "平均分"  => ["fixed" => "right", "width" => 80, "unresize" => true],
+        "模考次数" => ["fixed" => "right", "width" => 80, "unresize" => true],
+        "最高分"  => ["fixed" => "right", "width" => 80, "unresize" => true]
     ],
     "height"       => 500,
     "cellMinWidth" => 60,
