@@ -331,7 +331,6 @@ FormWidget::end();
                                     <th>商户退款单号</th>
                                     <th>微信退款单号</th>
                                     <th>退款渠道</th>
-                                    <th>申请退款金额</th>
                                     <th>退款金额</th>
                                     <th>退款状态</th>
                                     <th>退款成功时间</th>
@@ -344,9 +343,8 @@ FormWidget::end();
                                         <td><?= $refund['data'][ 'refund_id_' . $i ] ?></td>
                                         <td><?= \yii\helpers\ArrayHelper::getValue($way, $refund['data'][ 'refund_channel_' . $i ], "未知渠道") ?></td>
                                         <td><?= $refund['data'][ 'refund_fee_' . $i ] ?></td>
-                                        <td><?= $refund['data'][ 'settlement_refund_fee_' . $i ] ?></td>
                                         <td><?= \yii\helpers\ArrayHelper::getValue($status, $refund['data'][ 'refund_status_' . $i ], "未知状态") ?></td>
-                                        <td><?= $refund['data'][ 'refund_success_time_' . $i ] ?></td>
+                                        <td><?= \yii\helpers\ArrayHelper::getValue($refund['data'], 'refund_success_time_' . $i, "") ?></td>
                                     </tr>
                                 <?php endfor; ?>
                                 </tbody>
