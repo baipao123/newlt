@@ -104,6 +104,8 @@ class OrderController extends BaseController
         $res = $order->refund($price);
         if ($res === false)
             return $this->alert(WxPay::getInstance()->getError("微信退款失败"));
+        $order->status = Status::IS_REFUND;
+        $order->save();
         return $this->alert("微信退款成功", "success");
     }
 
