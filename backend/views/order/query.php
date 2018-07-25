@@ -319,7 +319,7 @@ FormWidget::end();
                     </tr>
                     <tr>
                         <td>订单总退款次数</td>
-                        <td><?= $refund['data']['total_refund_count'] ?></td>
+                        <td><?= $refund['data']['refund_count'] ?></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -338,7 +338,7 @@ FormWidget::end();
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php for ($i = 0; $i < $refund['data']['total_refund_count']; $i++): ?>
+                                <?php for ($i = 0; $i < $refund['data']['refund_count']; $i++): ?>
                                     <tr>
                                         <td><?= $refund['data'][ 'out_refund_no_' . $i ] ?></td>
                                         <td><?= $refund['data'][ 'refund_id_' . $i ] ?></td>
