@@ -314,7 +314,7 @@ FormWidget::end();
                     </tr>
                     <tr>
                         <td>订单总金额</td>
-                        <td><?= $refund['data']['total_fee'] ?></td>
+                        <td><?= $refund['data']['total_fee'] / 100 ?>元</td>
                         <td></td>
                     </tr>
                     <tr>
@@ -342,7 +342,7 @@ FormWidget::end();
                                         <td><?= $refund['data'][ 'out_refund_no_' . $i ] ?></td>
                                         <td><?= $refund['data'][ 'refund_id_' . $i ] ?></td>
                                         <td><?= \yii\helpers\ArrayHelper::getValue($way, $refund['data'][ 'refund_channel_' . $i ], "未知渠道") ?></td>
-                                        <td><?= $refund['data'][ 'refund_fee_' . $i ] ?></td>
+                                        <td><?= $refund['data'][ 'refund_fee_' . $i ] / 100 ?>元</td>
                                         <td><?= \yii\helpers\ArrayHelper::getValue($status, $refund['data'][ 'refund_status_' . $i ], "未知状态") ?></td>
                                         <td><?= \yii\helpers\ArrayHelper::getValue($refund['data'], 'refund_success_time_' . $i, "") ?></td>
                                     </tr>
