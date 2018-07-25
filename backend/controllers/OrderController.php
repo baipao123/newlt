@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use common\models\OrderRefundRecord;
 use common\tools\Status;
 use common\tools\WxPay;
 use yii;
@@ -65,7 +66,8 @@ class OrderController extends BaseController
                 "out_trade_no" => $out_trade_no,
                 "trade_no"     => $trade_no,
                 "order"        => null,
-                "data"         => false
+                "data"         => false,
+                "refund"       => false,
             ]);
         $order = Order::findOne($params);
         if (empty($out_trade_no) && empty($trade_no)) {
@@ -75,17 +77,33 @@ class OrderController extends BaseController
                     "out_trade_no" => $out_trade_no,
                     "trade_no"     => $trade_no,
                     "order"        => null,
-                    "data"         => false
+                    "data"         => false,
+                    "refund"       => false,
                 ]);
             $out_trade_no = $order->out_trade_no;
         }
         $query = WxPay::getInstance()->Query($out_trade_no, $trade_no);
+        $refund = false;
+        if ($order && $order->status == Status::IS_REFUND) {
+            $refundData = WxPay::getInstance()->RefundQuery($out_trade_no, $trade_no);
+            $records = OrderRefundRecord::find()->where(["out_trade_no" => $order->out_trade_no])->all();
+            /* @var $records OrderRefundRecord[] */
+            $recordsIndex = [];
+            foreach ($records as $r) {
+                $recordsIndex[ $r->refund_no ][] = $r;
+            }
+            $refund = [
+                "data"    => $refundData,
+                "records" => $recordsIndex
+            ];
+        }
         return $this->render("query", [
             "oid"          => $oid,
             "out_trade_no" => $out_trade_no,
             "trade_no"     => $trade_no,
             "order"        => $order,
-            "data"         => $query
+            "data"         => $query,
+            "refund"       => $refund,
         ]);
     }
 

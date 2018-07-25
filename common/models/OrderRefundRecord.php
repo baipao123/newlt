@@ -8,8 +8,13 @@
 
 namespace common\models;
 
-
+/**
+ * @property Admin $admin
+ **/
 class OrderRefundRecord extends \common\models\base\OrderRefundRecord
 {
 
+    public function getAdmin() {
+        return $this->hasOne(Admin::className(), ["id" => "admin_id"]);
+    }
 }

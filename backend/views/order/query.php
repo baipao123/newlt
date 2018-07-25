@@ -9,6 +9,7 @@ use common\models\Order;
 use common\tools\Status;
 use layuiAdm\widgets\FormWidget;
 use layuiAdm\widgets\FormItemWidget;
+use common\models\OrderRefundRecord;
 
 /* @var $order Order */
 
@@ -112,14 +113,14 @@ FormWidget::end();
                     </td>
                 </tr>
                 <?php if ($order->status == Status::IS_PAY): ?>
-                <tr>
-                    <td colspan="2">
-                        <button class="layui-btn layui-btn-warm"
-                                onclick="refund(<?= $order->id ?>,<?= $order->price / 100 ?>)">
-                            退款
-                        </button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button class="layui-btn layui-btn-warm"
+                                    onclick="refund(<?= $order->id ?>,<?= $order->price / 100 ?>)">
+                                退款
+                            </button>
+                        </td>
+                    </tr>
                 <?php endif; ?>
             </table>
 
@@ -224,4 +225,140 @@ FormWidget::end();
         <?php endif; ?>
     </div>
 
+    <?php if ($refund): ?>
+        <div class="layui-col-xs12">
+            <?php if (!empty($refund['records'])): ?>
+                <blockquote class="layui-elem-quote" style="text-align: center;">
+                    系统退款记录
+                </blockquote>
+                <table class="layui-table" lay-skin="line">
+                    <thead>
+                    <tr>
+                        <th>退款单号</th>
+                        <th>退款记录</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($refund['records'] as $refund_no => $records): ?>
+                        <tr>
+                            <td><?= $refund_no ?></td>
+                            <td>
+                                <table class="layui-table" lay-skin="line">
+                                    <thead>
+                                    <tr>
+                                        <th>退款金额</th>
+                                        <th>操作账户</th>
+                                        <th>操作时间</th>
+                                        <th>结果</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php /* @var $records OrderRefundRecord[] */ ?>
+                                    <?php foreach ($records as $record): ?>
+                                        <tr>
+                                            <td><?= $record->cash / 100 ?>元</td>
+                                            <td><?= $record->admin->username ?></td>
+                                            <td><?= date("Y-m-d H:i:s", $record->created_at) ?></td>
+                                            <td>
+                                                <?php if ($record->result == Status::SUCCESS): ?>
+                                                    <span class="layui-btn layui-btn-xs layui-btn-normal">成功</span>
+                                                <?php else: ?>
+                                                    <span class="layui-btn layui-btn-xs layui-btn-danger">失败</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tbody>
+                </table>
+            <?php else: ?>
+                <blockquote class="layui-elem-quote" style="text-align: center;">
+                    在系统中未查询到退款记录
+                </blockquote>
+            <?php endif; ?>
+        </div>
+
+        <div class="layui-col-xs12">
+            <?php if ($refund['data']): ?>
+                <?php
+                $status = [
+                    "SUCCESS"     => "退款成功",
+                    "REFUNDCLOSE" => "退款关闭",
+                    "PROCESSING"  => "退款处理中",
+                    "CHANGE"      => "退款异常，退款到银行发现用户的卡作废或者冻结了，导致原路退款银行卡失败，可前往商户平台（pay.weixin.qq.com）-交易中心，手动处理此笔退款"
+                ];
+                $way = [
+                    "ORIGINAL"       => "原路退款",
+                    "BALANCE"        => "退回到余额",
+                    "OTHER_BALANCE"  => "原账户异常退到其他余额账户",
+                    "OTHER_BANKCARD" => "原银行卡异常退到其他银行卡"
+                ];
+                ?>
+                <blockquote class="layui-elem-quote" style="text-align: center;">
+                    微信退款记录
+                </blockquote>
+                <table class="layui-table" lay-skin="line">
+                    <tr>
+                        <td>商户订单号</td>
+                        <td><?= $refund['data']['out_trade_no'] ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>微信流水号</td>
+                        <td><?= $refund['data']['transaction_id'] ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>订单总金额</td>
+                        <td><?= $refund['data']['total_fee'] ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>订单总退款次数</td>
+                        <td><?= $refund['data']['total_refund_count'] ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>退款记录</td>
+                        <td colspan="2">
+                            <table class="layui-table" lay-skin="line">
+                                <thead>
+                                <tr>
+                                    <th>商户退款单号</th>
+                                    <th>微信退款单号</th>
+                                    <th>退款渠道</th>
+                                    <th>申请退款金额</th>
+                                    <th>退款金额</th>
+                                    <th>退款状态</th>
+                                    <th>退款成功时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php for ($i = 0; $i < $refund['data']['total_refund_count']; $i++): ?>
+                                    <tr>
+                                        <td><?= $refund['data'][ 'out_refund_no_' . $i ] ?></td>
+                                        <td><?= $refund['data'][ 'refund_id_' . $i ] ?></td>
+                                        <td><?= \yii\helpers\ArrayHelper::getValue($way, $refund['data'][ 'refund_channel_' . $i ], "未知渠道") ?></td>
+                                        <td><?= $refund['data'][ 'refund_fee_' . $i ] ?></td>
+                                        <td><?= $refund['data'][ 'settlement_refund_fee_' . $i ] ?></td>
+                                        <td><?= \yii\helpers\ArrayHelper::getValue($status, $refund['data'][ 'refund_status_' . $i ], "未知状态") ?></td>
+                                        <td><?= $refund['data'][ 'refund_success_time_' . $i ] ?></td>
+                                    </tr>
+                                <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            <?php else: ?>
+                <blockquote class="layui-elem-quote" style="text-align: center;">
+                    在微信中未查询到退款记录
+                </blockquote>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
