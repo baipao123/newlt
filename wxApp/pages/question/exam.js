@@ -274,8 +274,10 @@ Page({
             return true;
         that.data.exam.status = 1
         app.post("exam/finish", {eid: that.data.eid}, function (res) {
-            wx.redirectTo({
-                url: "/pages/question/exam?eid=" + that.data.eid + "&all=1"
+            app.alert("交卷成功，得分：" + res.exam.score + '分', function () {
+                wx.redirectTo({
+                    url: "/pages/question/exam?eid=" + that.data.eid + "&all=1"
+                })
             })
         })
     },

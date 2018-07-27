@@ -97,6 +97,10 @@ Page({
             app.toast("您尚未开通此科目，请在下方支付并开通", "none")
             return false
         }
+        if (!tid) {
+            app.toast("请选择分类", "none")
+            return false
+        }
         app.get("exam/last", {tid: tid}, function (re) {
             if (re.exam.eid) {
                 let time = parseInt((new Date()).getTime() / 1000),

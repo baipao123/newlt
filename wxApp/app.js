@@ -189,6 +189,18 @@ App({
             complete: callback
         })
     },
+    alert: (content, callback, title, buttonText) => {
+        wx.showModal({
+            title: title == undefined ? "提示" : title,
+            content: content,
+            success: res => {
+                if (typeof success == "function")
+                    success()
+            },
+            confirmText: confirmText == undefined ? "确定" : confirmText,
+            showCancel: false
+        })
+    },
     confirm: (content, success, fail, title, confirmText, cancelText) => {
         wx.showModal({
             title: title == undefined ? "提示" : title,

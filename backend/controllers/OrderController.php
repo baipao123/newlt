@@ -128,6 +128,6 @@ class OrderController extends BaseController
     }
 
     public function actionWxRefund($out_trade_no, $trade_no, $price) {
-
+//        $price = (int)strval((string)number_format($price, 2, '.', '') * 100);
     }
 }
