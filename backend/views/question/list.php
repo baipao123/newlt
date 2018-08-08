@@ -49,7 +49,7 @@ echo FormItemWidget::widget([
 echo FormItemWidget::widget([
     "label"   => "题干",
     "options" => [
-        "name"  => "tid",
+        "name"  => "title",
         "value" => $title,
     ]
 ]);
