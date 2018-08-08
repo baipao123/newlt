@@ -202,7 +202,7 @@ class ExamController extends BaseController
         $info = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("sum(score) as score,count(*) as passNum")->asArray()->one();
         $detail = json_decode($exam->detail, true);
         $detail['failNum'] = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("count(*)")->scalar();
-        $exam->score = $info['score'];
+        $exam->score = intval($info['score']);
         $exam->status = UserExam::ExamFinish;
         $exam->finish_at = time();
         $exam->detail = json_encode(ArrayHelper::merge($info, $detail));

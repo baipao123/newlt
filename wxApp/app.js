@@ -194,10 +194,10 @@ App({
             title: title == undefined ? "提示" : title,
             content: content,
             success: res => {
-                if (typeof success == "function")
-                    success()
+                if (typeof callback == "function")
+                    callback()
             },
-            confirmText: confirmText == undefined ? "确定" : confirmText,
+            confirmText: buttonText == undefined ? "确定" : buttonText,
             showCancel: false
         })
     },
