@@ -46,6 +46,14 @@ echo FormItemWidget::widget([
     ]
 ]);
 
+echo FormItemWidget::widget([
+    "label"   => "题干",
+    "options" => [
+        "name"  => "tid",
+        "value" => $title,
+    ]
+]);
+
 FormWidget::end();
 ?>
 <button class="layui-btn layui-btn-danger"
@@ -59,7 +67,7 @@ TableWidget::begin([
         "题目ID" => ["fixed" => "left", "width" => 80, "unresize" => true],
         "所属科目" => ['minWidth' => 110],
         "题型"   => ['width' => 75],
-        "标题"   => ["minWidth" => 400],
+        "题干"   => ["minWidth" => 400],
         "选项"   => ["minWidth" => 400],
         "答案",
         "解析"   => ["minWidth" => 100],
