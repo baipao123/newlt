@@ -238,3 +238,12 @@ button.low{
 .weui-loading.big.hidden {
     display: none;
 }
+
+.weui-article__title{
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: .5em;
+}
+.weui-article__p{
+    text-indent:2em;
+}

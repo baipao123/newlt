@@ -8,7 +8,9 @@
     "pages/question/train",
     "pages/order/info",
     "pages/order/record",
-    "pages/common/webView"
+    "pages/common/webView",
+    "pages/common/note",
+    "pages/common/question"
   ],
   "tabBar": {
     "list": [

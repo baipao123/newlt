@@ -1,0 +1,23 @@
+<view class="weui-article bg-white">
+    <view class="weui-article__h1">常见问题</view>
+    <view class="weui-article__section">
+        <view class="weui-article__p">
+            企业直招无中介，实地验岗更放心！
+        </view>
+        <view class="weui-article__p">
+            有准兼职是江苏省大学生就业力发展中心面向在校大学生推出的兼职信息服务平台。
+        </view>
+        <view class="weui-article__p">
+            大学生的职业，就业力的事业。
+        </view>
+        <view class="weui-article__p">
+            “有准兼职”目前为试运行阶段，如您在使用过程中有任何疑问，请随时与我们联系。
+        </view>
+        <view class="weui-article__p">
+            您可以拨打江苏省大学生就业力发展中心的客服电话：<view class="weui-agree__link" bindtap="call" data-phone="0519—89591580">0519—89591580</view>
+        </view>
+        <view class="weui-article__p">
+            或与我们的客服联系：<view class="weui-agree__link" bindtap="call" data-phone="17351591580">17351591580</view>
+        </view>
+    </view>
+</view>
