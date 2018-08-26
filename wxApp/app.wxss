@@ -245,5 +245,8 @@ button.low{
     margin-bottom: .5em;
 }
 .weui-article__p{
-    text-indent:2em;
+    text-indent: 2em;
+}
+.weui-article__p > .weui-article__p {
+    text-indent: 3em;
 }

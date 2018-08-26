@@ -1,0 +1,19 @@
+<view class="weui-article bg-white">
+    <view class="weui-article__h1">联系我们</view>
+    <view class="weui-article__section">
+        <view class="weui-article__p">
+            www.jiuyeli.org
+        </view>
+        <view class="weui-article__p">
+            客服手机:<view class="weui-agree__link" bindtap="call" data-phone="17351591580">17351591580</view>
+        </view>
+        <view class="weui-article__p">
+            客服座机：<view class="weui-agree__link" bindtap="call" data-phone="0519—89591580">0519—89591580</view>
+        </view>
+        <view class="weui-article__p">
+            领图职业司机公众号：
+        </view>
+        <image src="{{domain}}static/mpQrCode.png" data-url="{{domain}}static/mpQrCode.png" class="logo block-auto" bindtouchstart="preview"> </image>
+
+    </view>
+</view>

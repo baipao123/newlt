@@ -1,23 +1,21 @@
 <view class="weui-article bg-white">
     <view class="weui-article__h1">常见问题</view>
+    <view class="weui-article__title">1、问：我现在开通一天的话有效期是到今天晚上12点吗？</view>
     <view class="weui-article__section">
         <view class="weui-article__p">
-            企业直招无中介，实地验岗更放心！
+            答：你好，有效期从付费开始计时，1天即24小时，3天即72小时。比如您是今天上午8点付费开通一天，那么有效期就是到明天上午8点。
         </view>
+    </view>
+    <view class="weui-article__title">2、问：领途易考上面的题目就是考试题目吗?</view>
+    <view class="weui-article__section">
         <view class="weui-article__p">
-            有准兼职是江苏省大学生就业力发展中心面向在校大学生推出的兼职信息服务平台。
+            答：你好，领途易考的题目与书本上保持一致，方便您利用空闲时间练习，提高考试通过率。
         </view>
+    </view>
+    <view class="weui-article__title">3、问：我没有时间精力看书做练习，有其他方法可以让我通过考试吗？</view>
+    <view class="weui-article__section">
         <view class="weui-article__p">
-            大学生的职业，就业力的事业。
-        </view>
-        <view class="weui-article__p">
-            “有准兼职”目前为试运行阶段，如您在使用过程中有任何疑问，请随时与我们联系。
-        </view>
-        <view class="weui-article__p">
-            您可以拨打江苏省大学生就业力发展中心的客服电话：<view class="weui-agree__link" bindtap="call" data-phone="0519—89591580">0519—89591580</view>
-        </view>
-        <view class="weui-article__p">
-            或与我们的客服联系：<view class="weui-agree__link" bindtap="call" data-phone="17351591580">17351591580</view>
+            答：你好，考试是公平公正的，要想通过考试，只有自己多看多练，没有其他捷径哦。
         </view>
     </view>
 </view>
