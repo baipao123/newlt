@@ -5,7 +5,7 @@
             www.jiuyeli.org
         </view>
         <view class="weui-article__p">
-            客服手机:<view class="weui-agree__link" bindtap="call" data-phone="17351591580">17351591580</view>
+            客服手机：<view class="weui-agree__link" bindtap="call" data-phone="17351591580">17351591580</view>
         </view>
         <view class="weui-article__p">
             客服座机：<view class="weui-agree__link" bindtap="call" data-phone="0519—89591580">0519—89591580</view>
