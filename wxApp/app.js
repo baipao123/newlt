@@ -13,7 +13,7 @@ App({
     globalData: {
         user: null,
         apiDomain: "https://newlt.justyoujob.com/",
-        qiNiuDomain: 'http://img.newlt.justyoujob.com/',
+        qiNiuDomain: 'https://imgs.newlt.justyoujob.com/',
         systemInfo: null,
         logining: false,
     },
