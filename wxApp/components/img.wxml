@@ -1,5 +1,7 @@
-<view class="image weui-flex" style="{{width>0 ? 'width:'+width+'px':''}}" wx:if="{{urls.length>0}}">
-    <view class="img weui-flex__item-auto"
-          style="padding-bottom:{{height}}%;background:url({{domain+item+ext}}) no-repeat;background-size:100%;"
-          wx:for="{{urls}}" wx:key="key-url"/>
+<view class="img-view weui-flex" style="{{width>0 ? 'width:'+width+'px':''}}" wx:if="{{urls.length>0}}">
+    <view class="img-box weui-flex__item-auto"
+          style="padding-bottom:{{height}}%;"
+          wx:for="{{urls}}" wx:key="key-url">
+        <image class="img" src="{{domain+item+ext}}"/>
+    </view>
 </view>

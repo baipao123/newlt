@@ -3,7 +3,7 @@
     </slider>
     <view class="bg-white weui-flex index-icon-list" wx:if="{{types.length>0}}">
         <navigator url="/pages/question/index?id={{item.tid}}" class="weui-flex__item" wx:for="{{types}}" wx:key="type">
-            <view class="index-icon" style="background-image:url({{domain}}{{item.icon}})"/>
+            <img class="index-icon" src="{{item.icon}}"/>
             <view class="text-m a-c">{{item.name}}</view>
         </navigator>
     </view>
