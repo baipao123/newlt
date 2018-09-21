@@ -43,8 +43,8 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'tid', 'pid', 'price', 'hour', 'payat', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['openId', 'formId', 'title', 'cover', 'prepay_id', 'paytime'], 'string', 'max' => 255],
-            [['out_trade_no', 'trade_no'], 'string', 'max' => 32],
+            [['openId', 'formId', 'title', 'cover', 'prepay_id', 'paytime', 'trade_no'], 'string', 'max' => 255],
+            [['out_trade_no'], 'string', 'max' => 32],
             [['out_trade_no'], 'unique'],
         ];
     }
