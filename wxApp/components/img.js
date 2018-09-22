@@ -83,5 +83,8 @@ Component({
                 urls: urls
             })
         },
+        errorLog:function (e) {
+            console.log(e)
+        }
     }
 })
