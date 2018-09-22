@@ -91,7 +91,7 @@ class QuestionType extends \common\models\base\QuestionType
         return [
             "tid"    => $this->id,
             "name"   => $this->name,
-            "icon"   => $this->icon(),
+            "icon"   => $this->icon,
             "status" => $this->status
         ];
     }
