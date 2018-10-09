@@ -1,6 +1,6 @@
 {
     "window": {
-        "navigationBarTitleText": "领途司机"
+        "navigationBarTitleText": "领途易考"
     },
     "usingComponents": {
         "slider": "/components/slider",

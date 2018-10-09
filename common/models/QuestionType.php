@@ -80,7 +80,7 @@ class QuestionType extends \common\models\base\QuestionType
      * @return QuestionType[]
      */
     public static function getList($tid = 0, $status = Status::PASS) {
-        $query = self::find()->where(["parentId" => $tid])->orderBy("sort desc");
+        $query = self::find()->where(["parentId" => $tid])->andWhere(["<>","status",Status::DELETE])->orderBy("sort desc");
         if ($status > 0)
             $query->andWhere(["status" => $status]);
         $types = $query->all();

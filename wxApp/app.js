@@ -12,8 +12,8 @@ App({
     },
     globalData: {
         user: null,
-        apiDomain: "https://newlt.justyoujob.com/",
-        qiNiuDomain: 'https://imgs.newlt.justyoujob.com/',
+        apiDomain: "https://demo.wx-dk.cn/",
+        qiNiuDomain: 'http://pic.yikao.jiuyeli.org/',
         systemInfo: null,
         logining: false,
     },
