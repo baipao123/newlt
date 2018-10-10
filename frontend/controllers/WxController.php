@@ -23,7 +23,9 @@ class WxController extends Controller
         $xml = isset($GLOBALS["HTTP_RAW_POST_DATA"]) ? $GLOBALS["HTTP_RAW_POST_DATA"] : file_get_contents("php://input");
         $wxPay = new WxPay;
         $params = $wxPay->FromXml($xml);
-        $out_trade_no = ArrayHelper::getValue($params, "out_trade_no");
+        $out_trade_no = ArrayHelper::getValue($params, "out_trade_no","");
+        if(empty($out_trade_no))
+            return false;
         $record = new OrderNotify;
         $record->params = json_encode($params);
         $record->out_trade_no = $out_trade_no;
