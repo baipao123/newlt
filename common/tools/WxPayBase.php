@@ -152,10 +152,16 @@ class WxPayBase
     public function FromXml($xml) {
         if (!$xml || is_array($xml))
             return false;
+        $xml_parser = xml_parser_create();
+        if(!xml_parse($xml_parser,$xml,true)) {
+            xml_parser_free($xml_parser);
+            return false;
+        }
         //将XML转为array
         //禁止引用外部xml实体
         libxml_disable_entity_loader(true);
         $values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        xml_parser_free($xml_parser);
         return $values;
     }
 
