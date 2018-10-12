@@ -87,6 +87,7 @@ class UserExam extends \common\models\base\UserExam
             for (intval($offset); $offset <= $max; $offset++)
                 $data[] = (int)$ids[ $type ][ $offset - 1 ];
         }
+        unset($ids);// 内存容易超
         if (count($data) < $limit) {
             $_ids = $this->getQIdsByOffset($type + 1, 1, $limit - count($data));
             return array_merge($data, $_ids);

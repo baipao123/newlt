@@ -74,8 +74,11 @@ App({
                         }
                     } else if (typeof fail == 'function')
                         fail(res.data)
-                } else
+                } else {
                     that.toast("500,服务器解析异常")
+                    console.log(url)
+                    console.log(params)
+                }
             },
             fail: (res) => {
                 wx.hideLoading()
