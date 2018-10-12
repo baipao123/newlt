@@ -162,10 +162,7 @@ Page({
         let that = this,
             option = e.currentTarget.dataset.option,
             qNum = that.data.qNum,
-            type = that.data.type,
-            offset = that.data.offset,
-            question = that.data.question,
-            uA = question.user.uA ? question.user.uA.split('') : []
+            type = that.data.type
         if (that.data.exam.status != 0)
             return true;
         if (type != 3) {
@@ -176,9 +173,16 @@ Page({
             }
             that.answer(data)
         } else {
-            if (uA.pop(option) == '')
+            let offset = that.data.offset,
+                question = that.data.question,
+                uA = question.user.uA ? question.user.uA.split('') : [],
+                index = uA.indexOf(option)
+            if (index > -1)
+                uA.splice(index, 1)
+            else
                 uA.push(option)
-            userAnswer = uA.join("")
+            uA.sort()
+            let userAnswer = uA.join("")
             console.log(userAnswer)
             that.setData({
                 "question.user.uA": userAnswer

@@ -32,7 +32,7 @@
 
         <view class="answer" wx:if="{{result.answer}}">
             <view class="weui-form-preview">
-                <view class="weui-form-preview__bd" style="line-height:.9em">
+                <view class="weui-form-preview__bd" style="line-height:1.5em">
                     <view class="weui-form-preview__item">
                         <view class="weui-form-preview__label">正确答案</view>
                         <view class="weui-form-preview__value text-green">{{result.answer}}</view>

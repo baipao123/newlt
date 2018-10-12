@@ -111,8 +111,9 @@ Component({
                     answer: [option]
                 })
             } else {
-                if (answer.indexOf(option) > -1)
-                    answer.pop(option)
+                let index = answer.indexOf(option)
+                if (index > -1)
+                    answer.splice(index, 1)
                 else
                     answer.push(option)
                 that.setData({
