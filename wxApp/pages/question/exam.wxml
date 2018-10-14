@@ -44,8 +44,6 @@
                     </view>
                 </view>
 
-                <view wx:if="{{question.type == 3}}" bindtap="">提交答案</view>
-
                 <view class="answer" wx:if="{{question.answer}}">
                     <view class="weui-form-preview">
                         <view class="weui-form-preview__bd" style="line-height:.9em">
@@ -73,7 +71,7 @@
                     <view class="weui-flex__item-auto prev" bindtap="prev">
                         <span class="myIcon icon-left" wx:if="{{!firstOffset}}">上一题</span>
                     </view>
-                    <view class="weui-flex__item-auto" bindtap="goAnswer">
+                    <view class="weui-flex__item-auto a-c" bindtap="goAnswer">
                         <span class="myIcon icon-pass-cycle" wx:if="{{type == 3}}">提交答案</span>
                     </view>
                     <view class="weui-flex__item-auto next" bindtap="next">

@@ -108,15 +108,15 @@ Page({
                 app.confirm("您上次的模考还有 " + timeStr + " 结束，需要继续考试吗？", function () {
                     app.turnPage("question/exam?eid=" + re.exam.eid + '&all=1')
                 }, function () {
-                    that.generateExam()
+                    that.generateExam(tid)
                 }, "提示", "继续考试", "重新开始")
             } else {
-                that.generateExam()
+                that.generateExam(tid)
             }
         })
     },
-    generateExam: function () {
-        app.post("exam/exam", {}, function (res) {
+    generateExam: function (tid) {
+        app.post("exam/exam", {tid:tid}, function (res) {
             if (res.eid && res.eid > 0)
                 app.turnPage("question/exam?eid=" + res.eid)
             else
