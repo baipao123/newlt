@@ -21,11 +21,14 @@ class Question extends \common\models\base\Question
     const TypeSelect = 2;
     const TypeMulti = 3;
     const TypeBlank = 4;
+    const TypeMultiQuestion = 5;
 
     const TypeAll = [
         Question::TypeJudge  => "判断题",
         Question::TypeSelect => "单选题",
-        Question::TypeMulti  => "多选题"
+        Question::TypeMulti  => "多选题",
+        Question::TypeBlank  => "填空题",
+//        Question::TypeMultiQuestion => "多个答案的题目"
     ];
 
     public function afterSave($insert, $changedAttributes) {
@@ -64,6 +67,8 @@ class Question extends \common\models\base\Question
                     "img"    => ""
                 ]
             ];
+        if($this->type == self::TypeBlank)
+            return [];
         $data = [];
         if (!empty($this->a) || !empty($this->aImg))
             $data[] = [

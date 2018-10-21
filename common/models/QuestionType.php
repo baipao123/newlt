@@ -25,15 +25,15 @@ class QuestionType extends \common\models\base\QuestionType
         $cacheKey = "Question-Type-All";
         if (!$refresh && Yii::$app->cache->exists($cacheKey))
             return Yii::$app->cache->get($cacheKey);
-        $types = QuestionType::find()->where(["status" => Status::PASS])->orderBy("parentId ASC,sort DESC,id ASC")->all();
+        $types = QuestionType::find()->where(["status" => Status::PASS,"parentId"=>0])->orderBy("tid ASC,sort DESC,id ASC")->all();
         /* @var $types self[] */
         $data = [];
         foreach ($types as $type) {
-            if ($type->parentId == 0) {
+            if ($type->tid == 0) {
                 $data[ $type->id ]['tid'] = $type->id;
                 $data[ $type->id ]['name'] = $type->name;
             } else
-                $data[ $type->parentId ]['child'][] = [
+                $data[ $type->tid ]['child'][] = [
                     "tid"  => $type->id,
                     "name" => $type->name
                 ];
@@ -80,7 +80,7 @@ class QuestionType extends \common\models\base\QuestionType
      * @return QuestionType[]
      */
     public static function getList($tid = 0, $status = Status::PASS) {
-        $query = self::find()->where(["parentId" => $tid])->andWhere(["<>","status",Status::DELETE])->orderBy("sort desc");
+        $query = self::find()->where(["tid" => $tid,"parentId"=>0])->andWhere(["<>","status",Status::DELETE])->orderBy("sort desc");
         if ($status > 0)
             $query->andWhere(["status" => $status]);
         $types = $query->all();

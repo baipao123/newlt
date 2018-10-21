@@ -8,13 +8,17 @@ use Yii;
  * This is the model class for table "question_type".
  *
  * @property int $id
+ * @property int $tid
  * @property int $parentId
  * @property string $name
  * @property string $icon
  * @property int $status
- * @property string $setting
- * @property int $created_at
  * @property int $sort
+ * @property string $description
+ * @property int $examNum
+ * @property int $score
+ * @property int $time
+ * @property int $created_at
  * @property int $updated_at
  */
 class QuestionType extends \yii\db\ActiveRecord
@@ -33,9 +37,9 @@ class QuestionType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parentId', 'created_at', 'status', 'sort', 'updated_at'], 'integer'],
-            [['name', 'icon'], 'string', 'max' => 255],
-            [['setting'], 'string', 'max' => 2000],
+            [['tid', 'parentId', 'sort', 'examNum', 'score', 'time', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'icon', 'description'], 'string', 'max' => 255],
+            [['status'], 'string', 'max' => 1],
         ];
     }
 
@@ -46,13 +50,17 @@ class QuestionType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'tid' => 'Tid',
             'parentId' => 'Parent ID',
             'name' => 'Name',
             'icon' => 'Icon',
             'status' => 'Status',
-            'setting' => 'Setting',
-            'created_at' => 'Created At',
             'sort' => 'Sort',
+            'description' => 'Description',
+            'examNum' => 'Exam Num',
+            'score' => 'Score',
+            'time' => 'Time',
+            'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
