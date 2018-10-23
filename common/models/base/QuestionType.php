@@ -15,8 +15,10 @@ use Yii;
  * @property int $status
  * @property int $sort
  * @property string $description
+ * @property int $totalNum
  * @property int $examNum
  * @property int $score
+ * @property int $passScore
  * @property int $time
  * @property int $created_at
  * @property int $updated_at
@@ -37,7 +39,7 @@ class QuestionType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'parentId', 'sort', 'examNum', 'score', 'time', 'created_at', 'updated_at'], 'integer'],
+            [['tid', 'parentId', 'sort', 'totalNum', 'examNum', 'score', 'passScore', 'time', 'created_at', 'updated_at'], 'integer'],
             [['name', 'icon', 'description'], 'string', 'max' => 255],
             [['status'], 'string', 'max' => 1],
         ];
@@ -57,8 +59,10 @@ class QuestionType extends \yii\db\ActiveRecord
             'status' => 'Status',
             'sort' => 'Sort',
             'description' => 'Description',
+            'totalNum' => 'Total Num',
             'examNum' => 'Exam Num',
             'score' => 'Score',
+            'passScore' => 'Pass Score',
             'time' => 'Time',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

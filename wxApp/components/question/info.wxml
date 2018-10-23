@@ -1,0 +1,84 @@
+<view>
+    <view class="weui-loading big {{question.qid ? 'hidden' : ''}}"/>
+
+    <!-- title -->
+    <view class="title" wx:if="{{question.title}}">
+        <text space="nbsp">{{indexNum > 0 ? indexNum + '. ' : ''}}{{question.title}}</text>
+    </view>
+    <view class="attaches">
+        <img urls="{{question.attaches}}"/>
+    </view>
+
+    <!-- options -->
+    <view class="options weui-flex {{question.answer && question.answer != '' ? 'answer':''}}" wx:if="{{question.options.length>0 && question.type < 4}}">
+        <wxs src="./../../wxs/in.wxs" module="tools"/>
+        <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,userAnswer)  ? 'user-chose':''}} {{tools.inString(item.option,question.answer) ? 'system-chose' : '' }}" wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
+            <view class="option-title">
+                <view class="weui-agree__checkbox-icon" style="top:1rpx">
+                    <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{tools.inArray(item.option,userAnswer)}}"/>
+                </view>
+                <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
+            </view>
+            <view class="option-img" wx:if="{{item.img}}">
+                <img src="{{item.img}}"/>
+            </view>
+        </view>
+    </view>
+    <view class="option weui-flex" wx:if="{{question.options.length>0 && question.type ==5}}">
+        <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}}" wx:for="{{question.options}}" wx:key="key-option"  data-option="{{item.option}}">
+            <view class="option-title">
+                <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
+            </view>
+            <view class="option-img" wx:if="{{item.img}}">
+                <img src="{{item.img}}"/>
+            </view>
+        </view>
+    </view>
+    <view class="option weui-flex" wx:if="{{question.type == 4}}">
+        <view class="fillBlank">
+            {{indexNum > 0 ? indexNum + '. ' : ''}}
+            <input class="weui-input" bindblur="fillBlanks" />
+        </view>
+    </view>
+
+    <!-- subQuestions -->
+    <view class="children">
+        <info question="{{item}}" wx:for="{{questionChildren}}" type="{{type}}" isChild="{{true}}" bindChose="childChose" wx:for-index="idx" indexNum="{{idx + 1}}"/>
+    </view>
+
+
+    <!-- after Answer -->
+    <view class="answer" wx:if="{{question.answer}}">
+        <view class="weui-form-preview">
+            <view class="weui-form-preview__bd" style="line-height:1.5em">
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">正确答案</view>
+                    <view class="weui-form-preview__value text-green">{{question.answer}}</view>
+                </view>
+                <view class="weui-form-preview__item" wx:if="{{result.knowledge}}">
+                    <view class="weui-form-preview__label">知识点</view>
+                    <view class="weui-form-preview__value">{{question.knowledge}}</view>
+                </view>
+                <view class="weui-form-preview__item" wx:if="{{result.difficulty}}">
+                    <view class="weui-form-preview__label">难度</view>
+                    <view class="weui-form-preview__value">{{question.difficulty}}</view>
+                </view>
+                <view class="weui-form-preview__item" wx:if="{{result.description}}">
+                    <view class="weui-form-preview__label">答案解析</view>
+                    <view class="weui-form-preview__value">{{question.description}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <!-- answer button -->
+    <view class="weui-flex" wx:if="{{!isChild}}">
+        <view class="a-c weui-flex__item-auto" wx:if="{{question.type >= 3 && !question.answer}}">
+            <button type="primary" size="mini" plain="{{true}}" bindtap="goAnswer"><span class="myIcon icon-true">提交答案</span></button>
+        </view>
+        <view class="a-c weui-flex__item-auto" wx:if="{{type==1}}">
+            <button type="primary" size="mini" plain="{{true}}" bindtap="seeAnswer"><span class="myIcon icon-eye">查看答案</span></button>
+        </view>
+    </view>
+
+</view>

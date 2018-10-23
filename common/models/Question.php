@@ -32,10 +32,12 @@ class Question extends \common\models\base\Question
     ];
 
     public function afterSave($insert, $changedAttributes) {
-        if ($insert || isset($changedAttributes['status'])) {
+        if ($this->parentId == 0 && ($insert || isset($changedAttributes['status']))) {
             $type = $this->questionType;
-            if ($type && !empty($type->typeEnStr($this->type)))
-                $type->updateSetting([$type->typeEnStr($this->type) . "Total" => Question::find()->where(["tid" => $this->tid, "type" => $this->type, "status" => Status::PASS])->count()]);
+            if ($type) {
+                $type->totalNum = Question::find()->where(["tid" => $this->tid, "parentId" => 0, "status" => Status::PASS])->count();
+                $type->save();
+            }
         }
     }
 
@@ -43,17 +45,37 @@ class Question extends \common\models\base\Question
         return $this->hasOne(QuestionType::className(), ["id" => "tid"]);
     }
 
-    public function info() {
-        return [
-            "qid"      => $this->id,
-            "type"     => $this->type,
-            "title"    => $this->title,
-            "attaches" => Img::formatFromJson($this->attaches),
-            "options"  => $this->options(),
+    public function info($hasAnswer = false, $emptyOptionNum = 0) {
+        $options = $this->options($emptyOptionNum);
+        $data = [
+            "qid"        => $this->id,
+            "type"       => $this->type,
+            "title"      => $this->title,
+            "attaches"   => Img::formatFromJson($this->attaches),
+            "options"    => $options,
+            "children"   => $this->children($hasAnswer,count($options)),
+            "userAnswer" => ""
         ];
+        if($hasAnswer)
+            $data['answer'] = $this->answer();
+        return $data;
     }
 
-    public function options() {
+    public function children($hasAnswer = false, $emptyOptionNum = 0) {
+        if ($this->type != self::TypeMultiQuestion)
+            return [];
+        if ($this->parentId != 0)
+            return [];
+        $questions = Question::find()->where(["parentId" => $this->id, "status" => Status::PASS])->all();
+        /* @var $questions Question[] */
+        $data = [];
+        foreach ($questions as $question) {
+            $data[ $question->id ] = $question->info($hasAnswer, $emptyOptionNum);
+        }
+        return $data;
+    }
+
+    public function options($emptyOptionNum = 0) {
         if ($this->type == self::TypeJudge)
             return [
                 [
@@ -100,6 +122,16 @@ class Question extends \common\models\base\Question
                 "text"   => ltrim($this->e, "E."),
                 "img"    => $this->eImg,
             ];
+        if (count($data) < $emptyOptionNum) {
+            $arr = ["A", "B", "C", "D", "E"];
+            for ($i = count($data); $i < $emptyOptionNum; $i++) {
+                $data[] = [
+                    "option" => $arr[ $i ],
+                    "text"   => "",
+                    "img"    => ""
+                ];
+            }
+        }
         return $data;
     }
 

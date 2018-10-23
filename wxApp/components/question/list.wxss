@@ -1,0 +1,49 @@
+@import "../../app.wxss";
+
+.weui-flex__item-auto {
+    min-width:40px;
+}
+
+.container{
+    padding: 30rpx;
+}
+.body{
+    padding: 30rpx;
+    background: white;
+    font-size: 30rpx;
+    position: relative;
+    padding-bottom:0;
+}
+.header{
+    color: #337ab7;
+    font-weight:bold;
+    border-bottom: 1rpx solid #ddd;
+    padding-left: 5rpx;
+    padding-bottom: 10rpx;
+    font-size: 40rpx;
+    position: relative;
+}
+.header:after{
+    content: " ";
+    height: 4rpx;
+    width: 140rpx;
+    background: #337ab7;
+    position: absolute;
+    left:0;
+    bottom: -1rpx;
+}
+.title{
+    margin:20rpx auto;
+}
+
+.actions{
+    color: #1aad19;
+    font-size: 30rpx;
+    line-height: 80rpx;
+}
+.actions .see{
+    text-align:center;
+}
+.actions .next{
+    text-align:right;
+}

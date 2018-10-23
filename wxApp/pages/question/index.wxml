@@ -3,14 +3,18 @@
         <view class="countDown text text-red a-c">{{type.timeStr}}</view>
         <view class="a-c text-m title">学习考试</view>
         <view class="weui-flex bg-white padding-b">
-            <view class="weui-flex__item" bindtap="train">
+            <picker class="weui-flex__item" bindchange="train" range="{{typesData}}" range-key="name" wx:if="{{type.on}}">
+                <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
+                <view class="text-m a-c">全真练习</view>
+            </picker>
+            <view class="weui-flex__item" bindchange="tips" wx:else>
                 <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
                 <view class="text-m a-c">全真练习</view>
             </view>
-            <picker class="weui-flex__item" bindchange="exam" range="{{typesData}}" range-key="name" disabled="{{!type.on}}">
+            <view class="weui-flex__item" bindchange="exam">
                 <image class="icon" src="{{domain}}wxApp/mokao.png"/>
                 <view class="text-m a-c">全真模考</view>
-            </picker>
+            </view>
         </view>
     </view>
     <view class="prices" wx:if="{{!type.on}}">
@@ -44,5 +48,4 @@
     </view>
 
     <include src="/pages/common/footer.wxml"/>
-    <select range="{{typesData}}" rangeKey="{{['name','name']}}" childKey="{{['child']}}" value="{{pickerValue}}" valueKey="{{['tid','type']}}" show="{{picker}}" bindsubmit="goTrain" />
 </view>

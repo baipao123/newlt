@@ -5,11 +5,12 @@ namespace common\models\base;
 use Yii;
 
 /**
- * This is the model class for table "{{%question}}".
+ * This is the model class for table "question".
  *
  * @property int $id
  * @property int $tid
  * @property int $type
+ * @property int $parentId
  * @property string $title
  * @property string $attaches
  * @property string $a
@@ -26,9 +27,9 @@ use Yii;
  * @property string $description
  * @property string $knowledge
  * @property int $difficulty
- * @property int $view_num
  * @property int $success_num
  * @property int $fail_num
+ * @property int $view_num
  * @property int $status
  * @property int $created_at
  * @property int $updated_at
@@ -40,7 +41,7 @@ class Question extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%question}}';
+        return 'question';
     }
 
     /**
@@ -49,10 +50,12 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'type', 'difficulty','view_num', 'success_num', 'fail_num', 'status', 'created_at', 'updated_at'], 'integer'],
-            //            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'description', 'knowledge'], 'required'],
+            [['tid', 'parentId', 'difficulty', 'success_num', 'fail_num', 'view_num', 'created_at', 'updated_at'], 'integer'],
+//            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'required'],
             [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'string'],
+            [['type'], 'string', 'max' => 3],
             [['answer'], 'string', 'max' => 255],
+            [['status'], 'string', 'max' => 1],
         ];
     }
 
@@ -65,6 +68,7 @@ class Question extends \yii\db\ActiveRecord
             'id' => 'ID',
             'tid' => 'Tid',
             'type' => 'Type',
+            'parentId' => 'Parent ID',
             'title' => 'Title',
             'attaches' => 'Attaches',
             'a' => 'A',
@@ -81,9 +85,9 @@ class Question extends \yii\db\ActiveRecord
             'description' => 'Description',
             'knowledge' => 'Knowledge',
             'difficulty' => 'Difficulty',
-            'view_num' => 'View Num',
             'success_num' => 'Success Num',
             'fail_num' => 'Fail Num',
+            'view_num' => 'View Num',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

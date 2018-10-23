@@ -1,4 +1,4 @@
 <view class="page">
-    <questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}" maxOffset="{{maxOffset}}"/>
+    <list bindMoreList="moreList" questions="{{questions}}" offset="{{offset}}" maxOffset="{{maxOffset}}" type="1" title="{{title}}"/>
     <include src="/pages/common/footer.wxml"/>
 </view>

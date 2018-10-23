@@ -11,8 +11,8 @@ namespace common\models;
 
 class UserTrainRecord extends \common\models\base\UserTrainRecord
 {
-    public static function lastOffset($uid, $tid, $type) {
-        $record = self::findOne(["uid" => $uid, "tid" => $tid, "type" => $type]);
+    public static function lastOffset($uid, $tid) {
+        $record = self::findOne(["uid" => $uid, "tid" => $tid]);
         return $record ? (int)$record->offset : 0;
     }
 }

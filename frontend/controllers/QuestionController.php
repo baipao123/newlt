@@ -94,28 +94,28 @@ class QuestionController extends BaseController
         ]);
     }
 
-    public function actionTrainLastOffset($tid = 0, $type = Question::TypeJudge) {
+    public function actionTrainLastOffset($tid = 0) {
         if (time() > $this->getUser()->getTidExpire($tid))
             return Tool::reJson(null, '请先购买此分类', Tool::FAIL);
         if (empty($tid))
             $tid = $this->getUser()->tid2;
         if (empty($tid))
             return Tool::reJson(null, "请先选择一个分类", Tool::FAIL);
-        $offset = UserTrainRecord::lastOffset($this->user_id(), $tid, $type);
+        $offset = UserTrainRecord::lastOffset($this->user_id(), $tid);
         return Tool::reJson([
             "offset" => $offset,
             "tid"    => $tid
         ]);
     }
 
-    public function actionTrainList($tid = 0, $offset = 1, $type = Question::TypeJudge) {
+    public function actionTrainList($tid = 0, $offset = 1) {
         $qType = QuestionType::findOne($tid);
         if (!$qType || $qType->status != Status::PASS)
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
 
         $offset = $offset <= 1 ? 1 : $offset;
 
-        $questions = Question::find()->where(["tid" => $tid, "type" => $type, "status" => Status::PASS])->offset($offset - 1)->limit(10)->all();
+        $questions = Question::find()->where(["tid" => $tid, "status" => Status::PASS, "parentId" => 0])->offset($offset - 1)->limit(10)->all();
         /* @var $questions Question[] */
         $data = [];
         foreach ($questions as $index => $question) {
@@ -123,7 +123,7 @@ class QuestionController extends BaseController
             $question->addViewNum();
         }
 
-        return Tool::reJson(["list" => $data, "num" => $qType->setting($qType->typeEnStr($type) . "Total")]);
+        return Tool::reJson(["list" => $data, "num" => $qType->totalNum]);
     }
 
     public function actionAnswer() {

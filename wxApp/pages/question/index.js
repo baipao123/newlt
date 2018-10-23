@@ -8,10 +8,7 @@ Page({
         prices: [],
         type: {},
         countIndex: 0,
-        picker: false,
         typesData: [],
-        pickerValue: [0, 0],
-        qTypes: [],
     },
     onLoad: function (options) {
         let tid = options && options.hasOwnProperty("id") ? options.id : 0
@@ -123,33 +120,18 @@ Page({
                 app.toast("生成考卷失败，请重试");
         })
     },
-    train: function (e) {
-        let that = this,
-            type = that.data.type,
-            list = that.data.typesData
-        if (!type.on) {
-            app.toast("您尚未开通此科目，请在下方支付并开通", "none")
-            return false
-        }
-        if (list.length <= 0) {
-            app.toast("题库内暂无题目", "none")
-            return false
-        }
-        console.log("start")
-        that.setData({
-            picker: true
-        })
+    tips: function (e) {
+        app.toast("您尚未开通此科目，请在下方支付并开通", "none")
     },
-    goTrain: function (e) {
+    train: function (e) {
         // app.turnPage("question/train")
         let that = this,
             value = e.detail.value,
-            tid = value[0],
-            t = value[1],
+            tid = that.data.typesData[value]['tid'],
             offset = 1
-        app.get("question/train-last-offset", {type: t, tid: tid}, function (res) {
+        app.get("question/train-last-offset", {tid: tid}, function (res) {
             res.offset = !res.offset || res.offset == 0 ? 1 : res.offset
-            let url = "question/train?tid=" + res.tid + "&type=" + t
+            let url = "question/train?tid=" + res.tid
             if (res.offset == 1) {
                 app.turnPage(url)
                 return true

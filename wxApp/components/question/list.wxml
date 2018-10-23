@@ -1,0 +1,23 @@
+<view class="container">
+    <view class="header">
+        <text>{{info.title}}</text>
+    </view>
+    <view class="body">
+        <view class="header">第{{offset}}题</view>
+
+        <info question="{{question}}" />
+
+        <view class="actions weui-flex">
+            <view class="weui-flex__item-auto prev" bindtap="prev">
+                <span class="myIcon icon-left" wx:if="{{offset > 1}}">上一题</span>
+            </view>
+
+            <view class="weui-flex__item-auto next" bindtap="next">
+                <block wx:if="{{offset < maxOffset || maxOffset == 0}}">
+                下一题
+                <span class="myIcon icon-right"/>
+                </block>
+            </view>
+        </view>
+    </view>
+</view>

@@ -6,23 +6,21 @@ Page({
         domain: app.globalData.qiNiuDomain,
         questions: [],
         tid: 0,
-        type: 0,
         offset: 1,
         maxOffset: 100,
         needOffset : 0,
+        info:{}
     },
     onLoad: function (options) {
         let that = this,
             tid = options.hasOwnProperty("tid") ? options.tid : 0,
-            type = options.hasOwnProperty("type") ? options.type : 0,
             offset = options.hasOwnProperty("offset") ? options.offset : 1
-        if (tid <= 0 || type <= 0) {
+        if (tid <= 0) {
             app.toast("未知题库", "none", function () {
                 wx.navigateBack()
             })
         }
         that.data.tid = tid
-        that.data.type = type
         that.data.offset = offset
         that.getList()
     },
@@ -45,7 +43,6 @@ Page({
         let that = this,
             data = {
                 tid: that.data.tid,
-                type: that.data.type,
                 offset: that.data.offset
             }
         app.get("question/train-list", data, function (res) {
@@ -55,7 +52,8 @@ Page({
                 that.setData({
                     questions: res.list,
                     offset: that.data.needOffset > 0 ? that.data.needOffset :  that.data.offset,
-                    maxOffset: res.num
+                    maxOffset: res.num,
+                    title: res.title,
                 })
         })
     }
