@@ -99,7 +99,12 @@ Component({
                 })
                 that.getMore(prev ? Math.max(offset - 9, 1) : offset,prev ? offset : 0)
             }
+        },
+        afterAnswer:function (data) {
+            let that = this,
+                question = data.question,
+                qid = question.qid
+            that.data.questions[qid] = question
         }
-
     }
 })

@@ -53,19 +53,19 @@
             <view class="weui-form-preview__bd" style="line-height:1.5em">
                 <view class="weui-form-preview__item">
                     <view class="weui-form-preview__label">正确答案</view>
-                    <view class="weui-form-preview__value text-green">{{question.answer}}</view>
+                    <view class="weui-form-preview__value text-green">{{question.answer.answer}}</view>
                 </view>
                 <view class="weui-form-preview__item" wx:if="{{result.knowledge}}">
                     <view class="weui-form-preview__label">知识点</view>
-                    <view class="weui-form-preview__value">{{question.knowledge}}</view>
+                    <view class="weui-form-preview__value">{{question.answer.knowledge}}</view>
                 </view>
                 <view class="weui-form-preview__item" wx:if="{{result.difficulty}}">
                     <view class="weui-form-preview__label">难度</view>
-                    <view class="weui-form-preview__value">{{question.difficulty}}</view>
+                    <view class="weui-form-preview__value">{{question.answer.difficulty}}</view>
                 </view>
                 <view class="weui-form-preview__item" wx:if="{{result.description}}">
                     <view class="weui-form-preview__label">答案解析</view>
-                    <view class="weui-form-preview__value">{{question.description}}</view>
+                    <view class="weui-form-preview__value">{{question.answer.description}}</view>
                 </view>
             </view>
         </view>

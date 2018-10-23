@@ -144,16 +144,16 @@ class Question extends \common\models\base\Question
         ];
     }
 
-    public function addErrNum() {
-        \Yii::$app->db->createCommand("UPDATE `question` SET `fail_num`=`fail_num`+1 WHERE `id`=:id", [":id" => $this->id])->execute();
+    public static function addErrNum($qid) {
+        \Yii::$app->db->createCommand("UPDATE `question` SET `fail_num`=`fail_num`+1 WHERE `id`=:id", [":id" => $qid])->execute();
     }
 
-    public function addSuccessNum() {
-        \Yii::$app->db->createCommand("UPDATE `question` SET `success_num`=`success_num`+1 WHERE `id`=:id", [":id" => $this->id])->execute();
+    public static function addSuccessNum($qid) {
+        \Yii::$app->db->createCommand("UPDATE `question` SET `success_num`=`success_num`+1 WHERE `id`=:id", [":id" => $qid])->execute();
     }
 
-    public function addViewNum() {
-        \Yii::$app->db->createCommand("UPDATE `question` SET `view_num`=`view_num`+1 WHERE `id`=:id", [":id" => $this->id])->execute();
+    public static function addViewNum($qid) {
+        \Yii::$app->db->createCommand("UPDATE `question` SET `view_num`=`view_num`+1 WHERE `id`=:id", [":id" => $qid])->execute();
     }
 
     public static function getIds($tid, $type, $limit) {

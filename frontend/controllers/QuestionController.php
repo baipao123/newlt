@@ -15,6 +15,7 @@ use common\models\QuestionType;
 use common\models\UserQuestionType;
 use common\tools\Status;
 use common\tools\Tool;
+use yii\helpers\ArrayHelper;
 
 class QuestionController extends BaseController
 {
@@ -120,7 +121,7 @@ class QuestionController extends BaseController
         $data = [];
         foreach ($questions as $index => $question) {
             $data[ $offset + $index ] = $question->info();
-            $question->addViewNum();
+            Question::addViewNum($question->id);
         }
 
         return Tool::reJson(["list" => $data, "num" => $qType->totalNum]);
@@ -128,23 +129,30 @@ class QuestionController extends BaseController
 
     public function actionAnswer() {
         $qid = $this->getPost("qid", 0);
-        $answer = $this->getPost("answer", "");
+        $answer = $this->getPost("answer", []);
         $offset = $this->getPost("offset", 0);
         $question = Question::findOne($qid);
         if (!$question)
             return Tool::reJson(null, "未发现题目", Tool::FAIL);
-        $result = $question->answer();
+        $info = $question->info(true);
         if (!empty($answer)) {
-            $answer = asort(str_split($answer));
-            if ($answer == $result['answer']) {
-                $result['result'] = true;
-                $question->addSuccessNum();
-            } else {
-                $question->addErrNum();
-                $result['result'] = false;
+            $questions = $info['children'];
+            array_unshift($questions, $info);
+            foreach ($questions as $q) {
+                if (empty($q))
+                    continue;
+                $answerText = ArrayHelper::getValue($answer, $q['qid']);
+                if($qid == $q['qid'])
+                    $info['userAnswer'] = $answerText;
+                else
+                    $info['children'][$q['qid']]['userAnswer'] = $answerText;
+                if ($q['answer']['answer'] == $answerText) {
+                    Question::addSuccessNum($q['qid']);
+                } else
+                    Question::addSuccessNum($q['qid']);
             }
         }
-        $this->getUser()->updateTrainRecord($question->tid, $question->type, $offset);
-        return Tool::reJson(["result" => $result]);
+        $this->getUser()->updateTrainRecord($question->tid, $offset);
+        return Tool::reJson(["question" => $info]);
     }
 }

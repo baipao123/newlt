@@ -9,21 +9,7 @@ Component({
             type: Object,
             value: {},
             observer: function (newData, oldData) {
-                let userAnswer = newData.userAnswer ? newData.userAnswer : '',
-                    children = newData.children,
-                    ajaxAnswer = [],
-                    questionChildren = []
-                for (let qid in children) {
-                    let child = children[qid]
-                    if (child.userAnswer && child.userAnswer != '')
-                        ajaxAnswer[child.qid] = child.userAnswer
-                    questionChildren.push(child)
-                }
-                this.setData({
-                    userAnswer: userAnswer,
-                    ajaxAnswer: ajaxAnswer,
-                    questionChildren: questionChildren
-                })
+                this.resetQuestion(newData)
             }
         },
         offset: {
@@ -64,6 +50,23 @@ Component({
     ready: function () {
     },
     methods: {
+        resetQuestion: function (question) {
+            let userAnswer = question.userAnswer ? question.userAnswer : '',
+                children = question.children,
+                ajaxAnswer = [],
+                questionChildren = []
+            for (let qid in children) {
+                let child = children[qid]
+                if (child.userAnswer && child.userAnswer != '')
+                    ajaxAnswer[child.qid] = child.userAnswer
+                questionChildren.push(child)
+            }
+            this.setData({
+                userAnswer: userAnswer,
+                ajaxAnswer: ajaxAnswer,
+                questionChildren: questionChildren
+            })
+        },
         chose: function (e) {
             let that = this,
                 option = e.currentTarget.dataset.option,
@@ -75,11 +78,6 @@ Component({
                 return true
 
             if (question.type <= 2) {
-                that.answer({
-                    qid: question.qid,
-                    offset: offset,
-                    answer: option
-                })
                 newUserAnswer = option
             } else if(question.type == 3){
                 let index = answer.indexOf(option)
@@ -108,20 +106,23 @@ Component({
             else if(that.data.type == 1)
                 that.goAnswer()
         },
-        goAnswer: function (e) {
+        goAnswer: function (e,isSee) {
             let that = this,
                 data = {
+                    qid: that.data.question.qid,
                     offset: that.data.offset,
                     answer: that.data.ajaxAnswer
                 }
-            if (data.answer.length == 0)
+
+            if (data.answer.length == 0 && !isSee)
                 app.toast(that.question.type == 4 ? "请先填写答案" : "请先选择答案")
             else {
-                app.post(type == 1 ? "question/answer" : "exam/answer", data, function (res) {
+                app.post(that.data.type == 1 ? "question/answer" : "exam/answer", data, function (res) {
                     that.setData({
-                        question: res.info
+                        question: res.question
                     })
-                    that.triggerEvent('afterAnswer', {question: res.info, offset: data.offset})
+                    that.resetQuestion(res.question)
+                    that.triggerEvent('AfterAnswer', {question: res.question, offset: data.offset,qid:data.qid})
                 })
             }
         },
@@ -129,10 +130,10 @@ Component({
             let that = this,
                 qid = that.data.question.qid,
                 offset = that.data.offset
-            if(that.data.question.hasAnswer)
+            if(that.data.question.answer)
                 return true
             app.confirm("确定直接查看答案？", function () {
-                that.answer({qid: qid, offset: offset})
+                that.goAnswer(null,true)
             })
         },
         childChose: function (data) {
