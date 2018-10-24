@@ -129,8 +129,10 @@ class QuestionController extends BaseController
 
     public function actionAnswer() {
         $qid = $this->getPost("qid", 0);
-        $answer = $this->getPost("answer", []);
+        $answer = $this->getPost("answer", "");
+        $answer = empty($answer) ? [] : json_decode($answer,true);
         $offset = $this->getPost("offset", 0);
+        \Yii::warning($_POST);
         $question = Question::findOne($qid);
         if (!$question)
             return Tool::reJson(null, "未发现题目", Tool::FAIL);
@@ -142,6 +144,7 @@ class QuestionController extends BaseController
                 if (empty($q))
                     continue;
                 $answerText = ArrayHelper::getValue($answer, $q['qid']);
+                \Yii::warning($answer,$answerText);
                 if($qid == $q['qid'])
                     $info['userAnswer'] = $answerText;
                 else

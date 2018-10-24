@@ -3,7 +3,8 @@
 
     <!-- title -->
     <view class="title" wx:if="{{question.title}}">
-        <text space="nbsp">{{indexNum > 0 ? indexNum + '. ' : ''}}{{question.title}}</text>
+        <import src="./../../utils/wxParse/wxParse.wxml"/>
+        <template is="wxParse" data="{{wxParseData:title.nodes}}"/>
     </view>
     <view class="attaches">
         <img urls="{{question.attaches}}"/>
@@ -12,7 +13,7 @@
     <!-- options -->
     <view class="options weui-flex {{question.answer && question.answer != '' ? 'answer':''}}" wx:if="{{question.options.length>0 && question.type < 4}}">
         <wxs src="./../../wxs/in.wxs" module="tools"/>
-        <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,userAnswer)  ? 'user-chose':''}} {{tools.inString(item.option,question.answer) ? 'system-chose' : '' }}" wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
+        <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,userAnswer)  ? 'user-chose':''}} {{tools.inString(item.option,question.answer.answer) ? 'system-chose' : '' }}" wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
             <view class="option-title">
                 <view class="weui-agree__checkbox-icon" style="top:1rpx">
                     <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{tools.inArray(item.option,userAnswer)}}"/>
@@ -43,12 +44,12 @@
 
     <!-- subQuestions -->
     <view class="children">
-        <info question="{{item}}" wx:for="{{questionChildren}}" type="{{type}}" isChild="{{true}}" bindChose="childChose" wx:for-index="idx" indexNum="{{idx + 1}}"/>
+        <info question="{{item}}" wx:for="{{questionChildren}}" type="{{type}}" isChild="{{true}}" bindChose="childChose" wx:key="item" wx:for-index="idx" indexNum="{{idx + 1}}"/>
     </view>
 
 
     <!-- after Answer -->
-    <view class="answer" wx:if="{{question.answer}}">
+    <view class="answer" wx:if="{{question.answer && question.type != 5}}">
         <view class="weui-form-preview">
             <view class="weui-form-preview__bd" style="line-height:1.5em">
                 <view class="weui-form-preview__item">
@@ -76,7 +77,7 @@
         <view class="a-c weui-flex__item-auto" wx:if="{{question.type >= 3 && !question.answer}}">
             <button type="primary" size="mini" plain="{{true}}" bindtap="goAnswer"><span class="myIcon icon-true">提交答案</span></button>
         </view>
-        <view class="a-c weui-flex__item-auto" wx:if="{{type==1}}">
+        <view class="a-c weui-flex__item-auto" wx:if="{{type==1 && !question.answer}}">
             <button type="primary" size="mini" plain="{{true}}" bindtap="seeAnswer"><span class="myIcon icon-eye">查看答案</span></button>
         </view>
     </view>

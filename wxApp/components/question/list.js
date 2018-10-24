@@ -100,8 +100,9 @@ Component({
                 that.getMore(prev ? Math.max(offset - 9, 1) : offset,prev ? offset : 0)
             }
         },
-        afterAnswer:function (data) {
+        afterAnswer:function (e) {
             let that = this,
+                data = e.detail,
                 question = data.question,
                 qid = question.qid
             that.data.questions[qid] = question

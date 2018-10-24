@@ -1,4 +1,6 @@
 @import "../../app.wxss";
+@import "../../utils/wxParse/wxParse.wxss";
+
 
 .weui-flex__item-auto {
     min-width:40px;
@@ -50,6 +52,7 @@
 }
 .option{
     margin-bottom: 20rpx;
+    margin-right: 2rpx;
 }
 .option-title{
     display: inline-block;
@@ -71,4 +74,29 @@
 }
 .actions .next{
     text-align:right;
+}
+
+
+.user-chose {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.orange-block {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.answer .user-chose:not(.system-chose) {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.system-chose {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
 }

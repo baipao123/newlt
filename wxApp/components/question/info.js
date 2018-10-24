@@ -1,4 +1,5 @@
 const app = getApp()
+const WxParse = require('../../utils/wxParse/wxParse.js');
 
 Component({
     options: {
@@ -26,14 +27,14 @@ Component({
 
             }
         },
-        isChild:{
+        isChild: {
             type: Boolean,
             value: false,
             observer: function (newData, oldData) {
 
             }
         },
-        indexNum:{
+        indexNum: {
             type: Number,
             value: 0,
             observer: function (newData, oldData) {
@@ -44,8 +45,8 @@ Component({
     data: {
         domain: app.globalData.qiNiuDomain,
         userAnswer: '',
-        ajaxAnswer:[],
-        questionChildren:[]
+        ajaxAnswer: {},
+        questionChildren: []
     },
     ready: function () {
     },
@@ -53,12 +54,12 @@ Component({
         resetQuestion: function (question) {
             let userAnswer = question.userAnswer ? question.userAnswer : '',
                 children = question.children,
-                ajaxAnswer = [],
+                ajaxAnswer = {},
                 questionChildren = []
             for (let qid in children) {
                 let child = children[qid]
                 if (child.userAnswer && child.userAnswer != '')
-                    ajaxAnswer[child.qid] = child.userAnswer
+                    ajaxAnswer['"' + child.qid + '"'] = child.userAnswer
                 questionChildren.push(child)
             }
             this.setData({
@@ -66,6 +67,8 @@ Component({
                 ajaxAnswer: ajaxAnswer,
                 questionChildren: questionChildren
             })
+
+            WxParse.wxParse('title', 'html', this.data.question.title, this, 0);
         },
         chose: function (e) {
             let that = this,
@@ -79,7 +82,7 @@ Component({
 
             if (question.type <= 2) {
                 newUserAnswer = option
-            } else if(question.type == 3){
+            } else if (question.type == 3) {
                 let index = answer.indexOf(option)
                 if (index > -1)
                     answer.splice(index, 1)
@@ -90,39 +93,44 @@ Component({
             }
             that.afterFill(newUserAnswer)
         },
-        fillBlank:function (e) {
+        fillBlank: function (e) {
             let that = this,
                 userAnswer = e.detail.value
             that.data.ajaxAnswer[that.data.question.qid] = userAnswer
             that.afterFill(userAnswer)
         },
-        afterFill:function (userAnswer) {
+        afterFill: function (userAnswer) {
             let that = this
             that.setData({
                 userAnswer: userAnswer
             })
             if (that.data.isChild)
-                that.triggerEvent('Chose', {"qid": that.data.question.qid, "userAnswer": userAnswer,index:that.data.indexNum})
-            else if(that.data.type == 1)
+                that.triggerEvent('Chose', {
+                    "qid": that.data.question.qid,
+                    "userAnswer": userAnswer,
+                    index: that.data.indexNum
+                })
+            else if (that.data.type == 1)
                 that.goAnswer()
         },
-        goAnswer: function (e,isSee) {
+        goAnswer: function (e, isSee) {
             let that = this,
                 data = {
                     qid: that.data.question.qid,
                     offset: that.data.offset,
-                    answer: that.data.ajaxAnswer
+                    answer: JSON.stringify(that.data.ajaxAnswer)
                 }
+            console.log(data)
 
-            if (data.answer.length == 0 && !isSee)
-                app.toast(that.question.type == 4 ? "请先填写答案" : "请先选择答案")
+            if (!data.answer && !isSee)
+                app.toast(that.data.question.type == 4 ? "请先填写答案" : "请先选择答案", "none")
             else {
                 app.post(that.data.type == 1 ? "question/answer" : "exam/answer", data, function (res) {
                     that.setData({
                         question: res.question
                     })
                     that.resetQuestion(res.question)
-                    that.triggerEvent('AfterAnswer', {question: res.question, offset: data.offset,qid:data.qid})
+                    that.triggerEvent('AfterAnswer', {question: res.question, offset: data.offset, qid: data.qid})
                 })
             }
         },
@@ -130,18 +138,20 @@ Component({
             let that = this,
                 qid = that.data.question.qid,
                 offset = that.data.offset
-            if(that.data.question.answer)
+            if (that.data.question.answer)
                 return true
             app.confirm("确定直接查看答案？", function () {
-                that.goAnswer(null,true)
+                that.goAnswer(null, true)
             })
         },
-        childChose: function (data) {
+        childChose: function (e) {
             let that = this,
+                data = e.detail,
                 qid = data.qid
             that.data.question.children[qid].userAnswer = data.userAnswer
             that.data.ajaxAnswer[qid] = data.userAnswer
             that.data.questionChildren[data.index - 1].userAnswer = data.userAnswer
+            console.log(that.data.ajaxAnswer)
             that.setData({
                 "questionChildren": that.data.questionChildren
             })
