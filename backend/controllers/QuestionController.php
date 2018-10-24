@@ -28,9 +28,19 @@ class QuestionController extends BaseController
             Yii::$app->controller->layout = "@layuiAdm/views/layouts/basic.php";
         else
             $tid = 0;
+        $thisTid = $tid;
+        $qType = QuestionType::findOne($tid);
+        if ($tid > 0 && !$qType)
+            return $this->alert("未找到科目");
+        $parentId = 0;
+        if ($qType && $qType->tid > 0) {
+            $parentId = $tid;
+            $tid = $qType->tid;
+        }
         return $this->render("types", [
-            "tid"   => $tid,
-            "types" => QuestionType::getList($tid, $status)
+            "tid"   => $thisTid,
+            "types" => QuestionType::getList($tid, $parentId, $status),
+            "qType" => $qType
         ]);
     }
 

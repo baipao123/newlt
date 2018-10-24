@@ -76,11 +76,12 @@ class QuestionType extends \common\models\base\QuestionType
 
     /**
      * @param int $tid
+     * @param int $parentId
      * @param int $status
      * @return QuestionType[]
      */
-    public static function getList($tid = 0, $status = Status::PASS) {
-        $query = self::find()->where(["tid" => $tid,"parentId"=>0])->andWhere(["<>","status",Status::DELETE])->orderBy("sort desc");
+    public static function getList($tid = 0,$parentId = 0, $status = Status::PASS) {
+        $query = self::find()->where(["tid" => $tid, "parentId" => $parentId])->andWhere(["<>", "status", Status::DELETE])->orderBy("sort desc");
         if ($status > 0)
             $query->andWhere(["status" => $status]);
         $types = $query->all();

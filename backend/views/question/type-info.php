@@ -23,14 +23,17 @@ use layuiAdm\tools\Url;
 <form class="layui-form" method="post">
     <input type="hidden" name="<?= Yii::$app->request->csrfParam ?>" value="<?= Yii::$app->request->getCsrfToken() ?>">
     <div class="layui-form-item">
-        <label class="layui-form-label">名称</label>
+        <label class="layui-form-label"><?= $type->tid == 0 ? "名称" : "大题标题" ?></label>
         <div class="layui-input-block">
             <input type="text" name="name" placeholder="名称" autocomplete="off" class="layui-input" lay-filter="name"
                    lay-verify="required" value="<?= $type->name ?>">
+            <?php if($type->tid>0) :?>
+            <div class="layui-form-mid layui-word-aux">标题用于小程序练习的筛选，以及小后台添加题目时选择，请简单明了，如果其他说明，可以在下方添加</div>
+            <?php endif;?>
         </div>
     </div>
 
-    <?php if($type->parentId == 0):?>
+    <?php if($type->tid == 0):?>
     <div class="layui-form-item">
         <label class="layui-form-label">图标</label>
         <div class="layui-input-block">
@@ -41,6 +44,14 @@ use layuiAdm\tools\Url;
             </div>
         </div>
     </div>
+    <?php else:?>
+        <div class="layui-form-item">
+            <label class="layui-form-label">大题标题说明</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" placeholder="大题标题说明" autocomplete="off" class="layui-input" lay-filter="name"
+                       lay-verify="required" value="<?= $type->description ?>">
+            </div>
+        </div>
     <?php endif;?>
 
     <div class="layui-form-item">
@@ -58,69 +69,53 @@ use layuiAdm\tools\Url;
         </div>
     </div>
 
-    <?php if ($type->parentId > 0): ?>
+
     <fieldset class="layui-elem-field" style="margin-top: 20px;">
         <legend>模考相关</legend>
         <div class="layui-field-box">
+            <?php if ($type->tid == 0): ?>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">模考时间(分钟)</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="sort" placeholder="模考时间" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->time ?>">
+                        <div class="layui-form-mid layui-word-aux">该科目考试总计时间</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">总分</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="sort" placeholder="总分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->score ?>">
+                        <div class="layui-form-mid layui-word-aux">考试满分分数</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">及格分</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="sort" placeholder="及格分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->passScore ?>">
+                        <div class="layui-form-mid layui-word-aux">考试及格分数</div>
+                    </div>
+                </div>
+            <?php else:?>
+                <?php if ($type->parentId == 0): ?>
+                    <div class="layui-form-mid" style="color:red">当科目中添加了1个或多个小题时，此处设置无效，请去小题里面设置模考相关内容</div>
+                <?php endif; ?>
             <div class="layui-form-item">
-                <label class="layui-form-label">分值</label>
-                <div class="layui-form-mid">总分:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[totalScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("totalScore") ?>">
+                <label class="layui-form-label">模考题量</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort" placeholder="模考题量" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->examNum ?>">
+                    <div class="layui-form-mid layui-word-aux">考试中，有几道题目，例：比如当前有2道阅读理解，共10小题，此处填2</div>
                 </div>
-                <div class="layui-form-mid"> 合格:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[passScore]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("passScore") ?>">
-                </div>
-                <div class="layui-form-mid">分</div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">时间</label>
-                <div class="layui-form-mid"> 总计:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[time]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("time") ?>">
+                <label class="layui-form-label">每小题的分值</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort" placeholder="总分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->score ?>">
+                    <div class="layui-form-mid layui-word-aux">试卷中每小题的分值，比如当前有2道阅读理解，共10小题，每题1分，此处就填1</div>
                 </div>
-                <div class="layui-form-mid">分钟</div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">判断题</label>
-                <div class="layui-form-mid">数量:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[judgeNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("judgeNum") ?>">
-                </div>
-                <div class="layui-form-mid"> 每道:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="text" name="setting[judgeScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("judgeScore") ?>">
-                </div>
-                <div class="layui-form-mid">分</div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">单选题</label>
-                <div class="layui-form-mid">数量:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[selectNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("selectNum") ?>">
-                </div>
-                <div class="layui-form-mid"> 每道:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="text" name="setting[selectScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("selectScore") ?>">
-                </div>
-                <div class="layui-form-mid">分</div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">多选题</label>
-                <div class="layui-form-mid">数量:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="number" name="setting[multiNum]" autocomplete="off" class="layui-input" title="" value="<?= $type->setting("multiNum") ?>">
-                </div>
-                <div class="layui-form-mid"> 每道:</div>
-                <div class="layui-input-inline" style="width: 60px;">
-                    <input type="text" name="setting[multiScore]" autocomplete="off" class="layui-input" lay-verify="decimal" title="" value="<?= $type->setting("multiScore") ?>">
-                </div>
-                <div class="layui-form-mid">分</div>
-            </div>
+            <?php endif;?>
         </div>
     </fieldset>
-    <?php endif; ?>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
