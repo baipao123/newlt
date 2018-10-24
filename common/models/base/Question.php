@@ -50,12 +50,9 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'parentId', 'difficulty', 'success_num', 'fail_num', 'view_num', 'created_at', 'updated_at'], 'integer'],
+            [['tid', 'status', 'type', 'parentId', 'difficulty', 'success_num', 'fail_num', 'view_num', 'created_at', 'updated_at'], 'integer'],
 //            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'required'],
-            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'string'],
-            [['type'], 'string', 'max' => 3],
-            [['answer'], 'string', 'max' => 255],
-            [['status'], 'string', 'max' => 1],
+            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'answer','description', 'knowledge'], 'string'],
         ];
     }
 

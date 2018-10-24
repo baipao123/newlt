@@ -23,23 +23,37 @@ Widget::setDefaultFormType(Widget::FORM_COLUMN);
 
 FormWidget::begin();
 
-echo FormItemWidget::widget([
-    "label"   => "所属科目",
-    "type"    => "select",
-    "tips"    => "科目提交后无法修改，如欲修改，请删除后重新添加",
-    "options" => [
-        "name"        => "tid",
-        "options"     => QuestionType::typesForSelect(),
-        "group"       => true,
-        "value"       => $question->tid,
-        "valueKey"    => "tid",
-        "textKey"     => "name",
-        "placeholder" => "请选择科目",
-        "search"      => true,
-        "verify"      => "required",
-        "disabled"    => !$question->isNewRecord
-    ]
-]);
+if($parentId == 0) {
+    echo FormItemWidget::widget([
+        "label"   => "所属科目",
+        "type"    => "select",
+        "tips"    => "科目提交后无法修改，如欲修改，请删除后重新添加",
+        "options" => [
+            "name"        => "tid",
+            "options"     => QuestionType::typesForSelect(),
+            "group"       => true,
+            "value"       => $question->tid,
+            "valueKey"    => "tid",
+            "textKey"     => "name",
+            "placeholder" => "请选择科目",
+            "search"      => true,
+            "verify"      => "required",
+            "disabled"    => !$question->isNewRecord
+        ]
+    ]);
+    if($question->type == Question::TypeMultiQuestion) {
+        ?>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn layui-btn-xs layui-btn-danger"
+                        onclick="layerOpenIFrame('<?= Url::createLink('/question/info', ["id" => 0, "parentId" => $question->id]) ?>','添加子题目',['80%','80%'])">
+                    <i class="layui-icon">&#xe654;</i>添加子题目
+                </a>
+            </div>
+        </div>
+        <?php
+    }
+}
 
 echo FormItemWidget::widget([
     "label"   => "题目类型",

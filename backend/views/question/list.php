@@ -58,7 +58,7 @@ if($parentId == 0) {
 }
 ?>
 <button class="layui-btn layui-btn-danger"
-        onclick="layerOpenIFrame('<?= Url::createLink('/question/info', ["id" => 0]) ?>','<?= $parentId == 0 ? '添加题目' : '添加子题目'?>',['100%','100%'])"><i class="layui-icon">&#xe654;</i><?= $parentId == 0 ? '添加题目' : '添加子题目'?>
+        onclick="layerOpenIFrame('<?= Url::createLink('/question/info', ["id" => 0, "parentId" => $parentId]) ?>','<?= $parentId == 0 ? '添加题目' : '添加子题目'?>',['100%','100%'])"><i class="layui-icon">&#xe654;</i><?= $parentId == 0 ? '添加题目' : '添加子题目'?>
 </button>
 
 <?php

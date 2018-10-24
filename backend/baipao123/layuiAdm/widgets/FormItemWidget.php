@@ -63,9 +63,10 @@ class FormItemWidget extends Widget
     }
 
     public function itemEnd() {
-        $html = '</div>' . "\n";
+        $html = '';
         if (!empty($this->tips))
             $html .= '<div class="layui-form-mid layui-word-aux">' . $this->tips . '</div>' . "\n";
+        $html .= '</div>' . "\n";
         $html .= '</div>' . "\n";
         return $html;
     }

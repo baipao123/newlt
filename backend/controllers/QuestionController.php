@@ -253,7 +253,13 @@ class QuestionController extends BaseController
     }
 
 
-    public function actionInfo($qid = 0) {
+    public function actionInfo($qid = 0, $parentId = 0) {
+        $pQuestion = null;
+        if($parentId > 0){
+            $pQuestion = Question::findOne($parentId);
+            if(!$pQuestion || $pQuestion->type != Question::TypeMultiQuestion)
+                return $this->alert("未发现父类大题");
+        }
         if ($qid > 0) {
             $question = Question::findOne($qid);
             if (!$question || $question->status == Status::DELETE) {
@@ -266,7 +272,8 @@ class QuestionController extends BaseController
         if (Yii::$app->request->isPost) {
             //            Yii::warning($_POST);
             if ($question->isNewRecord) {
-                $question->tid = Yii::$app->request->post("tid", 0);
+                $question->tid = $parentId > 0 ? $pQuestion->tid : Yii::$app->request->post("tid", 0);
+                $question->parentId = $parentId;
                 $question->type = Yii::$app->request->post("type", 0);
             }
             $question->title = Yii::$app->request->post("title", "");
@@ -305,9 +312,9 @@ class QuestionController extends BaseController
                 Yii::$app->session->setFlash("info", "非多选题，答案不能多选");
             elseif ($question->type == Question::TypeJudge && !in_array($question->answer, ["A", "B"]))
                 Yii::$app->session->setFlash("info", "判断题的答案只能是A、B");
-            elseif (empty($question->title) && empty($question->attaches))
+            elseif ($question->parentId == 0 && empty($question->title) && empty($question->attaches))
                 Yii::$app->session->setFlash("info", "题干不能为空");
-            elseif ($question->type != Question::TypeJudge && empty($question->a) && empty($question->aImg))
+            elseif (($parentId == 0 && in_array($question->type, [Question::TypeSelect, Question::TypeMulti])) && empty($question->a) && empty($question->aImg))
                 Yii::$app->session->setFlash("info", "选项A不能为空");
             elseif (!$question->save()) {
                 Yii::warning($question->errors, "保存Question失败");
@@ -317,7 +324,8 @@ class QuestionController extends BaseController
 
         }
         return $this->render("info", [
-            "question" => $question
+            "question" => $question,
+            "parentId" => $parentId
         ]);
     }
 
