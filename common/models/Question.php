@@ -28,7 +28,7 @@ class Question extends \common\models\base\Question
         Question::TypeSelect => "单选题",
         Question::TypeMulti  => "多选题",
         Question::TypeBlank  => "填空题",
-//        Question::TypeMultiQuestion => "多个答案的题目"
+        Question::TypeMultiQuestion => "含多个小题"
     ];
 
     public function afterSave($insert, $changedAttributes) {

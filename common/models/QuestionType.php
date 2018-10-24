@@ -45,7 +45,7 @@ class QuestionType extends \common\models\base\QuestionType
 
     public static function typesForSelect($is_sub = true) {
         if (!$is_sub) {
-            $types = QuestionType::find()->where(["status" => Status::PASS, "parentId" => 0])->orderBy("sort DESC,id ASC")->all();
+            $types = QuestionType::find()->where(["status" => Status::PASS, "tid" => 0])->orderBy("sort DESC,id ASC")->all();
             /* @var $types self[] */
             $data = [];
             foreach ($types as $type) {
@@ -56,19 +56,29 @@ class QuestionType extends \common\models\base\QuestionType
             }
             return $data;
         }
-        $types = QuestionType::find()->where(["status" => Status::PASS])->orderBy("parentId ASC,sort DESC,id ASC")->all();
+        $types = QuestionType::find()->where(["status" => Status::PASS])->orderBy("tid ASC,parentId ASC,sort DESC,id ASC")->all();
         /* @var $types self[] */
         $data = [];
-        $names = [];
+        $names = ArrayHelper::map($types,"id","name");
+        $parentIds = ArrayHelper::getColumn($types,"parentId");
         foreach ($types as $type) {
-            if ($type->parentId == 0) {
+            if ($type->tid == 0) {
                 $data[ $type->name ] = [];
-                $names[ $type->id ] = $type->name;
-            } else
-                $data[ $names[ $type->parentId ] ][] = [
+            } else if ($type->parentId == 0) {
+                if (!in_array($type->id, $parentIds))
+                    $data[ $names[ $type->tid ] ][] = [
+                        "tid"  => $type->id,
+                        "name" => $type->name
+                    ];
+            } else {
+                if (!isset($names[ $type->parentId ]))
+                    continue;
+                $pName = $names[ $type->parentId ];
+                $data[ $names[ $type->tid ] ][] = [
                     "tid"  => $type->id,
-                    "name" => $type->name
+                    "name" => $pName . '-' . $type->name
                 ];
+            }
         }
         return $data;
     }

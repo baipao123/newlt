@@ -211,8 +211,8 @@ class QuestionController extends BaseController
         return $this->alert();
     }
 
-    public function actionList($tid = 0, $type = 0, $title = "") {
-        $query = Question::find()->where(["<>", "status", Status::DELETE]);
+    public function actionList($tid = 0, $parentId = 0, $type = 0, $title = "") {
+        $query = Question::find()->where(["<>", "status", Status::DELETE])->andWhere(["parentId" => $parentId]);
         if ($tid > 0)
             $query->andWhere(["tid" => $tid]);
         if ($type > 0)
@@ -227,7 +227,8 @@ class QuestionController extends BaseController
             "pagination" => $pagination,
             "tid"        => $tid,
             "type"       => $type,
-            "title"      => $title
+            "title"      => $title,
+            "parentId"   => $parentId,
         ]);
     }
 

@@ -16,48 +16,49 @@ use common\tools\Img;
 use common\tools\Status;
 
 /* @var $pagination \yii\data\Pagination */
+if($parentId == 0) {
+    FormWidget::begin([
 
-FormWidget::begin([
+    ]);
+    echo FormItemWidget::widget([
+        "label"   => "所属科目",
+        "type"    => "select",
+        "options" => [
+            "name"        => "tid",
+            "options"     => QuestionType::typesForSelect(),
+            "group"       => true,
+            "value"       => $tid,
+            "valueKey"    => "tid",
+            "textKey"     => "name",
+            "placeholder" => "请选择科目",
+            "search"      => true
+        ]
+    ]);
 
-]);
-echo FormItemWidget::widget([
-    "label"   => "所属科目",
-    "type"    => "select",
-    "options" => [
-        "name"        => "tid",
-        "options"     => QuestionType::typesForSelect(),
-        "group"       => true,
-        "value"       => $tid,
-        "valueKey"    => "tid",
-        "textKey"     => "name",
-        "placeholder" => "请选择科目",
-        "search"      => true
-    ]
-]);
+    echo FormItemWidget::widget([
+        "label"   => "题目类型",
+        "type"    => "select",
+        "options" => [
+            "name"        => "type",
+            "options"     => Question::TypeAll,
+            "value"       => $type,
+            "placeholder" => "全部题型",
+        ]
+    ]);
 
-echo FormItemWidget::widget([
-    "label"   => "题目类型",
-    "type"    => "select",
-    "options" => [
-        "name"        => "type",
-        "options"     => Question::TypeAll,
-        "value"       => $type,
-        "placeholder" => "全部题型",
-    ]
-]);
+    echo FormItemWidget::widget([
+        "label"   => "题干",
+        "options" => [
+            "name"  => "title",
+            "value" => $title,
+        ]
+    ]);
 
-echo FormItemWidget::widget([
-    "label"   => "题干",
-    "options" => [
-        "name"  => "title",
-        "value" => $title,
-    ]
-]);
-
-FormWidget::end();
+    FormWidget::end();
+}
 ?>
 <button class="layui-btn layui-btn-danger"
-        onclick="layerOpenIFrame('<?= Url::createLink('/question/info', ["id" => 0]) ?>','添加题目',['100%','100%'])"><i class="layui-icon">&#xe654;</i>添加题目
+        onclick="layerOpenIFrame('<?= Url::createLink('/question/info', ["id" => 0]) ?>','<?= $parentId == 0 ? '添加题目' : '添加子题目'?>',['100%','100%'])"><i class="layui-icon">&#xe654;</i><?= $parentId == 0 ? '添加题目' : '添加子题目'?>
 </button>
 
 <?php
@@ -75,7 +76,7 @@ TableWidget::begin([
         "浏览量"  => ["fixed" => "right"],
         "正确量"  => ["fixed" => "right"],
         "错误量"  => ["fixed" => "right"],
-        "操作"   => ["fixed" => "right", "width" => 150, "unresize" => true]
+        "操作"   => ["fixed" => "right", "width" => 200, "unresize" => true]
     ],
     "height"       => 500,
     "cellMinWidth" => 60,
@@ -113,6 +114,10 @@ foreach ($list as $question) {
         <td>
             <span class="layui-btn layui-btn-xs layui-btn-normal"
                   onclick="layerOpenIFrame('<?= Url::createLink('question/info', ['qid' => $question->id]) ?>','编辑题目',['100%','100%'])">编辑</span>
+            <?php if($question->type == Question::TypeMultiQuestion):?>
+            <span class="layui-btn layui-btn-xs layui-btn-normal"
+                  onclick="layerOpenIFrame('<?= Url::createLink('question/list', ['parentId' => $question->id]) ?>','子题目列表',['100%','80%'])">子题目列表</span>
+            <?php endif;?>
             <?php if ($question->status == Status::FORBID): ?>
                 <span class="layui-btn layui-btn-xs"
                       onclick="layerConfirmUrl('<?= Url::createLink("question/toggle", ["qid" => $question->id, "status" => Status::PASS]) ?>')">开启</span>

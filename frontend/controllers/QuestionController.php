@@ -152,7 +152,7 @@ class QuestionController extends BaseController
                 if ($q['answer']['answer'] == $answerText) {
                     Question::addSuccessNum($q['qid']);
                 } else
-                    Question::addSuccessNum($q['qid']);
+                    Question::addErrNum($q['qid']);
             }
         }
         $this->getUser()->updateTrainRecord($question->tid, $offset);
