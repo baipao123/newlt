@@ -34,8 +34,9 @@ class InputOptions extends Widget
     public $filter;
 
     public function config() {
+        $this->ids[] = $this->id;
         $config = [
-            "ids"         => self::optionsToStr($this->ids),
+            "id"          => self::optionsToStr($this->ids),
             "class"       => self::optionsToStr($this->defaultClasses, $this->classes),
             "type"        => $this->type,
             "name"        => $this->name,

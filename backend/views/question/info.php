@@ -74,7 +74,8 @@ echo FormItemWidget::widget([
     "label"   => "题干",
     "options" => [
         "name"  => "title",
-        "value" => $question->title
+        "value" => $question->title,
+        "needEditor" => true
     ]
 ]);
 
