@@ -75,7 +75,7 @@ echo FormItemWidget::widget([
     ]
 ]);
 
-if ($question->type != Question::TypeJudge || $question->isNewRecord) {
+if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question::TypeAnswer]) || $question->isNewRecord) {
 
     echo FormItemWidget::widget([
         "type"    => "text",
@@ -188,31 +188,52 @@ if ($question->type != Question::TypeJudge || $question->isNewRecord) {
     ]);
 }
 
-echo FormItemWidget::widget([
-    "type"    => "checkbox",
-    "label"   => "答案",
-    "tips"    => "判断题A表示正确、B表示错误",
-    "options" => [
-        "name"    => "answer[]",
-        "verify"  => "required",
-        "value"   => str_split($question->answer),
+if (in_array($question->type, [Question::TypeJudge, Question::TypeMulti, Question::TypeSelect]) || $question->isNewRecord) {
+    echo FormItemWidget::widget([
+        "type"    => "checkbox",
+        "label"   => "答案",
+        "tips"    => "判断题A表示正确、B表示错误",
+        "classes" => "isSelect noAnswer",
         "options" => [
-            "A", "B",
-            [
-                "value" => "C",
-                "class" => "noJudge"
+            "name"    => "answer[]",
+            "value"   => str_split($question->answer),
+            "options" => [
+                [
+                    "value" => "A",
+                    "class" => "isSelect"
+                ],
+                [
+                    "value" => "B",
+                    "class" => "isSelect"
+                ],
+                [
+                    "value" => "C",
+                    "class" => "noJudge"
+                ],
+                [
+                    "value" => "D",
+                    "class" => "noJudge"
+                ],
+                [
+                    "value" => "E",
+                    "class" => "noJudge"
+                ]
             ],
-            [
-                "value" => "D",
-                "class" => "noJudge"
-            ],
-            [
-                "value" => "E",
-                "class" => "noJudge"
-            ]
-        ],
-    ]
-]);
+        ]
+    ]);
+}
+
+if (in_array($question->type, [Question::TypeBlank, Question::TypeAnswer]) || $question->isNewRecord) {
+    echo FormItemWidget::widget([
+        "type"    => "textarea",
+        "label"   => "答案",
+        "classes" => "noSelect noAnswer",
+        "options" => [
+            "name"  => "answer_text",
+            "value" => $question->answer,
+        ]
+    ]);
+}
 
 echo FormItemWidget::widget([
     "type"    => "textarea",
@@ -262,13 +283,29 @@ FormWidget::end();
         form.on("radio(type)", function (data) {
             console.log(data)
             var value = data.value,
-                isJudge = value == <?=Question::TypeJudge?>
-
-                    console.log(isJudge)
-            if (isJudge)
+                isJudge = value == <?=Question::TypeJudge?>,
+                noSelect = value == <?=Question::TypeBlank?> || value == <?=Question::TypeAnswer?> || value == <?=Question::TypeMultiQuestion?>,
+                isTypeAnswer = value == <?=Question::TypeMultiQuestion?>;
+            if (isJudge) {
+                $(".noAnswer").show()
                 $(".noJudge").hide()
-            else
+                $(".isSelect").show()
+                $(".noSelect").hide()
+            } else if (noSelect) {
+                $(".noJudge").hide()
+                $(".noSelect").show()
+                $(".isSelect").hide()
+                if(isTypeAnswer)
+                    $(".noAnswer").hide()
+            }
+            else {
+                $(".noAnswer").show()
                 $(".noJudge").show()
+                $(".noSelect").hide()
+                $(".isSelect").show()
+            }
+
+
             form.render()
         })
     })

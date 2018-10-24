@@ -272,7 +272,7 @@ class QuestionController extends BaseController
             $question->title = Yii::$app->request->post("title", "");
             $attaches = Yii::$app->request->post("attaches", []);
             $question->attaches = empty($attaches) ? "" : json_encode($attaches);
-            if ($question->type != Question::TypeJudge) {
+            if (in_array($question->type, [Question::TypeSelect,Question::TypeMulti,Question::TypeMultiQuestion])) {
                 $question->a = Yii::$app->request->post("a", "");
                 $question->aImg = Yii::$app->request->post("aImg", "");
                 $question->b = Yii::$app->request->post("b", "");
@@ -284,7 +284,12 @@ class QuestionController extends BaseController
                 $question->e = Yii::$app->request->post("e", "");
                 $question->eImg = Yii::$app->request->post("eImg", "");
             }
-            $question->answer = join("", Yii::$app->request->post("answer", []));
+            if (in_array($question->type, [Question::TypeSelect, Question::TypeMulti, Question::TypeJudge]))
+                $question->answer = join("", Yii::$app->request->post("answer", []));
+            else if (in_array($question->type, [Question::TypeBlank, Question::TypeAnswer]))
+                $question->answer = Yii::$app->request->post("answer_text", "");
+            else
+                $question->answer = "";
             $question->description = Yii::$app->request->post("description", "");
             $question->knowledge = Yii::$app->request->post("knowledge", "");
             $question->difficulty = (int)Yii::$app->request->post("difficulty", 0);

@@ -22,12 +22,14 @@ class Question extends \common\models\base\Question
     const TypeMulti = 3;
     const TypeBlank = 4;
     const TypeMultiQuestion = 5;
+    const TypeAnswer = 6;
 
     const TypeAll = [
         Question::TypeJudge  => "判断题",
         Question::TypeSelect => "单选题",
         Question::TypeMulti  => "多选题",
         Question::TypeBlank  => "填空题",
+        Question::TypeAnswer => "解答题",
         Question::TypeMultiQuestion => "含多个小题"
     ];
 
