@@ -101,6 +101,8 @@ Component({
         },
         afterFill: function (userAnswer) {
             let that = this
+            that.data.userAnswer = userAnswer
+            that.data.ajaxAnswer[that.data.question.qid] = userAnswer
             that.setData({
                 userAnswer: userAnswer
             })
