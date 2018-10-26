@@ -4,18 +4,15 @@ Page({
     data: {
         user: {},
         domain: app.globalData.qiNiuDomain,
-        picker: false,
         typesData: [],
-        pickerValue: [0, 0],
-        qTypes: []
+        pickerValue: 0
     },
     onLoad: function () {
         let that = this
         app.get("question/all-types", {}, function (res) {
             that.setData({
                 typesData: res.types,
-                pickerValue: res.value,
-                qTypes: res.qTypes
+                pickerValue: res.value
             })
         })
     },
@@ -45,18 +42,17 @@ Page({
             picker: true
         })
     },
-    pickerSubmit: function (e) {
+    changeType: function (e) {
         console.log(e)
         let that = this,
             value = e.detail.value,
-            tid = value[1]
+            tid = that.data.typesData[value].tid
         app.post("question/change-type", {tid: tid}, function (res) {
             app.globalData.user = res.user
             app.toast("切换分类成功", "success")
             that.setData({
                 pickerValue: res.value,
-                user: res.user,
-                qTypes: res.qTypes
+                user: res.user
             })
         })
     },
@@ -75,12 +71,12 @@ Page({
     train: function (e) {
         let that = this,
             index = e.detail.value,
-            type = that.data.qTypes[index].type
+            tid = that.data.typesData[that.data.pickerValue].child[index].tid
         if (!that.common())
             return true
-        app.get("question/train-last-offset", {type: type}, function (res) {
+        app.get("question/train-last-offset", {tid: tid}, function (res) {
             res.offset = !res.offset || res.offset == 0 ? 1 : res.offset
-            let url = "question/train?tid=" + res.tid + "&type=" + type
+            let url = "question/train?tid=" + res.tid
             if (res.offset == 1) {
                 app.turnPage(url)
                 return true

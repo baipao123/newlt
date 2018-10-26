@@ -41,7 +41,8 @@ class QuestionPrice extends \common\models\base\QuestionPrice
 
     public function title() {
         $type = $this->questionType;
-        return $type->name . "-" . $this->hourStr();
+        $name = $type ? $type->name . "-" : "";
+        return $name . $this->hourStr();
     }
 
     public function info() {

@@ -186,6 +186,10 @@ button.low{
     display: block;
 }
 
+.block-inline {
+    display: inline-block;
+}
+
 .width-1 {
     width: 100%;
 }

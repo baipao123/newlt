@@ -30,10 +30,12 @@ class GoodsController extends BaseController
     }
 
 
-    public function actionPrices($tid) {
-        $type = QuestionType::findOne($tid);
-        if (!$type || $type->status != Status::PASS)
-            return Tool::reJson(null, "分类不存在", Tool::FAIL);
+    public function actionPrices($tid = 0) {
+        if($tid > 0) {
+            $type = QuestionType::findOne($tid);
+            if (!$type || $type->status != Status::PASS)
+                return Tool::reJson(null, "分类不存在", Tool::FAIL);
+        }
         $prices = QuestionPrice::prices($tid);
         $data = [];
         foreach ($prices as $price)
@@ -48,9 +50,9 @@ class GoodsController extends BaseController
         $p = QuestionPrice::findOne($pid);
         if (!$p || $p->status != Status::PASS)
             return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
-        $type = $p->questionType;
-        if (!$type || $type->status != Status::PASS)
-            return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
+//        $type = $p->questionType;
+//        if (!$type || $type->status != Status::PASS)
+//            return Tool::reJson(null, "未发现商品，或商品已下架", Tool::FAIL);
         $oid = Order::find()->where(["tid" => $p->tid, "pid" => $pid, "status" => [Status::WAIT_PAY, Status::IS_UNIFY_ORDER, Status::WAIT_NOTIFY]])->andWhere([">", "created_at", time() - 900])->orderBy("id desc")->select("id")->scalar();
         if ($oid > 0)
             return $this->send(["oid" => intval($oid)], "存在未支付订单");
@@ -58,7 +60,7 @@ class GoodsController extends BaseController
         $order->tid = $p->tid;
         $order->pid = $pid;
         $order->title = $p->title();
-        $order->cover = empty($p->cover) ? $type->icon : $p->cover;
+        $order->cover = $p->cover();
         $order->uid = $this->user_id();
         $order->openId = $this->getUser()->openId;
 //        $order->formId = $this->getPost("formId");

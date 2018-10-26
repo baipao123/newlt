@@ -29,9 +29,8 @@ Page({
         this.info()
     },
     getPrices: function () {
-        let that = this,
-            tid = that.data.tid
-        app.get("goods/prices", {tid: tid}, function (data) {
+        let that = this
+        app.get("goods/prices", {}, function (data) {
             that.setData({
                 prices: data.prices,
             })

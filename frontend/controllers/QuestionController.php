@@ -22,22 +22,16 @@ class QuestionController extends BaseController
     public function actionAllTypes() {
         $types = QuestionType::all();
         $user = $this->getUser();
-        $value = [0, 0];
+        $value = 0;
         if ($user->tid > 0)
             foreach ($types as $i => $type) {
                 if ($user->tid == $type['tid']) {
-                    $value[0] = $i;
-                    foreach ($type['child'] as $j => $val) {
-                        if ($user->tid2 == $val['tid']) {
-                            $value[1] = $j;
-                            break;
-                        }
-                    }
+                    $value = $i;
                     break;
                 }
             }
         $type = QuestionType::findOne($user->tid2);
-        return Tool::reJson(["types" => array_values($types), "value" => $value, "qTypes" => $type ? $type->qTypes() : []]);
+        return Tool::reJson(["types" => array_values($types), "value" => $value]);
     }
 
     public function actionChangeType() {
@@ -46,28 +40,22 @@ class QuestionController extends BaseController
         if (!$type || $type->status != Status::PASS)
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
         $user = $this->getUser();
-        if ($user->tid == $type->parentId && $user->tid2 == $tid)
+        if ($user->tid == $type->id)
             return Tool::reJson(null, "已在当前分类", Tool::FAIL);
-        $expireAt = UserQuestionType::find()->where(["uid" => $user->id, "tid" => $type->parentId ?: $type->id])->orderBy("expire_at desc")->select("expire_at")->limit(1)->scalar();
-        $user->tid = $type->parentId;
-        $user->tid2 = $tid;
+        $expireAt = UserQuestionType::find()->where(["uid" => $user->id, "tid" => $type->tid ?: $type->id])->orderBy("expire_at desc")->select("expire_at")->limit(1)->scalar();
+        $user->tid = $type->tid ?: $type->id;
+        $user->tid2 = 0;
         $user->expire_at = intval($expireAt);
         $user->save();
         $types = QuestionType::all();
-        $value = [0, 0];
+        $value = 0;
         foreach ($types as $i => $t) {
             if ($user->tid == $t['tid']) {
-                $value[0] = $i;
-                foreach ($t['child'] as $j => $val) {
-                    if ($user->tid2 == $val['tid']) {
-                        $value[1] = $j;
-                        break;
-                    }
-                }
+                $value = $i;
                 break;
             }
         }
-        return Tool::reJson(["user" => $user->info(), "value" => $value, "qTypes" => $type->qTypes()]);
+        return Tool::reJson(["user" => $user->info(), "value" => $value]);
     }
 
     public function actionInfo($tid) {
@@ -132,7 +120,6 @@ class QuestionController extends BaseController
         $answer = $this->getPost("answer", "");
         $answer = empty($answer) ? [] : json_decode($answer,true);
         $offset = $this->getPost("offset", 0);
-        \Yii::warning($_POST);
         $question = Question::findOne($qid);
         if (!$question)
             return Tool::reJson(null, "未发现题目", Tool::FAIL);
@@ -144,7 +131,6 @@ class QuestionController extends BaseController
                 if (empty($q))
                     continue;
                 $answerText = ArrayHelper::getValue($answer, $q['qid']);
-                \Yii::warning($answer,$answerText);
                 if($qid == $q['qid'])
                     $info['userAnswer'] = $answerText;
                 else
