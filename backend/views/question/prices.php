@@ -21,15 +21,6 @@ use layuiAdm\tools\Url;
         <form class="layui-form" method="get">
 
             <div class="layui-input-inline">
-                <select name="tid" title="">
-                    <option value="0">请选择科目</option>
-                    <?php foreach ($types as $type): ?>
-                    <option value="<?= $type->id ?>" <?= $type->id == $tid ? "selected" : ""?>><?= $type->name ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="layui-input-inline">
                 <select name="status" title="">
                     <option value="0">全部状态</option>
                     <option value="<?= Status::PASS ?>" <?= $status == Status::PASS ? "selected" : ""?>>上架</option>
@@ -53,7 +44,7 @@ use layuiAdm\tools\Url;
 <table class="layui-table simple">
     <thead>
     <tr>
-        <th>分类ID</th>
+        <th>ID</th>
         <th>图标</th>
         <th>价格</th>
         <th>时间</th>
@@ -69,7 +60,11 @@ use layuiAdm\tools\Url;
     <?php foreach ($prices as $price): ?>
         <tr>
             <td><?= $price->id ?></td>
-            <td class="icon-<?= $price->id ?>"><img class="img" src="<?= $price->cover(true) ?>" style="width: 50px;"/></td>
+            <td class="icon-<?= $price->id ?>">
+                <?php if($price->cover(true)):?>
+                <img class="img" src="<?= $price->cover(true) ?>" style="width: 50px;"/>
+                <?php endif;?>
+            </td>
             <td><?= $price->price / 100 ?> 元<?= $price->oldPrice > 0 ? "<Br><s>原价：" . ($price->oldPrice / 100) . " 元</s>" : "" ?></td>
             <td><?= $price->hourStr() ?></td>
             <td><?= $price->sort ?></td>

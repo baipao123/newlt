@@ -28,18 +28,6 @@ use layuiAdm\tools\Url;
     <input type="hidden" name="<?= Yii::$app->request->csrfParam ?>" value="<?= Yii::$app->request->getCsrfToken() ?>">
 
     <div class="layui-form-item">
-        <label class="layui-form-label">分类</label>
-        <div class="layui-input-block">
-            <select name="tid" title="" lay-verify="required" lay-filter="tid">
-                <option value="0">请选择分类</option>
-                <?php foreach ($types as $type): ?>
-                    <option value="<?= $type->id ?>" <?= $type->id == $price->tid ? "selected" : ""?> data-icon="<?= $type->icon ?>"><?= $type->name ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
         <label class="layui-form-label">图标</label>
         <div class="layui-input-block">
             <input type="hidden" name="cover" lay-filter="cover" lay-verify="cover" class="price-cover" value="<?= $price->cover ?>">

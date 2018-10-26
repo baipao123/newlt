@@ -104,6 +104,7 @@ class QuestionController extends BaseController
 
     public function actionPrices($tid = 0, $status = 0) {
         $query = QuestionPrice::find();
+        $query->where(["<>", "status", Status::DELETE]);
         if ($status > 0)
             $query->andWhere(["status" => $status]);
         if ($tid > 0)
@@ -139,7 +140,7 @@ class QuestionController extends BaseController
         }
 
         if (Yii::$app->request->isPost) {
-            $price->tid = (int)Yii::$app->request->post("tid");
+            $price->tid = 0;
             $price->title = '';
             //            $price->title = Yii::$app->request->post("title");
             $price->cover = Yii::$app->request->post("cover", "");
@@ -166,11 +167,11 @@ class QuestionController extends BaseController
                 $price->created_at = time();
             $price->updated_at = time();
 
-            if (empty($price->tid))
-                Yii::$app->session->setFlash("warning", "请选择分类");
+//            if (empty($price->tid))
+//                Yii::$app->session->setFlash("warning", "请选择分类");
             //            elseif (empty($price->title))
             //                Yii::$app->session->setFlash("warning", "请输入标题");
-            elseif (empty($price->price))
+            if (empty($price->price))
                 Yii::$app->session->setFlash("warning", "请输入价格");
             elseif (!in_array($price->type, [QuestionPrice::Type_Day, QuestionPrice::Type_Hour]))
                 Yii::$app->session->setFlash("warning", "请选择正确的时长类型");
@@ -255,9 +256,9 @@ class QuestionController extends BaseController
 
     public function actionInfo($qid = 0, $parentId = 0) {
         $pQuestion = null;
-        if($parentId > 0){
+        if ($parentId > 0) {
             $pQuestion = Question::findOne($parentId);
-            if(!$pQuestion || $pQuestion->type != Question::TypeMultiQuestion)
+            if (!$pQuestion || $pQuestion->type != Question::TypeMultiQuestion)
                 return $this->alert("未发现父类大题");
         }
         if ($qid > 0) {
@@ -279,7 +280,7 @@ class QuestionController extends BaseController
             $question->title = Yii::$app->request->post("title", "");
             $attaches = Yii::$app->request->post("attaches", []);
             $question->attaches = empty($attaches) ? "" : json_encode($attaches);
-            if (in_array($question->type, [Question::TypeSelect,Question::TypeMulti,Question::TypeMultiQuestion])) {
+            if (in_array($question->type, [Question::TypeSelect, Question::TypeMulti, Question::TypeMultiQuestion])) {
                 $question->a = Yii::$app->request->post("a", "");
                 $question->aImg = Yii::$app->request->post("aImg", "");
                 $question->b = Yii::$app->request->post("b", "");

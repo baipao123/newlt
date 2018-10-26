@@ -20,17 +20,18 @@ class User extends \common\models\base\User
     }
 
     public function getTidExpire($tid) {
-        if ($tid <= 0)
-            return $this->expire_at;
-        if ($this->tid == $tid || $this->tid2 == $tid)
-            return $this->expire_at > time() ? $this->expire_at : 0;
-        $questionType = QuestionType::findOne($tid);
-        if (!$questionType)
-            return 0;
-        $tid = $questionType->tid > 0 ? $questionType->tid : $tid;
-        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid])->andWhere([">", "expire_at", time()])->orderBy("expire_at desc")->one();
-        /* @var $type UserQuestionType */
-        return $type ? $type->expire_at : 0;
+        return $this->expire_at;// 有效期全局通用
+//        if ($tid <= 0)
+//            return $this->expire_at;
+//        if ($this->tid == $tid || $this->tid2 == $tid)
+//            return $this->expire_at > time() ? $this->expire_at : 0;
+//        $questionType = QuestionType::findOne($tid);
+//        if (!$questionType)
+//            return 0;
+//        $tid = $questionType->tid > 0 ? $questionType->tid : $tid;
+//        $type = UserQuestionType::find()->where(["uid" => $this->id, "tid" => $tid])->andWhere([">", "expire_at", time()])->orderBy("expire_at desc")->one();
+//        /* @var $type UserQuestionType */
+//        return $type ? $type->expire_at : 0;
     }
 
     public function updateTrainRecord($tid, $offset) {
