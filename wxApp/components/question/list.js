@@ -97,6 +97,10 @@ Component({
                     index: index,
                 })
                 that.data.loading = false
+                wx.pageScrollTo({
+                    scrollTop: 0,
+                    duration: 300
+                })
             } else {
                 that.setData({
                     question:{},
