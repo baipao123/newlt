@@ -10,6 +10,7 @@ Page({
         questions: {},
         offset: 1,
         showIndex: false,
+        doneNum: 0,
         timeStrIndex: 0, // 倒计时
     },
     onLoad: function (options) {
@@ -93,15 +94,17 @@ Page({
     },
     finish: function () {
         let that = this,
-            total = that.data.exam.total,
-            num = that.data.exam.alNum
-        app.confirm("共有试题" + total + "题，已做" + num + "题，确定交卷吗？", function () {
+            total = that.data.exam.totalNum,
+            num = that.data.doneNum
+        app.confirm("共有试题" + total + "小题，已做" + num + "小题，确定交卷吗？", function () {
             that.finishExam()
         }, function () {
 
         }, "交卷", "确定交卷", "检查一下")
     },
     examIndex: function () {
+        if (!this.data.showIndex)
+            this.getInfo(this.data.eid, true)
         this.setData({
             showIndex: !this.data.showIndex
         })
@@ -138,16 +141,18 @@ Page({
                 })
         })
     },
-    getInfo: function (eid) {
+    getInfo: function (eid,again) {
         let that = this
         app.post("exam/info", {eid: eid}, function (res) {
             that.setData({
                 eid: eid,
                 exam: res.exam,
                 qNum: res.qNum,
-                maxOffset: res.num
+                maxOffset: res.num,
+                doneNum: res.doneNum
             })
-            that.timeStr(0)
+            if (!again)
+                that.timeStr(0)
         })
     },
     onUnload: function () {

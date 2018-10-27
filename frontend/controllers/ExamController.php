@@ -64,30 +64,37 @@ class ExamController extends BaseController
         foreach ($qNumList as $val) {
             $tid = $val['id'];
             $num = $val['examNum'];
-            $tmp = Question::find()->where(["tid" => $tid, "parentId" => 0, "status" => Status::PASS])->orderBy("RAND()")->limit($num)->select("id")->column();
+            $tmp = Question::find()->where(["tid" => $tid, "parentId" => 0, "status" => Status::PASS])->orderBy("RAND()")->limit($num)->select("id,answer")->asArray()->all();
             $qIds[ $tid ] = $tmp;
             $scores[$tid] = $val['score'];
             $allQIds = array_merge($allQIds, $tmp);
         }
         $cQIds = Question::find()->where(["id" => $allQIds, "type" => Question::TypeMultiQuestion])->select("id")->column();
-        $childQIds = Question::find()->where(["parentId" => $cQIds])->select("id,parentId")->asArray()->all();
+        $childQIds = Question::find()->where(["parentId" => $cQIds])->select("id,parentId,answer")->asArray()->all();
         $childData = [];
         foreach ($childQIds as $val) {
-            $childData[ $val['parentId'] ][] = $val['id'];
+            $childData[ $val['parentId'] ][] = [
+                "id"     => $val['id'],
+                "answer" => $val['answer']
+            ];
         }
         $total = 0;
         foreach ($qIds as $tid => $qIdArr) {
-            foreach ($qIdArr as $qId) {
+            foreach ($qIdArr as $val) {
+                $qId = $val['id'];
+                $answer = $val['answer'];
                 if (in_array($qId, $cQIds)) {
                     if (isset($childData[ $qId ])) {
-                        $qData[] = [$uid, $tid, $eid, $qId, 0, 0, $time];
-                        foreach ($childData[ $qId ] as $q) {
-                            $qData[] = [$uid, $tid, $eid, $q, $qId, $scores[ $tid ], $time];
+                        $qData[] = [$uid, $tid, $eid, $qId, 0, 0, $answer, $time];
+                        foreach ($childData[ $qId ] as $qVal) {
+                            $q = $qVal['id'];
+                            $a = $qVal['answer'];
+                            $qData[] = [$uid, $tid, $eid, $q, $qId, $scores[ $tid ], $a, $time];
                             $total++;
                         }
                     }
                 } else {
-                    $qData[] = [$uid, $tid, $eid, $qId, 0, $scores[ $tid ], $time];
+                    $qData[] = [$uid, $tid, $eid, $qId, 0, $scores[ $tid ], $answer, $time];
                     $total++;
                 }
             }
@@ -95,7 +102,7 @@ class ExamController extends BaseController
         $exam->num = count($qIds);
         $exam->totalNum = $total;
         $exam->save();
-        Yii::$app->db->createCommand()->batchInsert(UserExamQuestion::tableName(),["uid","tid","eid","qid","parentQid","score","created_at"],$qData)->execute();
+        Yii::$app->db->createCommand()->batchInsert(UserExamQuestion::tableName(),["uid","tid","eid","qid","parentQid","score","answer","created_at"],$qData)->execute();
         return $this->send([
             "eid" => $eid
         ]);
@@ -141,6 +148,7 @@ class ExamController extends BaseController
             "exam" => $exam->info(),
             "qNum" => $qNum,
             "num"  => $max,
+            "doneNum" => UserExamQuestion::find()->where(["eid"=>$eid,"status"=>UserExamQuestion::Done])->count(),
         ]);
     }
 
@@ -189,46 +197,29 @@ class ExamController extends BaseController
             return $this->sendError("考试已结束");
         $qid = $this->getPost("qid", 0);
         $answer = $this->getPost("answer", "");
+        $answer = empty($answer) ? [] : json_decode($answer,true);
         if (empty($answer))
-            return $this->sendError("请选择答案");
-        $answerArr = str_split($answer, 1);
-        asort($answerArr);
-        $answer = join($answerArr);
-
+            return $this->sendError("请填写答案");
         $question = Question::findOne($qid);
         if (!$question)
             return $this->sendError("未找到试题");
-        $ids = json_decode($exam->qIds, true);
-        if (!isset($ids[ $question->type ]) || !in_array($qid, $ids[ $question->type ]))
-            return $this->sendError("考卷中未发现此试题");
-        $u = UserExamQuestion::findOne(["eid" => $eid, "qid" => $qid, "uid" => $this->user_id()]);
-        if (!$u)
-            $u = new UserExamQuestion;
-        $u->eid = $eid;
-        $u->uid = $this->user_id();
-        $u->tid = $question->tid;
-        $u->qid = $qid;
-        $u->answer = $question->answer;
-        $u->userAnswer = $answer;
-        $u->status = Status::VERIFY;
-        $u->score = (string)$exam->Score($question->type);
-        if ($u->isNewRecord)
-            $u->created_at = time();
-        else
-            $u->updated_at = time();
-        $u->save();
-        if ($u->answer == $u->userAnswer)
-            $question->addSuccessNum();
-        else
-            $question->addErrNum();
-        return $this->send([
-            "user"  => [
-                "qid"    => $qid,
-                "uA"     => $answer,
-                "status" => Status::VERIFY
-            ],
-            "isNew" => $u->updated_at == 0,
-        ]);
+        $userExamQuestions = UserExamQuestion::find()->where(["eid" => $eid])->andWhere(["OR", "qid" => $qid, "parentQid" => $qid])->all();
+        $userExamQuestions = ArrayHelper::index($userExamQuestions, "qid");
+        /* @var $userExamQuestions UserExamQuestion[] */
+        foreach ($answer as $qid => $a) {
+            $userQuestion = isset($userExamQuestions[ $qid ]) ? $userExamQuestions[ $qid ] : null;
+            if ($userQuestion) {
+                $userQuestion->userAnswer = $a;
+                $userQuestion->status = UserExamQuestion::Done;
+                $userQuestion->updated_at = time();
+                $userQuestion->save();
+                if ($userQuestion->answer == $userQuestion->userAnswer)
+                    Question::addSuccessNum($qid);
+                else
+                    Question::addErrNum($qid);
+            }
+        }
+        return $this->send([]);
     }
 
     public function actionFinish() {
@@ -238,17 +229,22 @@ class ExamController extends BaseController
             return $this->sendError("未找到考卷");
         if ($exam->status == UserExam::ExamFinish)
             return $this->sendError("已经交过卷了");
-        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,:pass,:forbid) WHERE `eid`=:eid;", [":eid" => $eid, ":pass" => Status::PASS, ":forbid" => Status::FORBID])->execute();
-        $info = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("sum(score) as score,count(*) as passNum")->asArray()->one();
-        $detail = json_decode($exam->detail, true);
-        $detail['failNum'] = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => Status::PASS])->select("count(*)")->scalar();
+        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,:pass,:forbid) WHERE `eid`=:eid;", [":eid" => $eid, ":pass" => UserExamQuestion::Success, ":forbid" => UserExamQuestion::Fail])->execute();
+        $info = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => UserExamQuestion::Success])->select("sum(score) as score,count(*) as passNum")->asArray()->one();
+        $failNum = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => UserExamQuestion::Success])->select("count(*)")->scalar();
         $exam->score = intval($info['score']);
         $exam->status = UserExam::ExamFinish;
         $exam->finish_at = time();
-        $exam->detail = json_encode(ArrayHelper::merge($info, $detail));
+        $exam->passNum = intval($info['passNum']);
+        $exam->errNum = $failNum;
         $exam->save();
-        return $this->send([
-            "exam" => $exam->info(),
-        ]);
+
+        $parentQids = UserExamQuestion::find()->where(["eid" => $eid])->andWhere([">", "parentQid", 0])->distinct()->select("parentQid")->column();
+        $failParentQids = UserExamQuestion::find()->where(["eid" => $eid, "status" => UserExamQuestion::Fail])->andWhere([">", "parentQid", 0])->distinct()->select("parentQid")->column();
+        $successParentQids = array_diff($parentQids, $failParentQids);
+        if (!empty($successParentQids))
+            UserExamQuestion::updateAll(["status" => UserExamQuestion::Success], ["eid" => $eid, "qid" => $successParentQids]);
+
+        return $this->send([]);
     }
 }
