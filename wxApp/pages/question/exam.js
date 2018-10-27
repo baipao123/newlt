@@ -83,7 +83,7 @@ Page({
             return true;
         that.data.exam.status = 1
         app.post("exam/finish", {eid: that.data.eid}, function (res) {
-            app.alert("交卷成功，得分：" + res.exam.score + '分', function () {
+            app.alert("交卷成功，得分：" + res.score + '分', function () {
                 wx.redirectTo({
                     url: "/pages/question/exam?eid=" + that.data.eid + "&all=1"
                 })
@@ -94,13 +94,17 @@ Page({
     },
     finish: function () {
         let that = this,
-            total = that.data.exam.totalNum,
-            num = that.data.doneNum
-        app.confirm("共有试题" + total + "小题，已做" + num + "小题，确定交卷吗？", function () {
-            that.finishExam()
-        }, function () {
+            total = that.data.exam.totalNum
+        if(that.data.exam.status != 0)
+            return false
+        that.getInfo(that.data.eid,true,function () {
+            let num = that.data.doneNum
+            app.confirm("共有试题" + total + "小题，已做" + num + "小题，确定交卷吗？", function () {
+                that.finishExam()
+            }, function () {
 
-        }, "交卷", "确定交卷", "检查一下")
+            }, "交卷", "确定交卷", "检查一下")
+        })
     },
     examIndex: function () {
         if (!this.data.showIndex)
@@ -141,7 +145,7 @@ Page({
                 })
         })
     },
-    getInfo: function (eid,again) {
+    getInfo: function (eid,again,success) {
         let that = this
         app.post("exam/info", {eid: eid}, function (res) {
             that.setData({
@@ -151,8 +155,11 @@ Page({
                 maxOffset: res.num,
                 doneNum: res.doneNum
             })
+            that.data.doneNum = res.doneNum
             if (!again)
                 that.timeStr(0)
+            if(success)
+                success()
         })
     },
     onUnload: function () {

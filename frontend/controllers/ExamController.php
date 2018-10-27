@@ -219,6 +219,9 @@ class ExamController extends BaseController
                     Question::addErrNum($id);
             }
         }
+        if (!isset($answer[ $qid ]))
+            UserExamQuestion::isDone($eid, $qid);
+
         $info = $question->info();
         if (!empty($answer)) {
             $questions = $info['children'];
@@ -243,9 +246,9 @@ class ExamController extends BaseController
             return $this->sendError("未找到考卷");
         if ($exam->status == UserExam::ExamFinish)
             return $this->sendError("已经交过卷了");
-        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,:pass,:forbid) WHERE `eid`=:eid;", [":eid" => $eid, ":pass" => UserExamQuestion::Success, ":forbid" => UserExamQuestion::Fail])->execute();
+        Yii::$app->db->createCommand("UPDATE `user_exam_question` SET `status`=IF(`userAnswer`=`answer`,:pass,:forbid) WHERE `eid`=:eid AND `status`=:done;", [":eid" => $eid, ":pass" => UserExamQuestion::Success, ":forbid" => UserExamQuestion::Fail, ":done" => UserExamQuestion::Done])->execute();
         $info = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => UserExamQuestion::Success])->select("sum(score) as score,count(*) as passNum")->asArray()->one();
-        $failNum = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => UserExamQuestion::Success])->select("count(*)")->scalar();
+        $failNum = UserExamQuestion::find()->where(["eid" => $eid, "uid" => $this->user_id(), "status" => UserExamQuestion::Fail])->select("count(*)")->scalar();
         $exam->score = intval($info['score']);
         $exam->status = UserExam::ExamFinish;
         $exam->finish_at = time();
@@ -253,12 +256,18 @@ class ExamController extends BaseController
         $exam->errNum = $failNum;
         $exam->save();
 
-        $parentQids = UserExamQuestion::find()->where(["eid" => $eid])->andWhere([">", "parentQid", 0])->distinct()->select("parentQid")->column();
         $failParentQids = UserExamQuestion::find()->where(["eid" => $eid, "status" => UserExamQuestion::Fail])->andWhere([">", "parentQid", 0])->distinct()->select("parentQid")->column();
-        $successParentQids = array_diff($parentQids, $failParentQids);
+        $notDoParentQids = UserExamQuestion::find()->where(["eid" => $eid, "status" => UserExamQuestion::NotDo])->andWhere([">", "parentQid", 0])->distinct()->select("parentQid")->column();
+        $someSuccessParentQids = UserExamQuestion::find()->where(["eid" => $eid, "status" => UserExamQuestion::Success])->andWhere([">", "parentQid", 0])->distinct()->select("parentQid")->column();
+        $successParentQids = array_diff($someSuccessParentQids, $failParentQids, $notDoParentQids);
         if (!empty($successParentQids))
             UserExamQuestion::updateAll(["status" => UserExamQuestion::Success], ["eid" => $eid, "qid" => $successParentQids]);
+        $finalFailQids = array_merge($failParentQids,array_intersect($notDoParentQids,$someSuccessParentQids));
+        if(!empty($finalFailQids))
+            UserExamQuestion::updateAll(["status" => UserExamQuestion::Fail], ["eid" => $eid, "qid" => $finalFailQids]);
 
-        return $this->send([]);
+        return $this->send([
+            "score"=>$exam->score
+        ]);
     }
 }
