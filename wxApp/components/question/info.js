@@ -60,7 +60,7 @@ Component({
             for (let qid in children) {
                 let child = children[qid]
                 if (child.userAnswer && child.userAnswer != '')
-                    ajaxAnswer['"' + child.qid + '"'] = child.userAnswer
+                    ajaxAnswer[child.qid] = child.userAnswer
                 questionChildren.push(child)
             }
             this.setData({

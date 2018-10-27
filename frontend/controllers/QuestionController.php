@@ -132,7 +132,7 @@ class QuestionController extends BaseController
                 $answerText = ArrayHelper::getValue($answer, $q['qid']);
                 if($qid == $q['qid'])
                     $info['userAnswer'] = $answerText;
-                else
+                else if(isset($info['children'][$q['qid']]))
                     $info['children'][$q['qid']]['userAnswer'] = $answerText;
                 if ($q['answer']['answer'] == $answerText) {
                     Question::addSuccessNum($q['qid']);

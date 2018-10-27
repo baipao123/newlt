@@ -38,7 +38,7 @@
     <view class="option weui-flex" wx:if="{{question.type == 4}}">
         <view class="fillBlank">
             {{indexNum > 0 ? indexNum + '. ' : ''}}
-            <input class="weui-input" bindblur="fillBlank" style="border-bottom:1rpx solid #333;"/>
+            <input class="weui-input" bindblur="fillBlank" style="border-bottom:1rpx solid #333;" value="{{question.userAnswer}}"/>
         </view>
     </view>
 

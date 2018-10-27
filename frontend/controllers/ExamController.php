@@ -206,17 +206,17 @@ class ExamController extends BaseController
         $userExamQuestions = UserExamQuestion::find()->where(["eid" => $eid])->andWhere(["OR", "qid" => $qid, "parentQid" => $qid])->all();
         $userExamQuestions = ArrayHelper::index($userExamQuestions, "qid");
         /* @var $userExamQuestions UserExamQuestion[] */
-        foreach ($answer as $qid => $a) {
-            $userQuestion = isset($userExamQuestions[ $qid ]) ? $userExamQuestions[ $qid ] : null;
+        foreach ($answer as $id => $a) {
+            $userQuestion = isset($userExamQuestions[ $id ]) ? $userExamQuestions[ $id ] : null;
             if ($userQuestion) {
                 $userQuestion->userAnswer = $a;
                 $userQuestion->status = UserExamQuestion::Done;
                 $userQuestion->updated_at = time();
                 $userQuestion->save();
                 if ($userQuestion->answer == $userQuestion->userAnswer)
-                    Question::addSuccessNum($qid);
+                    Question::addSuccessNum($id);
                 else
-                    Question::addErrNum($qid);
+                    Question::addErrNum($id);
             }
         }
         $info = $question->info();
@@ -226,10 +226,10 @@ class ExamController extends BaseController
             foreach ($questions as $q) {
                 if (empty($q))
                     continue;
-                $answerText = ArrayHelper::getValue($answer, $q['qid']);
+                $answerText = ArrayHelper::getValue($answer, $q['qid'],"");
                 if($qid == $q['qid'])
                     $info['userAnswer'] = $answerText;
-                else
+                else if(isset($info['children'][$q['qid']]))
                     $info['children'][$q['qid']]['userAnswer'] = $answerText;
             }
         }

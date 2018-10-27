@@ -110,7 +110,7 @@ class UserExam extends \common\models\base\UserExam
                 $offset++;
             }
         }
-        return [$data, $offset];
+        return [$data, $offset - 1];
     }
 
 
