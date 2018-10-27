@@ -38,13 +38,13 @@
     <view class="option weui-flex" wx:if="{{question.type == 4}}">
         <view class="fillBlank">
             {{indexNum > 0 ? indexNum + '. ' : ''}}
-            <input class="weui-input" bindblur="fillBlanks" />
+            <input class="weui-input" bindblur="fillBlank" style="border-bottom:1rpx solid #333;"/>
         </view>
     </view>
 
     <!-- subQuestions -->
     <view class="children">
-        <info question="{{item}}" wx:for="{{questionChildren}}" type="{{type}}" isChild="{{true}}" bindChose="childChose" wx:key="item" wx:for-index="idx" indexNum="{{idx + 1}}"/>
+        <info question="{{item}}" wx:for="{{questionChildren}}" eid="{{eid}}" isChild="{{true}}" bindChose="childChose" wx:key="item" wx:for-index="idx" indexNum="{{idx + 1}}"/>
     </view>
 
 
@@ -73,7 +73,7 @@
     </view>
 
     <!-- answer button -->
-    <view class="weui-flex" wx:if="{{!isChild && question.type != 6}}">
+    <view class="weui-flex" wx:if="{{!(isChild || question.type == 6 || (questionChildren.length>0 && questionChildren[0].type ==6)) }}">
         <view class="a-c weui-flex__item-auto" wx:if="{{question.type >= 3 && !question.answer}}">
             <button type="primary" size="mini" plain="{{true}}" bindtap="goAnswer"><span class="myIcon icon-true">提交答案</span></button>
         </view>

@@ -142,10 +142,12 @@ Page({
         let that = this
         app.post("exam/info", {eid: eid}, function (res) {
             that.setData({
+                eid: eid,
                 exam: res.exam,
                 qNum: res.qNum,
                 maxOffset: res.num
             })
+            that.timeStr(0)
         })
     },
     onUnload: function () {

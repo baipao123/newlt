@@ -20,9 +20,9 @@ Component({
 
             }
         },
-        type: {
+        eid: {
             type: Number,
-            value: 1,
+            value: 0,
             observer: function (newData, oldData) {
 
             }
@@ -114,7 +114,7 @@ Component({
                     "userAnswer": userAnswer,
                     index: that.data.indexNum
                 })
-            else if (that.data.type == 1)
+            else if (that.data.question.type != 4)
                 that.goAnswer()
         },
         goAnswer: function (e, isSee) {
@@ -124,6 +124,8 @@ Component({
                     offset: that.data.offset,
                     answer: JSON.stringify(that.data.ajaxAnswer)
                 }
+            if(that.data.eid>0)
+                data.eid = that.data.eid
             console.log(data)
 
             if (!data.answer && !isSee)

@@ -39,6 +39,12 @@ Component({
                 })
             }
         },
+        eid: {
+            type: Number,
+            value: 0,
+            observer: function (newData, oldData) {
+            }
+        },
         info: {
             type: Object,
             value: 1,
