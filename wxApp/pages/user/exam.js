@@ -6,10 +6,7 @@ Page({
         domain: app.globalData.qiNiuDomain,
         nowTime: 0,
         timeOutIndex : 1,
-        picker: false,
         typesData: [],
-        pickerValue: [0, 0],
-        qTypes: [],
         refresh: false,
         loading: false,
         empty: false,
@@ -18,11 +15,9 @@ Page({
     },
     onLoad: function () {
         let that = this
-        app.get("question/all-types", {}, function (res) {
+        app.get("question/all-types", {tid:tid}, function (res) {
             that.setData({
-                typesData: res.types,
-                pickerValue: res.value,
-                qTypes: res.qTypes
+                typesData: res.types
             })
         })
         that.getList()
@@ -54,17 +49,11 @@ Page({
             that.countDown(that.data.timeOutIndex)
         } , 1000)
     },
-    picker: function () {
-        let that = this
-        that.setData({
-            picker: true
-        })
-    },
-    pickerSubmit: function (e) {
+    toggleType: function (e) {
         console.log(e)
         let that = this,
             value = e.detail.value
-        that.data.tid = value[1]
+        that.data.tid = that.data.typesData[value].tid
         that.data.page = 1
         that.getList(true)
     },

@@ -102,7 +102,7 @@ class ExamController extends BaseController
     }
 
     public function actionRecords($tid = 0, $page = 1, $limit = 10) {
-        $tid = empty($tid) ? $this->getUser()->tid2 : $tid;
+        $tid = empty($tid) ? $this->getUser()->tid : $tid;
         $info = [];
         if ($page == 1) {
             $type = QuestionType::findOne($tid);
@@ -112,8 +112,8 @@ class ExamController extends BaseController
             $info['avg'] = (string)number_format($info['avg'], 1);
             $info['icon'] = $type->icon();
             $info['name'] = $type->name;
-            $info['total'] = $type->setting("totalScore");
-            $info['pass'] = $type->setting("passScore");
+            $info['total'] = $type->score;
+            $info['pass'] = $type->passScore;
         }
 
         $exams = UserExam::find()
@@ -139,7 +139,7 @@ class ExamController extends BaseController
         return $this->send([
             "exam"  => $exam->info(),
             "qNum"  => $exam->qNum(),
-            "alNum" => count($exam->finishQuestions())
+            "alNum" => $exam->totalNum,
         ]);
     }
 

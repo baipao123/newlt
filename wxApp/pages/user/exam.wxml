@@ -1,6 +1,6 @@
 <view class="page">
     <block wx:if="{{info}}">
-        <view class="weui-panel" catchtap="picker">
+        <picker class="weui-panel" catchtap="picker" range="{{typesData}}" range-key="name" bindchange="toggleType">
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_appmsg">
                     <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" wx:if="{{info.icon}}">
@@ -21,7 +21,7 @@
                     </view>
                 </view>
             </view>
-        </view>
+        </picker>
         <view class="weui-flex bars a-c bg-white">
             <view class="weui-flex__item">
                 <view class="text text-green">{{info.num}}</view>
@@ -54,7 +54,7 @@
                                 </view>
                                 <view class="weui-flex__item a-c">
                                     <text class="text-green" wx:if="{{item.status == 1}}">已交卷</text>
-                                    <text class="text-orange" wx:elif="{{item.status == 2}}">考试中</text>
+                                    <text class="text-orange" wx:elif="{{item.status == 0}}">考试中</text>
                                     <text class="text-red" wx:else>未交卷</text>
                                 </view>
                             </view>
@@ -65,13 +65,13 @@
                             </view>
                             <view class="weui-flex">
                                 <view class="weui-flex__item">
-                                    总共<text class="text-green">{{item.total}}</text>题
+                                    总共<text class="text-green">{{item.totalNum}}</text>题
                                 </view>
                                 <view class="weui-flex__item" wx:if="{{item.passNum}}">
                                     正确<text class="text-green">{{item.passNum}}</text>题
                                 </view>
                                 <view class="weui-flex__item" wx:if="{{item.failNum}}">
-                                    错误<text class="text-green">{{item.failNum}}</text>题
+                                    错误<text class="text-green">{{item.errNum}}</text>题
                                 </view>
                             </view>
                         </view>

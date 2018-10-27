@@ -12,7 +12,7 @@
     </view>
     <view class="questions" hidden="{{showIndex}}">
         <!--<questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>-->
-        <questionList bindMoreList="moreList" questions="{{questions}}" offset="{{offset}}" maxOffset="{{maxOffset}}" type="2" title="{{title}}"/>
+        <questionList bindMoreList="moreList" questions="{{questions}}" offset="{{offset}}" maxOffset="{{maxOffset}}" type="2" info="{{title}}"/>
 
     </view>
     <include src="/pages/common/footer.wxml"/>

@@ -56,14 +56,16 @@ class UserExam extends \common\models\base\UserExam
             $this->status = self::ExamExpire;
             $this->save();
         }
-        $detail = empty($this->detail) ? [] : json_decode($this->detail, true);
-        return ArrayHelper::merge($detail, [
+        return [
             "eid"       => $this->id,
             "status"    => $this->status,
             "score"     => $this->score,
             "expire_at" => $this->expire_at,
             "finish_at" => $this->finish_at > 0 ? date("Y-m-d H:i:s", $this->finish_at) : "",
-        ]);
+            "totalNum"  => $this->totalNum,
+            "passNum"   => $this->passNum,
+            "errNum"    => $this->errNum,
+        ];
     }
 
     public function finishQuestions() {
@@ -73,7 +75,7 @@ class UserExam extends \common\models\base\UserExam
         return ArrayHelper::index($data, "qid");
     }
 
-    public function qNum() {
+    public function questionIndex() {
         $Ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
         if (empty($Ids))
             return [];
@@ -91,10 +93,6 @@ class UserExam extends \common\models\base\UserExam
         return $data;
     }
 
-    public function Score($type) {
-        $qType = $this->type;
-        return $qType->setting($qType->typeEnStr($type) . "Score");
-    }
 
     public static function examInfo($uid, $tid) {
         return \Yii::$app->db->cache(function () use ($uid, $tid) {

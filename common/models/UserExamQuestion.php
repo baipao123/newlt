@@ -12,4 +12,9 @@ namespace common\models;
 class UserExamQuestion extends \common\models\base\UserExamQuestion
 {
 
+    const NotDo = 0;
+    const Done = 1;
+    const Success = 2;
+    const Fail = 3;
+
 }

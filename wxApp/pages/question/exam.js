@@ -24,7 +24,7 @@ Page({
         if (all > 0)
             that.setData({showIndex: all > 0})
         that.data.eid = eid
-        that.getInfo()
+        that.getInfo(eid)
     },
     onShow: function () {
         let that = this
@@ -83,6 +83,8 @@ Page({
                     url: "/pages/question/exam?eid=" + that.data.eid + "&all=1"
                 })
             })
+        },function (res) {
+            that.data.exam.status = 0
         })
     },
     finish: function () {
@@ -132,6 +134,16 @@ Page({
                 that.setData({
                     questions: res.list
                 })
+        })
+    },
+    getInfo: function (eid) {
+        let that = this
+        app.get("exam/info", {eid: eid}, function (res) {
+            that.setData({
+                exam: res.exam,
+                qNum: res.qNum,
+                alNum: res.alNum
+            })
         })
     },
     onUnload: function () {
