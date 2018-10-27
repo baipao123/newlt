@@ -74,7 +74,6 @@ class QuestionController extends BaseController
             $data[] = [
                 "tid"   => $type->id,
                 "name"  => $type->name,
-                "child" => $type->qTypes()
             ];
         return Tool::reJson([
             "type"  => $typeData,

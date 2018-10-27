@@ -131,7 +131,7 @@ Component({
             if (!data.answer && !isSee)
                 app.toast(that.data.question.type == 4 ? "请先填写答案" : "请先选择答案", "none")
             else {
-                app.post(that.data.type == 1 ? "question/answer" : "exam/answer", data, function (res) {
+                app.post(that.data.eid == 0 ? "question/answer" : "exam/answer", data, function (res) {
                     that.setData({
                         question: res.question
                     })

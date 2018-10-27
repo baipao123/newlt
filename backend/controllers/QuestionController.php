@@ -46,8 +46,12 @@ class QuestionController extends BaseController
 
     public function actionTypeInfo($tid = 0, $pid = 0) {
         if (empty($tid)) {
+            $parentType = QuestionType::findOne($pid);
+            if(!$parentType && $pid>0)
+                return $this->alert("无法添加题型");
             $type = new QuestionType();
-            $type->parentId = $pid;
+            $type->tid = $parentType->tid > 0 ? $parentType->tid : $pid;
+            $type->parentId = $parentType->tid > 0 ? $pid : 0;
         } else {
             $type = QuestionType::findOne($tid);
             if (!$type || $type->status == Status::DELETE) {
@@ -57,20 +61,26 @@ class QuestionController extends BaseController
         }
         if (Yii::$app->request->isPost) {
             Yii::warning($_POST);
-            $type->name = Yii::$app->request->post("name");
-            $type->icon = Yii::$app->request->post("icon");
-            $type->sort = Yii::$app->request->post("sort");
-            $type->status = Yii::$app->request->post("status") ? Status::PASS : Status::FORBID;
+            $type->name = Yii::$app->request->post("name",'');
+            $type->description = Yii::$app->request->post("description",'');
+            $type->icon = Yii::$app->request->post("icon",'');
+            $type->sort = (int)Yii::$app->request->post("sort",0);
+            $type->status = Yii::$app->request->post("status") == "on" ? Status::PASS : Status::FORBID;
+
+            $type->score = (int)Yii::$app->request->post("score", $type->score);
+            $type->passScore = (int)Yii::$app->request->post("passScore", $type->passScore);
+            $type->time = (int)Yii::$app->request->post("time", $type->time);
+            $type->examNum = (int)Yii::$app->request->post("examNum", $type->examNum);
+
             $type->updated_at = time();
             if ($type->isNewRecord)
                 $type->created_at = time();
             if (empty($type->name))
                 Yii::$app->session->setFlash("warning", "名称必填");
-            elseif (empty($type->icon) && $type->parentId == 0)
+            elseif (empty($type->icon) && $type->tid == 0)
                 Yii::$app->session->setFlash("warning", "请上传图标");
             elseif ($type->save()) {
                 Yii::$app->session->setFlash("success", "保存成功");
-                $type->updateSetting(Yii::$app->request->post("setting"));
             } else {
                 Yii::$app->session->setFlash("warning", "保存失败");
                 Yii::warning($type->errors, "保存QuestionType失败");

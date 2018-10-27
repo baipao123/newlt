@@ -49,7 +49,7 @@ use layuiAdm\tools\Url;
             <label class="layui-form-label">大题标题说明</label>
             <div class="layui-input-block">
                 <input type="text" name="description" placeholder="大题标题说明" autocomplete="off" class="layui-input" lay-filter="name"
-                       lay-verify="required" value="<?= $type->description ?>">
+                       value="<?= $type->description ?>">
             </div>
         </div>
     <?php endif;?>
@@ -77,21 +77,21 @@ use layuiAdm\tools\Url;
                 <div class="layui-form-item">
                     <label class="layui-form-label">模考时间(分钟)</label>
                     <div class="layui-input-block">
-                        <input type="number" name="sort" placeholder="模考时间" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->time ?>">
+                        <input type="number" name="time" placeholder="模考时间" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->time ?>">
                         <div class="layui-form-mid layui-word-aux">该科目考试总计时间</div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">总分</label>
                     <div class="layui-input-block">
-                        <input type="number" name="sort" placeholder="总分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->score ?>">
+                        <input type="number" name="score" placeholder="总分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->score ?>">
                         <div class="layui-form-mid layui-word-aux">考试满分分数</div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">及格分</label>
                     <div class="layui-input-block">
-                        <input type="number" name="sort" placeholder="及格分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->passScore ?>">
+                        <input type="number" name="passScore" placeholder="及格分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->passScore ?>">
                         <div class="layui-form-mid layui-word-aux">考试及格分数</div>
                     </div>
                 </div>
@@ -102,14 +102,14 @@ use layuiAdm\tools\Url;
             <div class="layui-form-item">
                 <label class="layui-form-label">模考题量</label>
                 <div class="layui-input-block">
-                    <input type="number" name="sort" placeholder="模考题量" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->examNum ?>">
+                    <input type="number" name="examNum" placeholder="模考题量" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->examNum ?>">
                     <div class="layui-form-mid layui-word-aux">考试中，有几道题目，例：比如当前有2道阅读理解，共10小题，此处填2</div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">每小题的分值</label>
                 <div class="layui-input-block">
-                    <input type="number" name="sort" placeholder="总分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->score ?>">
+                    <input type="number" name="score" placeholder="总分" autocomplete="off" class="layui-input" lay-filter="sort" value="<?= $type->score ?>">
                     <div class="layui-form-mid layui-word-aux">试卷中每小题的分值，比如当前有2道阅读理解，共10小题，每题1分，此处就填1</div>
                 </div>
             </div>

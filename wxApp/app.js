@@ -12,7 +12,7 @@ App({
     },
     globalData: {
         user: null,
-        apiDomain: "https://demo.wx-dk.cn/",
+        apiDomain: "https://yikao.jiuyeli.org/",
         qiNiuDomain: 'http://pic.yikao.jiuyeli.org/',
         systemInfo: null,
         logining: false,

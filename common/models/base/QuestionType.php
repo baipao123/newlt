@@ -39,9 +39,8 @@ class QuestionType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tid', 'parentId', 'sort', 'totalNum', 'examNum', 'score', 'passScore', 'time', 'created_at', 'updated_at'], 'integer'],
+            [['tid', 'parentId', 'sort', 'totalNum', 'examNum', 'score', 'passScore', 'time', 'status', 'created_at', 'updated_at'], 'integer'],
             [['name', 'icon', 'description'], 'string', 'max' => 255],
-            [['status'], 'string', 'max' => 1],
         ];
     }
 

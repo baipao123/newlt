@@ -130,51 +130,6 @@ class QuestionType extends \common\models\base\QuestionType
         return Img::icon($this->icon, $full);
     }
 
-    public function setting($key = "") {
-        $setting = empty($this->setting) ? [] : json_decode($this->setting, true);
-        return empty($key) ? $setting : ArrayHelper::getValue($setting, $key, 0);
-    }
-
-    public function updateSetting($arr) {
-        $setting = $this->setting();
-        foreach ($arr as $key => $value) {
-            $value = number_format($value, 1);
-            $setting[ $key ] = intval($value) == $value ? intval($value) : $value;
-        }
-        $this->setting = json_encode($setting);
-        $this->save();
-    }
-
-    public function qTypes() {
-        $setting = $this->setting();
-        $data = [];
-        $judge = ArrayHelper::getValue($setting, "judgeTotal", 0);
-        $select = ArrayHelper::getValue($setting, "selectTotal", 0);
-        $multi = ArrayHelper::getValue($setting, "multiTotal", 0);
-        $blank = ArrayHelper::getValue($setting, "blankTotal", 0);
-        if ($judge > 0)
-            $data[] = [
-                "type" => Question::TypeJudge,
-                "name" => "判断题({$judge})"
-            ];
-        if ($select > 0)
-            $data[] = [
-                "type" => Question::TypeSelect,
-                "name" => "单选题({$select})"
-            ];
-        if ($multi > 0)
-            $data[] = [
-                "type" => Question::TypeMulti,
-                "name" => "多选题({$multi})"
-            ];
-        if ($blank > 0)
-            $data[] = [
-                "type" => Question::TypeBlank,
-                "name" => "填空题({$blank})"
-            ];
-        return $data;
-    }
-
     public function typeEnStr($type) {
         $arr = [
             Question::TypeJudge  => "judge",
