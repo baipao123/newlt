@@ -15,7 +15,7 @@ Page({
     },
     onLoad: function () {
         let that = this
-        app.get("question/all-types", {tid:tid}, function (res) {
+        app.get("question/all-types", {}, function (res) {
             that.setData({
                 typesData: res.types
             })

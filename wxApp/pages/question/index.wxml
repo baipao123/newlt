@@ -7,11 +7,11 @@
                 <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
                 <view class="text-m a-c">全真练习</view>
             </picker>
-            <view class="weui-flex__item" bindchange="tips" wx:else>
+            <view class="weui-flex__item" bindtap="tips" wx:else>
                 <image class="icon" src="{{domain}}wxApp/lianxi.png"/>
                 <view class="text-m a-c">全真练习</view>
             </view>
-            <view class="weui-flex__item" bindchange="exam">
+            <view class="weui-flex__item" bindtap="exam">
                 <image class="icon" src="{{domain}}wxApp/mokao.png"/>
                 <view class="text-m a-c">全真模考</view>
             </view>

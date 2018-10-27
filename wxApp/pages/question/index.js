@@ -87,14 +87,9 @@ Page({
     },
     exam: function (e) {
         let that = this,
-            value = e.detail.value,
-            tid = that.data.typesData[value].tid
+            tid = that.data.tid
         if (!that.data.type.on) {
             app.toast("您尚未开通此科目，请在下方支付并开通", "none")
-            return false
-        }
-        if (!tid) {
-            app.toast("请选择分类", "none")
             return false
         }
         app.get("exam/last", {tid: tid}, function (re) {
