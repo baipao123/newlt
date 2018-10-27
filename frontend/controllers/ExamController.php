@@ -162,8 +162,9 @@ class ExamController extends BaseController
         /* @var $questions Question[] */
         $questions = ArrayHelper::index($questions, "id");
         $data = [];
-        foreach ($questions as $index => $question) {
-            $qid = $question->id;
+        foreach ($examData as $val) {
+            $qid = $val['qid'];
+            $question = $questions[$qid];
             $info = $question->info($exam->status == UserExam::ExamFinish);
             $info['userAnswer'] = isset($answerData[ $qid ]) ? $answerData[ $qid ] : "";
             if (!empty($info['children'])) {

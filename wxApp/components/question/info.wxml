@@ -73,7 +73,7 @@
     </view>
 
     <!-- answer button -->
-    <view class="weui-flex" wx:if="{{!isChild}}">
+    <view class="weui-flex" wx:if="{{!isChild && question.type != 6}}">
         <view class="a-c weui-flex__item-auto" wx:if="{{question.type >= 3 && !question.answer}}">
             <button type="primary" size="mini" plain="{{true}}" bindtap="goAnswer"><span class="myIcon icon-true">提交答案</span></button>
         </view>

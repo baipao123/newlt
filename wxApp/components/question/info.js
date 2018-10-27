@@ -55,7 +55,8 @@ Component({
             let userAnswer = question.userAnswer ? question.userAnswer : '',
                 children = question.children,
                 ajaxAnswer = {},
-                questionChildren = []
+                questionChildren = [],
+                title = this.data.question.title
             for (let qid in children) {
                 let child = children[qid]
                 if (child.userAnswer && child.userAnswer != '')
@@ -67,8 +68,9 @@ Component({
                 ajaxAnswer: ajaxAnswer,
                 questionChildren: questionChildren
             })
-
-            WxParse.wxParse('title', 'html', this.data.question.title, this, 0);
+            if (this.data.indexNum > 0)
+                title = this.data.indexNum + '. ' + title
+            WxParse.wxParse('title', 'html', title, this, 0);
         },
         chose: function (e) {
             let that = this,
