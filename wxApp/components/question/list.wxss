@@ -32,6 +32,12 @@
     left:0;
     bottom: -1rpx;
 }
+
+.header > .desc {
+    font-weight: normal;
+    color: #333;
+    font-size: 25rpx;
+}
 .title{
     margin:20rpx auto;
 }

@@ -101,8 +101,11 @@ class QuestionController extends BaseController
             return Tool::reJson(null, "不存在的分类", Tool::FAIL);
 
         $offset = $offset <= 1 ? 1 : $offset;
+        $childTids = QuestionType::find()->where(["parentId" => $tid, "tid" => $qType->tid])->select("id")->column();
+        if (!empty($childTids))
+            $tid = $childTids;
 
-        $questions = Question::find()->where(["tid" => $tid, "status" => Status::PASS, "parentId" => 0])->offset($offset - 1)->limit(10)->all();
+        $questions = Question::find()->where(["tid" => $tid, "status" => Status::PASS, "parentId" => 0])->offset($offset - 1)->limit(10)->orderBy("id asc")->all();
         /* @var $questions Question[] */
         $data = [];
         foreach ($questions as $index => $question) {

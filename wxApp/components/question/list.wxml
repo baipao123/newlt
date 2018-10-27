@@ -1,7 +1,7 @@
 <view class="container">
     <view class="header">
-        <text>{{info.title}}</text>
-        <text>{{info.desc}}</text>
+        <view>{{info.title}}</view>
+        <view class="desc">{{info.desc}}</view>
     </view>
     <view class="body">
         <view class="header">第{{index}}题</view>
