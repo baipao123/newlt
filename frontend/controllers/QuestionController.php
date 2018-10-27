@@ -30,7 +30,6 @@ class QuestionController extends BaseController
                     break;
                 }
             }
-        $type = QuestionType::findOne($user->tid2);
         return Tool::reJson(["types" => array_values($types), "value" => $value]);
     }
 
@@ -112,7 +111,7 @@ class QuestionController extends BaseController
             Question::addViewNum($question->id);
         }
 
-        return Tool::reJson(["list" => $data, "num" => $qType->totalNum]);
+        return Tool::reJson(["list" => $data, "num" => $qType->totalNum, "title" => $qType->title()]);
     }
 
     public function actionAnswer() {

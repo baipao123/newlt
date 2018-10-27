@@ -7,21 +7,26 @@ Component({
     properties: {
         questions: {
             type: Object,
-            value: [],
+            value: {},
             observer: function (newData, oldData) {
-                for (let index in newData) {
-                    this.data.questions[index] = newData[index]
+                if (!app.isEmptyObject(this.data.questions)) {
+                    for (let index in newData) {
+                        oldData[index] = newData[index]
+                    }
+                    this.data.questions = oldData
+                    this.setOffset()
                 }
-                this.setOffset()
             }
         },
         offset: {
             type: Number,
-            value: 1,
+            value: 0,
             observer: function (newData, oldData) {
                 this.setData({
                     offset: newData
                 })
+                if(oldData == 0 && !app.isEmptyObject(this.data.questions))
+                    this.setOffset()
             }
         },
         maxOffset: {
@@ -31,13 +36,6 @@ Component({
                 this.setData({
                     maxOffset: newData
                 })
-            }
-        },
-        type: {
-            type: Number,
-            value: 1,
-            observer: function (newData, oldData) {
-
             }
         },
         info: {
@@ -73,9 +71,9 @@ Component({
             this.data.offset++
             this.setOffset()
         },
-        getMore: function (offset,needOffset) {
+        getMore: function (offset) {
             this.data.loading = true
-            this.triggerEvent('MoreList', {offset: offset, needOffset: needOffset})
+            this.triggerEvent('MoreList', {offset: offset})
         },
         setOffset: function (prev) {
             let that = this,
@@ -94,7 +92,7 @@ Component({
                 that.data.loading = false
             } else {
                 that.setData({
-                    question: {},
+                    question:{},
                     offset: offset,
                 })
                 that.getMore(prev ? Math.max(offset - 9, 1) : offset,prev ? offset : 0)
@@ -104,8 +102,9 @@ Component({
             let that = this,
                 data = e.detail,
                 question = data.question,
-                qid = question.qid
-            that.data.questions[qid] = question
+                qid = question.qid,
+                offset = that.data.offset
+            that.data.questions[offset] = question
         }
     }
 })

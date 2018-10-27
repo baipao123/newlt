@@ -1,6 +1,7 @@
 <view class="container">
     <view class="header">
         <text>{{info.title}}</text>
+        <text>{{info.desc}}</text>
     </view>
     <view class="body">
         <view class="header">第{{offset}}题</view>

@@ -73,28 +73,6 @@ class UserExam extends \common\models\base\UserExam
         return ArrayHelper::index($data, "qid");
     }
 
-    /**
-     * @param int $type
-     * @param int $offset
-     * @param int $limit
-     * @return array
-     */
-    public function getQIdsByOffset($type = 0, $offset = 1, $limit = 10) {
-        $ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
-        $data = [];
-        if (isset($ids[ $type ]) && isset($ids[ $type ][ $offset - 1 ])) {
-            $max = min(count($ids[ $type ]), $offset + $limit);
-            for (intval($offset); $offset <= $max; $offset++)
-                $data[] = (int)$ids[ $type ][ $offset - 1 ];
-        }
-        unset($ids);// 内存容易超
-        if (count($data) < $limit) {
-            $_ids = $this->getQIdsByOffset($type + 1, 1, $limit - count($data));
-            return array_merge($data, $_ids);
-        } else
-            return $data;
-    }
-
     public function qNum() {
         $Ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
         if (empty($Ids))

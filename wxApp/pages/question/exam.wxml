@@ -1,5 +1,5 @@
 <view class="page">
-    <view class="indexList" wx:if="{{showIndex}}">
+    <view class="indexList" hidden="{{!showIndex}}">
         <view class="indexBlock" wx:for="{{qNum}}" wx:for-index="type" wx:key="indexBlock-key">
             <view class="header" wx:if="{{type == 1}}">判断题</view>
             <view class="header" wx:elif="{{type == 2}}">单选题</view>
@@ -10,79 +10,10 @@
             </view>
         </view>
     </view>
-    <view class="questions" wx:else>
+    <view class="questions" hidden="{{showIndex}}">
         <!--<questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>-->
-        <view class="container">
-            <view class="header">
-                <text wx:if="{{question.type == 1}}">判断题</text>
-                <text wx:elif="{{question.type == 2}}">单选题</text>
-                <text wx:elif="{{question.type == 3}}">多选题</text>
-                <text wx:elif="{{question.type == 4}}">填空题</text>
-            </view>
-            <view class="body">
-                <view class="header">第{{offset}}题</view>
-                <view class="weui-loading big {{question.title ? 'hidden' : ''}}"/>
-                <view class="title" wx:if="{{question.title}}">
-                    <text space="nbsp">{{question.title}}</text>
-                </view>
-                <view class="attaches">
-                    <img urls="{{question.attaches}}"/>
-                </view>
-                <view class="options weui-flex" >
-                    <wxs src="./../../wxs/in.wxs" module="tools"/>
-                    <view class="weui-flex__item-auto option {{item.img == '' ? '' : 'center'}} {{tools.inString(item.option,question.user.uA) ? 'blue-block':''}} {{question.answer.answer ? (tools.inString(item.option,question.answer.answer) ? 'green-block': (tools.inString(item.option,question.user.uA) ? 'red-block' : '' )) : '' }} "
-                          wx:for="{{question.options}}" wx:key="key-option" bindtap="chose" data-option="{{item.option}}">
-                        <view class="option-title">
-                            <view class="weui-agree__checkbox-icon" style="top:1rpx">
-                                <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{tools.inString(item.option,question.user.uA)}}"/>
-                            </view>
-                            <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
-                        </view>
-                        <view class="option-img" wx:if="{{item.img}}">
-                            <img src="{{item.img}}"/>
-                        </view>
-                    </view>
-                </view>
+        <questionList bindMoreList="moreList" questions="{{questions}}" offset="{{offset}}" maxOffset="{{maxOffset}}" type="2" title="{{title}}"/>
 
-                <view class="answer" wx:if="{{question.answer}}">
-                    <view class="weui-form-preview">
-                        <view class="weui-form-preview__bd" style="line-height:.9em">
-                            <view class="weui-form-preview__item">
-                                <view class="weui-form-preview__label">正确答案</view>
-                                <view class="weui-form-preview__value text-green">{{question.answer.answer}}</view>
-                            </view>
-                            <view class="weui-form-preview__item" wx:if="{{question.answer.knowledge}}">
-                                <view class="weui-form-preview__label">知识点</view>
-                                <view class="weui-form-preview__value">{{question.answer.knowledge}}</view>
-                            </view>
-                            <view class="weui-form-preview__item" wx:if="{{question.answer.difficulty}}">
-                                <view class="weui-form-preview__label">难度</view>
-                                <view class="weui-form-preview__value">{{question.answer.difficulty}}</view>
-                            </view>
-                            <view class="weui-form-preview__item" wx:if="{{question.answer.description}}">
-                                <view class="weui-form-preview__label">答案解析</view>
-                                <view class="weui-form-preview__value">{{question.answer.description}}</view>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-
-                <view class="actions weui-flex">
-                    <view class="weui-flex__item-auto prev" bindtap="prev">
-                        <span class="myIcon icon-left" wx:if="{{!firstOffset}}">上一题</span>
-                    </view>
-                    <view class="weui-flex__item-auto a-c" bindtap="goAnswer">
-                        <span class="myIcon icon-pass-cycle" wx:if="{{type == 3}}">提交答案</span>
-                    </view>
-                    <view class="weui-flex__item-auto next" bindtap="next">
-                        <block  wx:if="{{!lastOffset}}">
-                            下一题
-                            <span class="myIcon icon-right"/>
-                        </block>
-                    </view>
-                </view>
-            </view>
-        </view>
     </view>
     <include src="/pages/common/footer.wxml"/>
     <view style="height:100rpx"/>

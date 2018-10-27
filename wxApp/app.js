@@ -347,5 +347,8 @@ App({
             return urls.substr(0, 4) == "http" ? urls : domain + urls
         else
             return urls
+    },
+    isEmptyObject:function (obj) {
+        return Object.keys(obj).length == 0
     }
 })

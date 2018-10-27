@@ -25,7 +25,7 @@ class ExamController extends BaseController
         if ($expire_at <= time())
             return $this->sendError("请先购买此分类");
         if ($tid <= 0)
-            $tid = $user->tid2;
+            $tid = $user->tid;
         $exam = UserExam::getLastExam($this->user_id(), $tid);
         return $this->send([
             "exam" => $exam ? $exam->simpleInfo() : []
@@ -35,39 +35,69 @@ class ExamController extends BaseController
     public function actionExam() {
         $tid = $this->getPost("tid", 0);
         $user = $this->getUser();
+        $uid = $user->id;
+        $time = time();
         $expire_at = $user->getTidExpire($tid);
         if ($expire_at <= time())
             return $this->sendError("请先购买此分类");
         if ($tid <= 0)
-            $tid = $user->tid2;
+            $tid = $user->tid;
         $type = QuestionType::findOne($tid);
         if (!$type || $type->status != Status::PASS)
             return $this->sendError("不存在的分类");
-        $setting = $type->setting();
-        $judge = ArrayHelper::getValue($setting, "judgeNum", 0);
-        $select = ArrayHelper::getValue($setting, "selectNum", 0);
-        $multi = ArrayHelper::getValue($setting, "multiNum", 0);
-        $blank = ArrayHelper::getValue($setting, "blankNum", 0);
-        $qIds = [
-            Question::TypeJudge  => $judge > 0 ? Question::getIds($tid, Question::TypeJudge, $judge) : [],
-            Question::TypeSelect => $select > 0 ? Question::getIds($tid, Question::TypeSelect, $select) : [],
-            Question::TypeMulti  => $multi > 0 ? Question::getIds($tid, Question::TypeMulti, $multi) : [],
-            Question::TypeBlank  => $blank > 0 ? Question::getIds($tid, Question::TypeBlank, $blank) : [],
-        ];
         $exam = new UserExam;
         $exam->uid = $user->id;
         $exam->tid = $tid;
-        $exam->expire_at = time() + ArrayHelper::getValue($setting, "time", 0) * 60;
+        $exam->expire_at = time() + ($type->time ?: 60) * 60;
         $exam->status = UserExam::ExamIng;
-        $exam->qIds = json_encode($qIds);
-        $exam->detail = json_encode([
-            "total" => count($qIds, COUNT_RECURSIVE) - 4
-        ]);
         $exam->created_at = time();
-        if (!$exam->save())
+        if (!$exam->save()) {
             Yii::warning($exam->errors, "保存UserExam错误");
+            return $this->sendError("创建模考试卷失败");
+        }
+        $eid = $exam->attributes['id'];
+        $qData = [];
+        $qNumList = QuestionType::getExamNumList($tid);
+        $qIds = [];
+        $allQIds = [];
+        $scores = [];
+        foreach ($qNumList as $val) {
+            $tid = $val['id'];
+            $num = $val['examNum'];
+            $tmp = Question::find()->where(["tid" => $tid, "parentId" => 0, "status" => Status::PASS])->orderBy("RAND()")->limit($num)->select("id")->column();
+            $qIds[ $tid ] = $tmp;
+            $scores[$tid] = $val['score'];
+            $allQIds = array_merge($allQIds, $tmp);
+        }
+        $cQIds = Question::find()->where(["id" => $allQIds, "type" => Question::TypeMultiQuestion])->select("id")->column();
+        $childQIds = Question::find()->where(["parentId" => $cQIds])->select("id,parentId")->asArray()->all();
+        $childData = [];
+        foreach ($childQIds as $val) {
+            $childData[ $val['parentId'] ][] = $val['id'];
+        }
+        $total = 0;
+        foreach ($qIds as $tid => $qIdArr) {
+            foreach ($qIdArr as $qId) {
+                if (in_array($qId, $cQIds)) {
+                    if (isset($childData[ $qId ])) {
+                        $qData[] = [$uid, $tid, $eid, $qId, 0, 0, $time];
+                        foreach ($childData[ $qId ] as $q) {
+                            $qData[] = [$uid, $tid, $eid, $q, $qId, $scores[ $tid ], $time];
+                            $total++;
+                        }
+                    }
+                } else {
+                    $qData[] = [$uid, $tid, $eid, $qId, 0, $scores[ $tid ], $time];
+                    $total++;
+                }
+            }
+        }
+        $exam->num = count($qIds);
+        $exam->totalNum = $total;
+        $exam->save();
+        Yii::$app->db->createCommand()->batchInsert(UserExamQuestion::tableName(),["uid","tid","eid","qid","parentQid","score","created_at"],$qData)->execute();
         return $this->send([
-            "eid" => $exam->attributes['id']
+            "eid" => $eid
         ]);
     }
 
@@ -115,26 +145,34 @@ class ExamController extends BaseController
 
     public function actionList() {
         $eid = $this->getPost("eid", 0);
-        $type = $this->getPost("type", Question::TypeJudge);
         $exam = UserExam::findOne($eid);
         if (!$exam || $exam->uid != $this->user_id())
             return $this->sendError("未找到考卷");
         $offset = $this->getPost("offset", 1);
-        $qIds = $exam->getQIdsByOffset($type, $offset);
-        $questions = Question::find()->where(["id" => $qIds])->orderBy(["type" => SORT_ASC, new \yii\db\Expression('FIELD (`id`,' . implode(',', $qIds) . ')')])->all();
+        $examData = UserExamQuestion::find()->where(["eid" => $eid, "parentQid" => 0])->offset($offset - 1)->limit(10)->select("id,qid,userAnswer")->asArray()->all();
+        $qIds = ArrayHelper::getColumn($examData, "qid");
+        $answerData = ArrayHelper::map($examData, "qid", "userAnswer");
+        $examDataSub = UserExamQuestion::find()->where(["eid" => $eid, "parentQid" => $qIds])->select("id,qid,userAnswer")->asArray()->all();
+        foreach ($examDataSub as $val) {
+            $answerData[ $val['qid'] ] = $val['userAnswer'];
+        }
+
+        $questions = Question::find()->where(["id" => $qIds])->all();
         /* @var $questions Question[] */
+        $questions = ArrayHelper::index($questions, "id");
         $data = [];
-        $tmpType = $type;
         foreach ($questions as $index => $question) {
-            if ($tmpType != $question->type) {
-                $tmpType = $question->type;
-                $offset = 1;
+            $qid = $question->id;
+            $info = $question->info($exam->status == UserExam::ExamFinish);
+            $info['userAnswer'] = isset($answerData[ $qid ]) ? $answerData[ $qid ] : "";
+            if (!empty($info['children'])) {
+                foreach ($info['children'] as $i => $value) {
+                    $subQid = $value['qid'];
+                    $info['children'][ $i ]['userAnswer'] = isset($answerData[ $subQid ]) ? $answerData[ $subQid ] : "";
+                }
             }
-            $info = $question->info();
-            if ($exam->status == UserExam::ExamFinish)
-                $info['answer'] = $question->answer();
-            $data[ $tmpType ][ $offset ] = $info;
-            $question->addViewNum();
+            $data[ $offset ] = $info;
+            Question::addViewNum($question->id);
             $offset++;
         }
         return $this->send(["list" => $data]);

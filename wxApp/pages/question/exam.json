@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-    "questionInfo": "/components/question/questionInfo"
+    "questionList": "/components/question/list"
   }
 }
