@@ -1,19 +1,15 @@
 <view class="page">
     <view class="indexList" hidden="{{!showIndex}}">
-        <view class="indexBlock" wx:for="{{qNum}}" wx:for-index="type" wx:key="indexBlock-key">
-            <view class="header" wx:if="{{type == 1}}">判断题</view>
-            <view class="header" wx:elif="{{type == 2}}">单选题</view>
-            <view class="header" wx:elif="{{type == 3}}">多选题</view>
-            <view class="header" wx:elif="{{type == 4}}">填空题</view>
+        <view class="indexBlock" wx:for="{{qNum}}" wx:for-index="tid" wx:key="indexBlock-key">
+            <view class="header">{{item.name}}</view>
             <view class="weui-flex offsetList">
-                <view class="weui-flex__item text-m index {{q.status > 0 ? (q.status == 2 ? 'success' : (q.status== 3 ? 'fail' : 'done')) : ''}}" wx:for="{{item}}" wx:for-index="i" wx:for-item="q" wx:key="item-key" data-offset="{{i}}" data-type="{{type}}" bindtap="goSingle">{{i}}</view>
+                <view class="weui-flex__item text-m index {{q.status > 0 ? (q.status == 2 ? 'success' : (q.status== 3 ? 'fail' : 'done')) : ''}}" wx:for="{{item.questions}}" wx:for-index="i" wx:for-item="q" wx:key="item-key" data-offset="{{q.offset}}" bindtap="goSingle">{{q.offset}}</view>
             </view>
         </view>
     </view>
     <view class="questions" hidden="{{showIndex}}">
         <!--<questionInfo bindMoreList="moreList" list="{{questions}}" offset="{{offset}}"/>-->
         <questionList bindMoreList="moreList" questions="{{questions}}" offset="{{offset}}" maxOffset="{{maxOffset}}" type="2" info="{{title}}"/>
-
     </view>
     <include src="/pages/common/footer.wxml"/>
     <view style="height:100rpx"/>

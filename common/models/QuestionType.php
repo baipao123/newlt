@@ -13,8 +13,15 @@ use common\tools\Img;
 use common\tools\Status;
 use yii\helpers\ArrayHelper;
 
+/**
+ * @property QuestionType $parentType
+ **/
 class QuestionType extends \common\models\base\QuestionType
 {
+
+    public function getParentType() {
+        return $this->hasOne(self::className(), ["id" => "parentId"])->alias("q");
+    }
 
     public function afterSave($insert, $changedAttributes) {
         if ($insert || isset($changedAttributes['name']) || isset($changedAttributes['status']))

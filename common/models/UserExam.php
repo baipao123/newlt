@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 /**
  * @property User $user
  * @property QuestionType $type
+ * @property UserExamQuestion[] $questions
  */
 class UserExam extends \common\models\base\UserExam
 {
@@ -27,6 +28,10 @@ class UserExam extends \common\models\base\UserExam
 
     public function getUser() {
         return $this->hasOne(User::className(), ["id" => "uid"]);
+    }
+
+    public function getQuestions() {
+        return $this->hasMany(UserExamQuestion::className(), ["eid" => "id"])->andWhere(["parentQid" => 0])->orderBy("id asc");
     }
 
     /**
@@ -76,21 +81,36 @@ class UserExam extends \common\models\base\UserExam
     }
 
     public function questionIndex() {
-        $Ids = empty($this->qIds) ? [] : json_decode($this->qIds, true);
-        if (empty($Ids))
-            return [];
-        $answers = $this->finishQuestions();
+        $questions = $this->questions;
         $data = [];
-        foreach ($Ids as $type => $ids) {
-            foreach ($ids as $index => $qid) {
-                $data[ $type ][ $index + 1 ] = [
-                    "qid"    => $qid,
-                    "uA"     => isset($answers[ $qid ]) ? $answers[ $qid ]['userAnswer'] : '',
-                    "status" => isset($answers[ $qid ]) ? $answers[ $qid ]['status'] : 0,
+        $tids = ArrayHelper::getColumn($questions, "tid");
+        $tids = array_unique($tids);
+        $types = QuestionType::find()->where(["t.id" => $tids])->joinWith("parentType q")->alias("t")->all();
+        /* @var $types QuestionType[]*/
+        $types = ArrayHelper::index($types,"id");
+        $offset = 1;
+        foreach ($questions as $question) {
+            if ($question->parentQid == 0 && isset($types[ $question->tid ])) {
+                $type = $types[ $question->tid ];
+                if ($type->parentId > 0)
+                    $type = $type->parentType;
+                if (!isset($data[ $type->id ])) {
+                    $data[ $type->id ] = [
+                        "tid"       => $type->id,
+                        "name"      => $type->name,
+                        "desc"      => $type->description,
+                        "questions" => []
+                    ];
+                }
+                $data[ $type->id ]["questions"][] = [
+                    "offset" => $offset,
+                    "qid"    => $question->qid,
+                    "status" => $question->status,
                 ];
+                $offset++;
             }
         }
-        return $data;
+        return [$data, $offset];
     }
 
 

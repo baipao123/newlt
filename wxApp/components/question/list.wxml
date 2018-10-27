@@ -4,13 +4,13 @@
         <text>{{info.desc}}</text>
     </view>
     <view class="body">
-        <view class="header">第{{offset}}题</view>
+        <view class="header">第{{index}}题</view>
 
         <info question="{{question}}" offset="{{offset}}" bindAfterAnswer="afterAnswer" />
 
         <view class="actions weui-flex">
             <view class="weui-flex__item-auto prev" bindtap="prev">
-                <span class="myIcon icon-left" wx:if="{{offset > 1}}">上一题</span>
+                <span class="myIcon icon-left" wx:if="{{index > 1}}">上一题</span>
             </view>
 
             <view class="weui-flex__item-auto next" bindtap="next">

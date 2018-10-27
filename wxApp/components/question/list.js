@@ -22,10 +22,11 @@ Component({
             type: Number,
             value: 0,
             observer: function (newData, oldData) {
+                this.data.index = newData
                 this.setData({
-                    offset: newData
+                    index:newData
                 })
-                if(oldData == 0 && !app.isEmptyObject(this.data.questions))
+                if (!app.isEmptyObject(this.data.questions))
                     this.setOffset()
             }
         },
@@ -50,7 +51,7 @@ Component({
         domain: app.globalData.qiNiuDomain,
         question:{},
         loading: false,
-
+        index:0
     },
     ready: function () {
     },
@@ -58,17 +59,17 @@ Component({
         prev: function () {
             if(this.data.loading)
                 return true
-            this.data.offset--
+            this.data.index--
             this.setOffset(true)
         },
         next: function () {
             if(this.data.loading)
                 return true
-            if (!this.data.questions[this.data.offset + 1] && this.data.offset >= this.data.maxOffset) {
+            if (!this.data.questions[this.data.index + 1] && this.data.index >= this.data.maxOffset) {
                 app.toast("已到最后一题")
                 return true
             }
-            this.data.offset++
+            this.data.index++
             this.setOffset()
         },
         getMore: function (offset) {
@@ -77,25 +78,25 @@ Component({
         },
         setOffset: function (prev) {
             let that = this,
-                offset = that.data.offset,
+                index = that.data.index,
                 questions = that.data.questions
-            console.log(offset)
-            if (offset <= 0) {
+            console.log(index)
+            if (index <= 0) {
                 app.toast("已经是第一题了", "none")
                 return false
             }
-            if (questions[offset]) {
+            if (questions[index]) {
                 that.setData({
-                    question: questions[offset],
-                    offset: offset,
+                    question: questions[index],
+                    index: index,
                 })
                 that.data.loading = false
             } else {
                 that.setData({
                     question:{},
-                    offset: offset,
+                    index: index,
                 })
-                that.getMore(prev ? Math.max(offset - 9, 1) : offset,prev ? offset : 0)
+                that.getMore(prev ? Math.max(index - 9, 1) : index,prev ? index : 0)
             }
         },
         afterAnswer:function (e) {
@@ -103,8 +104,8 @@ Component({
                 data = e.detail,
                 question = data.question,
                 qid = question.qid,
-                offset = that.data.offset
-            that.data.questions[offset] = question
+                index = that.data.index
+            that.data.questions[index] = question
         }
     }
 })

@@ -25,6 +25,10 @@ Page({
             that.setData({showIndex: all > 0})
         that.data.eid = eid
         that.getInfo(eid)
+        that.getList({
+            eid: eid,
+            offset: 1
+        })
     },
     onShow: function () {
         let that = this
@@ -104,30 +108,28 @@ Page({
     },
     goSingle: function (e) {
         let that = this,
-            type = e.currentTarget.dataset.type,
             offset = e.currentTarget.dataset.offset
+        that.data.offset = offset
         that.setData({
-            showIndex: false
+            showIndex: false,
+            offset: offset
         })
-        that.data.type = type,
-            that.data.offset = offset
-        that.setQuestion()
     },
     empty: function () {
 
     },
     moreList: function (e) {
         let that = this,
-            data = e.detail.value,
+            data = e.detail,
             obj = {
                 eid: that.data.eid,
                 offset: data.offset
             }
-        that.getList(data)
+        that.getList(obj)
     },
     getList: function (data) {
         let that = this
-        app.get("exam/list", data, function (res) {
+        app.post("exam/list", data, function (res) {
             if (res.list.length == 0)
                 app.toast("没有更多题目了")
             else
@@ -138,11 +140,11 @@ Page({
     },
     getInfo: function (eid) {
         let that = this
-        app.get("exam/info", {eid: eid}, function (res) {
+        app.post("exam/info", {eid: eid}, function (res) {
             that.setData({
                 exam: res.exam,
                 qNum: res.qNum,
-                alNum: res.alNum
+                maxOffset: res.num
             })
         })
     },

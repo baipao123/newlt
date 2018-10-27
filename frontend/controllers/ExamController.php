@@ -136,10 +136,11 @@ class ExamController extends BaseController
         $exam = UserExam::findOne($eid);
         if (!$exam || $exam->uid != $this->user_id())
             return $this->sendError("未找到考卷");
+        list($qNum, $max) = $exam->questionIndex();
         return $this->send([
-            "exam"  => $exam->info(),
-            "qNum"  => $exam->qNum(),
-            "alNum" => $exam->totalNum,
+            "exam" => $exam->info(),
+            "qNum" => $qNum,
+            "num"  => $max,
         ]);
     }
 
@@ -149,10 +150,10 @@ class ExamController extends BaseController
         if (!$exam || $exam->uid != $this->user_id())
             return $this->sendError("未找到考卷");
         $offset = $this->getPost("offset", 1);
-        $examData = UserExamQuestion::find()->where(["eid" => $eid, "parentQid" => 0])->offset($offset - 1)->limit(10)->select("id,qid,userAnswer")->asArray()->all();
+        $examData = UserExamQuestion::find()->where(["eid" => $eid, "parentQid" => 0])->offset($offset - 1)->limit(10)->select("id,qid,userAnswer")->orderBy("id asc")->asArray()->all();
         $qIds = ArrayHelper::getColumn($examData, "qid");
         $answerData = ArrayHelper::map($examData, "qid", "userAnswer");
-        $examDataSub = UserExamQuestion::find()->where(["eid" => $eid, "parentQid" => $qIds])->select("id,qid,userAnswer")->asArray()->all();
+        $examDataSub = UserExamQuestion::find()->where(["eid" => $eid, "parentQid" => $qIds])->select("id,qid,userAnswer")->orderBy("id asc")->asArray()->all();
         foreach ($examDataSub as $val) {
             $answerData[ $val['qid'] ] = $val['userAnswer'];
         }
