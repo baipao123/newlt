@@ -219,7 +219,21 @@ class ExamController extends BaseController
                     Question::addErrNum($qid);
             }
         }
-        return $this->send([]);
+        $info = $question->info();
+        if (!empty($answer)) {
+            $questions = $info['children'];
+            array_unshift($questions, $info);
+            foreach ($questions as $q) {
+                if (empty($q))
+                    continue;
+                $answerText = ArrayHelper::getValue($answer, $q['qid']);
+                if($qid == $q['qid'])
+                    $info['userAnswer'] = $answerText;
+                else
+                    $info['children'][$q['qid']]['userAnswer'] = $answerText;
+            }
+        }
+        return $this->send(["question"=>$info]);
     }
 
     public function actionFinish() {
