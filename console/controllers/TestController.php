@@ -29,4 +29,18 @@ class TestController extends Controller
         echo $total;
     }
 
+
+    public function actionToggle(){
+        $arr = [17,18,19,20];
+        $arr2 = [2,1,3];
+        $index = 38;
+        $str = "";
+        foreach ($arr2 as $type){
+            foreach ($arr as $oldTid){
+                $str.="UPDATE `question` SET `tid`={$index} WHERE `tid`={$oldTid} AND `type`={$type};".PHP_EOL;
+                $index++;
+            }
+        }
+        echo $str;
+    }
 }
