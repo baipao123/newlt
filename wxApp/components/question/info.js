@@ -68,8 +68,6 @@ Component({
                 ajaxAnswer: ajaxAnswer,
                 questionChildren: questionChildren
             })
-            if (this.data.indexNum > 0)
-                title = this.data.indexNum + '. ' + title
             WxParse.wxParse('title', 'html', title, this, 0);
         },
         chose: function (e) {

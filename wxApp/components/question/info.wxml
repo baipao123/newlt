@@ -2,6 +2,7 @@
     <view class="weui-loading big {{question.qid ? 'hidden' : ''}}"/>
 
     <!-- title -->
+    <text wx:if="{{indexNum>0}}">{{indexNum}}.</text>
     <view class="title" wx:if="{{question.title}}">
         <import src="./../../utils/wxParse/wxParse.wxml"/>
         <template is="wxParse" data="{{wxParseData:title.nodes}}"/>

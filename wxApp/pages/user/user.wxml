@@ -16,7 +16,7 @@
 
             <view bindtap="order" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__bd"><span class="myIcon margin-r2 text-orange icon-orders" />我的订单</view>
-                <view class="weui-cell__ft weui-cell__ft_in-access" >123</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" />
             </view>
 
             <view bindtap="record" class="weui-cell weui-cell_access" hover-class="weui-cell_active">

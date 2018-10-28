@@ -32,8 +32,8 @@ class TestController extends Controller
 
     public function actionToggle(){
         $arr = [17,18,19,20];
-        $arr2 = [2,1,3];
-        $index = 38;
+        $arr2 = [5];
+        $index = 46;
         $str = "";
         foreach ($arr2 as $type){
             foreach ($arr as $oldTid){
