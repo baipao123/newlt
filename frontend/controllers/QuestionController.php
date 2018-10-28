@@ -142,7 +142,9 @@ class QuestionController extends BaseController
                     Question::addErrNum($q['qid']);
             }
         }
-        $this->getUser()->updateTrainRecord($question->tid, $offset);
+
+        $type = QuestionType::findOne($question->tid);
+        $this->getUser()->updateTrainRecord($type && $type->parentId > 0 ? $type->parentId : $question->tid, $offset);
         return Tool::reJson(["question" => $info]);
     }
 }

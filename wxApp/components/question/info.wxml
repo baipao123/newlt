@@ -7,7 +7,7 @@
         <template is="wxParse" data="{{wxParseData:title.nodes}}"/>
     </view>
     <view class="attaches">
-        <img urls="{{question.attaches}}"/>
+        <img urls="{{question.attaches}}" auto="{{true}}" isPreview="{{true}}"/>
     </view>
 
     <!-- options -->
@@ -21,7 +21,7 @@
                 <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
             </view>
             <view class="option-img" wx:if="{{item.img}}">
-                <img src="{{item.img}}"/>
+                <img src="{{item.img}}" auto="{{true}}"  isPreview="{{true}}"/>
             </view>
         </view>
     </view>
@@ -31,7 +31,7 @@
                 <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
             </view>
             <view class="option-img" wx:if="{{item.img}}">
-                <img src="{{item.img}}"/>
+                <img src="{{item.img}}"  auto="{{true}}"  isPreview="{{true}}"/>
             </view>
         </view>
     </view>

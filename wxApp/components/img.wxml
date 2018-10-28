@@ -2,6 +2,6 @@
     <view class="img-box weui-flex__item-auto"
           style="padding-bottom:{{height}}%;"
           wx:for="{{urls}}" wx:key="key-url">
-        <image class="img" src="{{domain+item+ext}}" mode="aspectFill" binderror="errorLog"/>
+        <image class="img" src="{{domain+item+ext}}" mode="aspectFill" binderror="errorLog" bindload="load" bindtap="preview" data-index="index"/>
     </view>
 </view>

@@ -17,7 +17,7 @@ use Yii;
 class UserController extends BaseController
 {
     public function actionCheckTid($tid = 0) {
-        return Tool::reJson(["result" => !!$this->getUser()->getTidExpire($tid)]);
+        return Tool::reJson(["result" => $this->getUser()->getTidExpire($tid) > time()]);
     }
 
     // 获取用户信息

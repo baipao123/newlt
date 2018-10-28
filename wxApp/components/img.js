@@ -52,11 +52,18 @@ Component({
         },
         isPreview: {
             type: Boolean,
-            value: "",
+            value: false,
             observer: function (newData, olddata) {
                 this.setData({
                     isPreview: newData
                 })
+            }
+        },
+        auto:{
+            type: Boolean,
+            value: false,
+            observer: function (newData, olddata) {
+
             }
         }
     },
@@ -85,6 +92,15 @@ Component({
         },
         errorLog:function (e) {
             console.log(e)
+        },
+        load: function (e) {
+            let that = this,
+                data = e.detail,
+                h = data.height,
+                w = data.width
+            that.setData({
+                height: parseInt(h / w * 100)
+            })
         }
     }
 })
