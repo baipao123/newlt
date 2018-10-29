@@ -23,7 +23,7 @@
             <?php if ($multi): ?>
                 <a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-xs" onclick="imgListDelete<?=$id?>($(this))">删除</a>
             <?php endif; ?>
-            <input type="hidden" name="<?= $name ?>[]" value="<?= $key ?>">
+            <input type="hidden" name="<?= $name ?><?= $multi ? '[]':'' ?>" value="<?= $key ?>">
         </div>
     <?php endforeach; ?>
 </div>
