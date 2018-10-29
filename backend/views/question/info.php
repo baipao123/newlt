@@ -257,7 +257,7 @@ if (in_array($question->type, [Question::TypeBlank, Question::TypeAnswer]) || $q
             "isMulti" => false,
             "hint"    => "推荐尺寸:300*300",
             "name"    => 'answerImg',
-            "value"   => $question->eImg
+            "value"   => $question->answerImg
         ]
     ]);
 }
