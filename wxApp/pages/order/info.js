@@ -10,15 +10,18 @@ Page({
         waiting: false,
         timeOutIndex: 1,
         nowTime: 0,
+        back: 0
     },
     onLoad: function (options) {
         let that = this,
-            oid = options && options.hasOwnProperty("id") ? options.id : 0
+            oid = options && options.hasOwnProperty("id") ? options.id : 0,
+            back = options && options.hasOwnProperty("back") ? options.back : 0
         if (oid == 0)
             app.toast("不存在的订单", "none", function () {
                 wx.navigateBack()
             })
         that.data.oid = oid
+        that.data.back = back
         that.getInfo()
         that.countDown()
     },
@@ -56,6 +59,8 @@ Page({
                 if (res.info.status == 20 && res.user)
                     app.globalData.user = res.user
                 wx.hideLoading()
+                if (that.data.back > 0)
+                    wx.navigateBack()
             }
         })
     },

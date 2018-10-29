@@ -336,14 +336,15 @@ App({
     },
     fullImg: function (urls) {
         let domain = this.globalData.qiNiuDomain
-        if (typeof urls == "Array") {
+        if (Array.isArray(urls)) {
             let i = 0,
                 src = []
             for (i; i < urls.length; i++) {
-                src.push(this.fullImg(urls[i]))
+                let img = this.fullImg(urls[i])
+                src.push(img)
             }
             return src
-        } else if (typeof urls == "String")
+        } else if (typeof urls == "string")
             return urls.substr(0, 4) == "http" ? urls : domain + urls
         else
             return urls
