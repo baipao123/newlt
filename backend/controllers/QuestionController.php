@@ -308,6 +308,7 @@ class QuestionController extends BaseController
                 $question->answer = Yii::$app->request->post("answer_text", "");
             else
                 $question->answer = "";
+            $question->answerImg = Yii::$app->request->post("answerImg", "");
             $question->description = Yii::$app->request->post("description", "");
             $question->knowledge = Yii::$app->request->post("knowledge", "");
             $question->difficulty = (int)Yii::$app->request->post("difficulty", 0);

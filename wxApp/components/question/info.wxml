@@ -39,7 +39,7 @@
     <view class="option weui-flex" wx:if="{{question.type == 4}}">
         <view class="fillBlank">
             {{indexNum > 0 ? indexNum + '. ' : ''}}
-            <input class="weui-input" bindblur="fillBlank" style="border-bottom:1rpx solid #333;" value="{{question.userAnswer}}"/>
+            <input class="weui-input" bindblur="fillBlank" style="border-bottom:1rpx solid #333;" value="{{question.userAnswer}}" disabled="{{question.answer}}"/>
         </view>
     </view>
 
@@ -56,6 +56,9 @@
                 <view class="weui-form-preview__item">
                     <view class="weui-form-preview__label">正确答案</view>
                     <view class="weui-form-preview__value text-green">{{question.answer.answer}}</view>
+                    <block wx:if="{{question.answer.answerImg}}">
+                        <img src="{{question.answer.answerImg}}" isPreview="{{true}}" auto="{{true}}"/>
+                    </block>
                 </view>
                 <view class="weui-form-preview__item" wx:if="{{result.knowledge}}">
                     <view class="weui-form-preview__label">知识点</view>

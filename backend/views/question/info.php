@@ -195,7 +195,7 @@ if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question
         "label"   => "选项E配图",
         "classes" => "noJudge",
         "options" => [
-            "isMulti" => true,
+            "isMulti" => false,
             "hint"    => "推荐尺寸:200*200",
             "name"    => 'eImg',
             "value"   => $question->eImg
@@ -246,6 +246,18 @@ if (in_array($question->type, [Question::TypeBlank, Question::TypeAnswer]) || $q
         "options" => [
             "name"  => "answer_text",
             "value" => $question->answer,
+        ]
+    ]);
+
+    echo FormItemWidget::widget([
+        "type"    => "img",
+        "label"   => "答案配图",
+        "classes" => "noJudge",
+        "options" => [
+            "isMulti" => false,
+            "hint"    => "推荐尺寸:300*300",
+            "name"    => 'answerImg',
+            "value"   => $question->eImg
         ]
     ]);
 }

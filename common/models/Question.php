@@ -140,6 +140,7 @@ class Question extends \common\models\base\Question
     public function answer() {
         return [
             "answer"      => $this->answer,
+            "answerImg"   => $this->answerImg . 'FoGaTA654IMVxs1vBCVae4n2fXQ3.PNG',
             "description" => $this->description,
             "knowledge"   => $this->knowledge,
             "difficulty"  => $this->difficulty

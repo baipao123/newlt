@@ -24,6 +24,7 @@ use Yii;
  * @property string $e
  * @property string $eImg
  * @property string $answer
+ * @property string $answerImg
  * @property string $description
  * @property string $knowledge
  * @property int $difficulty
@@ -51,8 +52,8 @@ class Question extends \yii\db\ActiveRecord
     {
         return [
             [['tid', 'status', 'type', 'parentId', 'difficulty', 'success_num', 'fail_num', 'view_num', 'created_at', 'updated_at'], 'integer'],
-//            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'required'],
-            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'answer','description', 'knowledge'], 'string'],
+            //           [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'description', 'knowledge'], 'required'],
+            [['title', 'attaches', 'a', 'aImg', 'b', 'bImg', 'c', 'cImg', 'd', 'dImg', 'e', 'eImg', 'answer', 'answerImg', 'description', 'knowledge'], 'string']
         ];
     }
 
@@ -79,6 +80,7 @@ class Question extends \yii\db\ActiveRecord
             'e' => 'E',
             'eImg' => 'E Img',
             'answer' => 'Answer',
+            'answerImg' => 'Answer Img',
             'description' => 'Description',
             'knowledge' => 'Knowledge',
             'difficulty' => 'Difficulty',
