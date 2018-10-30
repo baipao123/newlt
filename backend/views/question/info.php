@@ -252,7 +252,7 @@ if (in_array($question->type, [Question::TypeBlank, Question::TypeAnswer]) || $q
     echo FormItemWidget::widget([
         "type"    => "img",
         "label"   => "答案配图",
-        "classes" => "noJudge",
+        "classes" => "noSelect",
         "options" => [
             "isMulti" => false,
             "hint"    => "推荐尺寸:300*300",
