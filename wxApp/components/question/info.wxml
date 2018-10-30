@@ -22,7 +22,7 @@
                 <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
             </view>
             <view class="option-img" wx:if="{{item.img}}">
-                <img src="{{item.img}}" auto="{{true}}"  isPreview="{{true}}"/>
+                <img src="{{item.img}}" auto="{{true}}"  isPreview="{{true}}" isBubble="{{false}}"/>
             </view>
         </view>
     </view>
@@ -32,7 +32,7 @@
                 <text space="nbsp">{{item.option}}{{item.text ? '.'+item.text : ''}}</text>
             </view>
             <view class="option-img" wx:if="{{item.img}}">
-                <img src="{{item.img}}"  auto="{{true}}"  isPreview="{{true}}"/>
+                <img src="{{item.img}}"  auto="{{true}}"  isPreview="{{true}}" isBubble="{{false}}"/>
             </view>
         </view>
     </view>
@@ -82,6 +82,11 @@
             <button type="primary" size="mini" plain="{{true}}" bindtap="goAnswer"><span class="myIcon icon-true">提交答案</span></button>
         </view>
         <view class="a-c weui-flex__item-auto" wx:if="{{type==1 && !question.answer}}">
+            <button type="primary" size="mini" plain="{{true}}" bindtap="seeAnswer"><span class="myIcon icon-eye">查看答案</span></button>
+        </view>
+    </view>
+    <view class="weui-flex" wx:if="{{ eid == 0  && !isChild && ((question.type == 6 && !question.answer) || (questionChildren.length>0 && questionChildren[0].type ==6 && !questionChildren[0].answer))}}">
+        <view class="a-c weui-flex__item-auto">
             <button type="primary" size="mini" plain="{{true}}" bindtap="seeAnswer"><span class="myIcon icon-eye">查看答案</span></button>
         </view>
     </view>

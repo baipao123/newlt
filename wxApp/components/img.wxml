@@ -2,6 +2,7 @@
     <view class="img-box weui-flex__item-auto"
           style="padding-bottom:{{height}}%;"
           wx:for="{{urls}}" wx:key="key-url">
-        <image class="img" src="{{domain+item+ext}}" mode="aspectFill" binderror="errorLog" bindload="load" bindtap="preview" data-index="index"/>
+        <image class="img" src="{{domain+item+ext}}" mode="aspectFill" binderror="errorLog" bindload="load" bindtap="preview" data-bubble="{{234}}" data-index="index" wx:if="{{isBubble}}"/>
+        <image class="img" src="{{domain+item+ext}}" mode="aspectFill" binderror="errorLog" bindload="load" catchtap="preview" data-bubble="{{123}}" data-index="index" wx:else/>
     </view>
 </view>

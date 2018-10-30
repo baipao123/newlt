@@ -59,9 +59,16 @@ Component({
                 })
             }
         },
-        auto:{
+        auto: {
             type: Boolean,
             value: false,
+            observer: function (newData, olddata) {
+
+            }
+        },
+        isBubble: {
+            type: Boolean,
+            value: true,
             observer: function (newData, olddata) {
 
             }
