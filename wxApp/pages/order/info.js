@@ -56,11 +56,12 @@ Page({
                 that.setData({
                     waiting: false
                 })
-                if (res.info.status == 20 && res.user)
+                if (res.info.status == 20 && res.user) {
                     app.globalData.user = res.user
+                    if (that.data.back > 0)
+                        wx.navigateBack()
+                }
                 wx.hideLoading()
-                if (that.data.back > 0)
-                    wx.navigateBack()
             }
         })
     },
@@ -116,7 +117,7 @@ Page({
         that.setData({
             nowTime: time
         })
-        if (that.data.info.status && (that.data.info.status != 1 || time >= that.data.info.expire_at))
+        if (that.data.info.status && ((that.data.info.status != 1 && that.data.info.status != 10 ) || time >= that.data.info.expire_at))
             return true
         that.data.timeOutIndex++
         setTimeout(() => {

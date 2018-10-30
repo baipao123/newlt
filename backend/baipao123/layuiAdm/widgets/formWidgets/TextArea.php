@@ -42,7 +42,7 @@ class TextArea extends InputOptions
                       	 autoFloatEnabled:false,
                          zIndex:899,
         	/* 传入配置参数,可配参数列表看umeditor.config.js */
-            toolbar: ['undo redo | bold italic underline | forecolor backcolor | justifyleft justifyright justifycenter ']
+            toolbar: ['undo redo | bold italic underline | forecolor backcolor | justifyleft justifyright justifycenter | removeformat']
         });
             })
 JS;

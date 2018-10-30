@@ -75,7 +75,8 @@ echo FormItemWidget::widget([
     "options" => [
         "name"  => "title",
         "value" => $question->title,
-        "needEditor" => true
+        "needEditor" => true,
+        "style" => "min-height:300px;"
     ]
 ]);
 
