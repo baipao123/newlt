@@ -22,8 +22,9 @@ class ImgList extends QiNiuUploaderWidget
             "uploader" => parent::run(),
             "id"       => $this->getId(),
             "multi"    => $this->isMulti,
+            "isDelete" => $this->isDelete,
             "name"     => $this->name,
-            "img"    => $this->getValues()
+            "img"      => $this->getValues()
         ]);
     }
 

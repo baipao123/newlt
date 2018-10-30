@@ -16,6 +16,8 @@ class QiNiuUploaderWidget extends Widget
 
     public $isMulti = true;
 
+    public $isDelete = false;
+
     public $tokenUrl = "./qiniu-token";
 
     public $mineTypes = ["image/png", "image/jpeg", "image/gif"];

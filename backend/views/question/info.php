@@ -109,6 +109,7 @@ if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question
         "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
+            "isDelete" => true,
             "hint"    => "推荐尺寸:200*200",
             "name"    => 'aImg',
             "value"   => $question->aImg
@@ -131,6 +132,7 @@ if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question
         "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
+            "isDelete" => true,
             "hint"    => "推荐尺寸:200*200",
             "name"    => 'bImg',
             "value"   => $question->bImg
@@ -153,6 +155,7 @@ if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question
         "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
+            "isDelete" => true,
             "hint"    => "推荐尺寸:200*200",
             "name"    => 'cImg',
             "value"   => $question->cImg
@@ -175,6 +178,7 @@ if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question
         "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
+            "isDelete" => true,
             "hint"    => "推荐尺寸:200*200",
             "name"    => 'dImg',
             "value"   => $question->dImg
@@ -197,6 +201,7 @@ if (!in_array($question->type, [Question::TypeJudge,Question::TypeBlank,Question
         "classes" => "noJudge",
         "options" => [
             "isMulti" => false,
+            "isDelete" => true,
             "hint"    => "推荐尺寸:200*200",
             "name"    => 'eImg',
             "value"   => $question->eImg
@@ -256,6 +261,7 @@ if (in_array($question->type, [Question::TypeBlank, Question::TypeAnswer]) || $q
         "classes" => "noSelect",
         "options" => [
             "isMulti" => false,
+            "isDelete" => true,
             "hint"    => "推荐尺寸:300*300",
             "name"    => 'answerImg',
             "value"   => $question->answerImg

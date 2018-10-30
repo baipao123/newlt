@@ -39,6 +39,13 @@ class Question extends \common\models\base\Question
             if ($type) {
                 $type->totalNum = Question::find()->where(["tid" => $this->tid, "parentId" => 0, "status" => Status::PASS])->count();
                 $type->save();
+                \Yii::warning($type->totalNum, "num");
+                if ($type->parentId > 0) {
+                    $newType = $type->parentType;
+                    $newType->totalNum = QuestionType::find()->where(["parentId" => $type->parentId, "status" => Status::PASS])->select("SUM(totalNum)")->scalar();
+                    $newType->save();
+                    \Yii::warning($newType->totalNum, "num2");
+                }
             }
         }
     }

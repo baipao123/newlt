@@ -20,7 +20,7 @@
     <?php foreach ($img as $key): ?>
         <div class="single-img single-img-<?= $id ?>">
             <img src="<?= Yii::$app->params['qiniu']['domain'] . '/' . $key ?>">
-            <?php if ($multi): ?>
+            <?php if ($multi || $isDelete): ?>
                 <a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-xs" onclick="imgListDelete<?=$id?>($(this))">删除</a>
             <?php endif; ?>
             <input type="hidden" name="<?= $name ?><?= $multi ? '[]': '' ?>" value="<?= $key ?>">
@@ -59,7 +59,7 @@
             html = '';
         html += '<div class="single-img single-img-<?= $id ?>">';
         html += '<img src="<?= Yii::$app->params['qiniu']['domain']  ?>/'+info.key+'">';
-        <?php if ($multi): ?>
+        <?php if ($multi || $isDelete): ?>
         html += '<a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-xs" onclick="imgListDelete<?=$id?>($(this))">删除</a>';
         <?php endif;?>
         html += '<input type="hidden" name="<?= $name ?><?= $multi ? '[]': '' ?>" value="'+info.key+'">';
