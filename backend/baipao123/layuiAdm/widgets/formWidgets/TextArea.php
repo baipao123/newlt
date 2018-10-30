@@ -35,6 +35,8 @@ class TextArea extends InputOptions
 
     public function run() {
         $config = $this->config();
+        if (!empty($this->style))
+            $config['style'] = $this->style;
         $js = '';
         if ($this->needEditor) {
             $config['lay-ignore'] = '';
