@@ -19,6 +19,8 @@ class TextArea extends InputOptions
 
     public $needEditor = false;
 
+    public $style;
+
     public function init() {
         if ($this->needEditor) {
             $this->assetFiles[] = "/umeditor/themes/default/_css/umeditor.css";
