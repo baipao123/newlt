@@ -320,7 +320,7 @@ class QuestionController extends BaseController
                 Yii::$app->session->setFlash("info", "题型必须选择");
             elseif (!in_array($question->type, [Question::TypeMultiQuestion,Question::TypeAnswer])  && empty($question->answer))
                 Yii::$app->session->setFlash("info", "答案必须选择");
-            elseif (!in_array($question->type, [Question::TypeMultiQuestion,Question::TypeAnswer,Question::TypeBlank])  && strlen($question->answer) > 1)
+            elseif (!in_array($question->type, [Question::TypeMulti,Question::TypeMultiQuestion,Question::TypeAnswer,Question::TypeBlank])  && strlen($question->answer) > 1)
                 Yii::$app->session->setFlash("info", "非多选题，答案不能多选");
             elseif ($question->type == Question::TypeJudge && !in_array($question->answer, ["A", "B"]))
                 Yii::$app->session->setFlash("info", "判断题的答案只能是A、B");
