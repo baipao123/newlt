@@ -65,10 +65,6 @@ FormWidget::end();
                     <td><?= $order->title ?></td>
                 </tr>
                 <tr>
-                    <td>科目</td>
-                    <td><?= $order->qType->name ?></td>
-                </tr>
-                <tr>
                     <td>时长</td>
                     <td><?= $order->hour ?>小时</td>
                 </tr>
